@@ -1,2 +1,5 @@
 vncorenlp
 src/__pycache__
+tmp.ipynb
+src/helper/__pycache__
+.vscode/
