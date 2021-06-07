@@ -7,7 +7,7 @@ class Extractor:
     def __init__(self,n_gram = 4,dict_path='./src/data/fullname.pkl'):
 
         self.max_n_gram = n_gram
-        self.fullname_dict = read_dict(dict_path)
+        # self.fullname_dict = read_dict(dict_path)
 
         self.phone_regex = get_phone_pattern()
 
