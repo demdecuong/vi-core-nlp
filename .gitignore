@@ -1,2 +1,12 @@
 vncorenlp
 src/__pycache__
+src/data/raw
+src/data/fullname.pkl
+src/first_name.txt
+src/firstfirstname.txt
+src/fullname.txt
+src/fullname2.txt
+src/last_name.txt
+src/mid_name.txt
+src/midlastname.txt
+src/utils/__pycache__

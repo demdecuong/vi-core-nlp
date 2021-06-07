@@ -1,6 +1,6 @@
 from src.extractor import Extractor
-
 extractor = Extractor()
-text = "sdt : 0349933957 ok chua"
 
-print(extractor.extract_phone_num(text))
+text2 = "tôi tên là pham hai nam"
+print(extractor.extract_person_name(text2,'pattern'))
+# 
