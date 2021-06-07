@@ -15,15 +15,18 @@ print(extractor.extract_phone_num(text))
 
 **Extract date**
 ```
-from helper.PMdate import PatternMatching
+from src.extractor import Extractor
 
-extractor = PatternMatching()
-text = "tôi muốn đặt lịch vào ngày mai"
+extractor = Extractor()
 
-print(extractor.extract_date(text))
-# ngày mai
+text = "tôi muốn đặt lịch vào ngày 6 tháng 7"
+extractor.extract_date(text)
+# [('None', ['ngày 6 '], ['tháng 7'], 'None')]
 
-text = "tôi muốn sinh vào ngày 21-03-1997"
-print(extractor.extract_date(text))
-# 21-03-1997
+
+text = "tôi sinh vào ngày 21-3-1997"
+extractor.extract_date(text)
+# [('Thứ 6', '21', '3', '1997')]
 ```
+
+## TODO predict date if missing 
