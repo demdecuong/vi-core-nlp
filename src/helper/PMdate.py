@@ -61,12 +61,7 @@ class PatternMatching(object):
                 year = "None"
             if week == "None" and day == "None" and month == "None" and year == "None":
                 return "Invalid"
-            return  {
-                "week": week,
-                "day": day,
-                "month": month,
-                "year": year
-            }
+            return  (week, day, month, year)
         else:
             result_non_format.extend(result_format)
             #parse format date
