@@ -59,14 +59,23 @@ class PatternMatching(object):
             tmp = max(len(wod), len(day), len(month), len(year))
             if tmp == 0:
                 return "Invalid"
-            if not wod:
-                wod = ["None"]*tmp
             if not day:
-                day = ["None"]*tmp
+                day = [str(date.today()).split("-")[2]] * tmp
+            else:
+                day = [re.search("\d+", x).group() for x in day]
             if not month:
-                month = ["None"]*tmp
+                month = [str(date.today()).split("-")[1]] * tmp
+            else:
+                month = [re.search("\d+", x).group() for x in month]
             if not year:
-                year = ["None"]*tmp
+                year = [str(date.today()).split("-")[0]] * tmp
+            else:
+                year = [re.search("\d+", x).group() for x in year]
+                
+            try:
+                wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(tmp)]
+            except:
+                wod = ["None"] * tmp
             return  [(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)]
             #TODO  inference week day month year is None
         else:
@@ -118,7 +127,7 @@ class PatternMatching(object):
                 month = get_date[1]
                 year = get_date[0]
                 wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
-            elif re.search("mai", i) or re.search("tới", i) or re.search("sau", i):
+            elif re.search("mai", i) or re.search("tới", i) or re.search("sau", i) or re.search("mốt", i):
                 if re.search("(ngày)|(ngay)|(ngayf)", i) or re.search("(hôm)|(hom)", i) or re.search("(sáng)|(sang)", i) or re.search("(trưa)|(trua)", i) or re.search("(chiều)|(chieu)", i) or re.search("(tối)|(toi)", i):
                     get_date = self._get_day(1, mode="add").split("-")
                     day = get_date[2]
@@ -138,7 +147,7 @@ class PatternMatching(object):
                     year = get_date[0]
                     wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
             elif re.search("kia", i):
-                get_date = self._get_day(2).split("-")
+                get_date = self._get_day(2, mode="add").split("-")
                 day = get_date[2]
                 month = get_date[1]
                 year = get_date[0]
