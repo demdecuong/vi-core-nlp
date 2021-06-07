@@ -7,21 +7,18 @@ class Extractor:
     def __init__(self,n_gram = 4,dict_path='./src/data/fullname.pkl'):
 
         self.max_n_gram = n_gram
-        # self.fullname_dict = read_dict(dict_path)
+        self.fullname_dict = read_dict(dict_path)
 
         self.phone_regex = get_phone_pattern()
 
         self.person_explicit, self.person_pronoun, self.person_semi_pronoun, self.matches = self.build_person_name_pattern()
 
-    def extract_time(self,input):
+    def extract_time(self,utterance):
         pass
 
-    def extract_date(self,input):
+    def extract_date(self,utterance):
         pass
 
-    def extract_date_time(self,input):
-        pass
-    
     def extract_person_name(self,utterance,mode='pattern'):
         '''
         1. Extract ngrams from (max_ngram,2)
@@ -51,10 +48,15 @@ class Extractor:
             result = []
             dict_result = self.extract_person_name_dict(utterance)
             pattern_result = self.extract_person_name_pattern(utterance)
-            result.extend(dict_result)
-            result.extend(pattern_result)
+            if dict_result != 'Invalid':
+                result.append(dict_result)
+            if pattern_result != 'Invalid':
+                result.append(pattern_result)
             result = list(set(result))
-            return result
+            if result != []:
+                return result[0]
+            else:
+                return 'Invalid'
 
     def extract_person_name_dict(self,utterance):
         '''
@@ -102,7 +104,7 @@ class Extractor:
                 return 'Invalid' 
         else:
             explicit = self.person_explicit.search(utterance)
-            if explicit != None:
+            if explicit != None and explicit.group(1) != None:
                 return explicit.group(1)
             else:
                 return 'Invalid'

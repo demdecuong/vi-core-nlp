@@ -173,7 +173,6 @@ def get_person_pattern():
         'bác sĩ : \.?([^()0-9-.*]+)',
         'bác sĩ: \.?([^()0-9-.*]+)',
     ]
-
     # (tên/tên là/tên :) la [Name]
     format_semi_pronoun = [
         'tên là \.?([^()0-9-]+)',
