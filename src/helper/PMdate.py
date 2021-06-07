@@ -7,17 +7,17 @@ def format():
     format_date = ['(\d+(,|\s|\.|-|\/|_)+\d+(,|\s|\.|-|\/|_)+\d+)', # 21/03/1997  21-03-1997  21.03.1997
                     '((monday|tuesday|wednesday|thursday|friday|saturday|sunday)(,|\s|\.|-|\/|_)\d+(,|\s|\.|-|\/|_)*\d*(,|\s|\.|-|\/|_)*\d*)', # Monday 21 3 
                     ] 
-    week = ['(monday|tuesday|wednesday|friday|saturday|sunday)']
-    week_vn = ['(thứ(\s+|\.+)[2-8])|(thứ(\s+|\.+)(hai|ba|tư|bốn|năm|lăm|sáu|bảy|chủ nhật|cn))']
+    wod = ['(monday|tuesday|wednesday|friday|saturday|sunday)']
+    wod_vn = ['(thứ(\s+|\.+)*[2-8])|(thuws(\s+|\.+)*[2-8])|(thu(\s+|\.+)*[2-8])|(thứ(\s+|\.+)*(hai|ba|tư|tu|bốn|bon|năm|nam|lăm|lam|sáu|say|bảy|bay|chủ nhật|chu nhat|cn))']
 
-    day_vn = ['(ngày(\s+|\.+)(\d\d|\d)($|\s))']
+    day_vn = ['(ngày(\s+|\.+)*(\d\d|\d)($|\s))|(ngay(\s+|\.+)*(\d\d|\d)($|\s))|(ngafy(\s+|\.+)*(\d\d|\d)($|\s))']
 
-    month = ['(January|February|March|April|May|June|July|August|September|October|November|December)']
-    month_vn = ['(tháng(\s+|\.+)(\d\d|\d)($|\s))|(tháng(\s+|\.+)(một|hai|ba|bốn|tư|năm|lăm|sáu|bảy|tám|chín|mười|mười một|mười hai|giêng|chạp))']
+    month = ['(january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sep|october|oct|november|nov|december|dec)']
+    month_vn = ['(tháng(\s+|\.+)*(\d\d|\d)($|\s))|(thang(\s+|\.+)*(\d\d|\d)($|\s))|(thasng(\s+|\.+)*(\d\d|\d)($|\s))|(((tháng)|(thang))(\s+|\.+)*(một|mot|hai|ba|bốn|bon|tư|tu|năm|nam|lăm|lam|sáu|bảy|bay|tám|tam|chín|chin|mười|muoi|mười một|muoi mot|mười hai|muoi hai|giêng|gieng|chạp|chap))']
 
     year = ['('+'|'.join([str(i) for i in list(range(1900, 2050))])+')']
 
-    return format_date, week, week_vn, day_vn, month, month_vn, year
+    return format_date, wod, wod_vn, day_vn, month, month_vn, year
 
 def non_format():
     short_time = ['(ngày\s(hôm\s)*qua)|(sáng\s(hôm\s)*qua)|(trưa\s(hôm\s)*qua)|(chiều\s(hôm\s)*qua)|(tối\s(hôm\s)*qua)|(ngày\s(hôm\s)*nay)|(sáng\s(hôm\s)*nay)|(trưa\s(hôm\s)*nay)|(chiều\s(hôm\s)*nay)|(tối\s(hôm\s)*nay)|(ngày\s(hôm\s)*mai)|(sáng\s(hôm\s)*mai)|(trưa\s(hôm\s)*mai)|(chiều\s(hôm\s)*mai)|(tối\s(hôm\s)*mai)|(ngày\s(hôm\s)*mốt)|(sáng\s(hôm\s)*mốt)|(trưa\s(hôm\s)*mốt)|(chiều\s(hôm\s)*mốt)|(tối\s(hôm\s)*mốt)|(ngày\s(hôm\s)*kia)|(sáng\s(hôm\s)*kia)|(trưa\s(hôm\s)*kia)|(chiều\s(hôm\s)*kia)|(tối\s(hôm\s)*kia)|(buổi\ssáng)|(buổi\strưa)|(buổi\schiều)|(buổi\stối)']
@@ -31,10 +31,10 @@ class PatternMatching(object):
     def __init__(self) -> None:
         super().__init__()
 
-        self.format_date, self.week, self.week_vn, self.day_vn, self.month, self.month_vn, self.year = format()
+        self.format_date, self.wod, self.wod_vn, self.day_vn, self.month, self.month_vn, self.year = format()
         self.format_date = "|".join([x for x in self.format_date])
 
-        self.week = "|".join([self.week[0], self.week_vn[0]])
+        self.wod = "|".join([self.wod[0], self.wod_vn[0]])
         self.day = self.day_vn[0]
         self.month = "|".join([self.month[0], self.month_vn[0]])
         self.year = self.year[0]
@@ -50,24 +50,27 @@ class PatternMatching(object):
         # text = pre_process.preprocess(text)
         result_non_format = [x.group() for x in re.finditer(self.non_format, text)]
         result_format = [x.group() for x in re.finditer(self.format_date, text)]
+
         if not result_non_format and not result_format:
-            week = [x.group() for x in re.finditer(self.week, text)]
+            wod = [x.group() for x in re.finditer(self.wod, text)]
             day = [x.group() for x in re.finditer(self.day, text)]
             month = [x.group() for x in re.finditer(self.month, text)]
             year = [x.group() for x in re.finditer(self.year, text)]
-            if not week:
-                week = "None"
-            if not day:
-                day = "None"
-            if not month:
-                month = "None"
-            if not year:
-                year = "None"
-            if week == "None" and day == "None" and month == "None" and year == "None":
+            tmp = max(len(wod), len(day), len(month), len(year))
+            if tmp == 0:
                 return "Invalid"
-            return  [(week, day, month, year)]
+            if not wod:
+                wod = ["None"]*tmp
+            if not day:
+                day = ["None"]*tmp
+            if not month:
+                month = ["None"]*tmp
+            if not year:
+                year = ["None"]*tmp
+            return  [(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)]
             #TODO  inference week day month year is None
         else:
+            result = []
             if result_format:
                 list_date = [re.split('(,|\s|\.|-|\/|_)', x) for x in result_format]
                 day = [x[0] for x in list_date]
@@ -76,34 +79,70 @@ class PatternMatching(object):
                 wod  = []
                 for i in range(len(day)):
                     wod.append(self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()])
-                return [(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)]
-            
+                result.extend([(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)])
             if result_non_format:
-                # current_date = self._get_current_time()
-                return result_non_format
+                result.extend(self._map_non_format_to_date(result_non_format=result_non_format))
+            return result
 
-    def _get_current_time(self):
-        return str(date.today())
+    def _get_day(self, timedelta, mode = "sub"):
+        if mode == "add":
+            return str(date.today() + datetime.timedelta(days=timedelta))
+        elif mode == "sub":
+            return str(date.today() - datetime.timedelta(days=timedelta))
     
-    def _map_non_format_to_date(self, result_non_format, current_time):
-        current_year, current_month, current_day = current_time.split("-")
-        current_time, current_month, current_day = int(current_year), int(current_month), int(current_day)
-
+    def _map_non_format_to_date(self, result_non_format):
+        result = []
         for i in result_non_format:
-            day = current_day
-            month = current_month
-            year = current_year
             if re.search("qua", i):
-                if re.search("ngày", i) or re.search("hôm", i) or re.search("sáng", i) or re.search("trưa", i) or re.search("chiều", i) or re.search("tối", i):
-                    day = str(datetime.date.today() - datetime.timedelta(days=1)).split("-")[2]
-                elif re.search("tuần", i):
-                    pass
-            elif re.search("nay", i):
-                pass
-            elif re.search("mai", i) or re.search("tới", i) or re.search("sau"):
-                pass
+                if re.search("(ngày)|(ngay)|(ngayf)", i) or re.search("(hôm)|(hom)", i) or re.search("(sáng)|(sang)", i) or re.search("(trưa)|(trua)", i) or re.search("(chiều)|(chieu)", i) or re.search("(tối)|(toi)", i):
+                    get_date = self._get_day(1, mode="sub").split("-")
+                    day = get_date[2]
+                    month = get_date[1]
+                    year = get_date[0]
+                    wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
+                elif re.search("(tuần)|(tuan)", i):
+                    get_date = self._get_day(7, mode="sub").split("-")
+                    day = get_date[2]
+                    month = get_date[1]
+                    year = get_date[0]
+                    wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
+                elif re.search("(tháng)|(thang)", i):
+                    get_date = self._get_day(30, mode="sub").split("-")
+                    day = get_date[2]
+                    month = get_date[1]
+                    year = get_date[0]
+                    wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
+            elif re.search("(này)|(nay)", i):
+                get_date = self._get_day(0).split("-")
+                day = get_date[2]
+                month = get_date[1]
+                year = get_date[0]
+                wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
+            elif re.search("mai", i) or re.search("tới", i) or re.search("sau", i):
+                if re.search("(ngày)|(ngay)|(ngayf)", i) or re.search("(hôm)|(hom)", i) or re.search("(sáng)|(sang)", i) or re.search("(trưa)|(trua)", i) or re.search("(chiều)|(chieu)", i) or re.search("(tối)|(toi)", i):
+                    get_date = self._get_day(1, mode="add").split("-")
+                    day = get_date[2]
+                    month = get_date[1]
+                    year = get_date[0]
+                    wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
+                elif re.search("(tuần)|(tuan)", i):
+                    get_date = self._get_day(7, mode="add").split("-")
+                    day = get_date[2]
+                    month = get_date[1]
+                    year = get_date[0]
+                    wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
+                elif re.search("(tháng)|(thang)", i):
+                    get_date = self._get_day(30, mode="add").split("-")
+                    day = get_date[2]
+                    month = get_date[1]
+                    year = get_date[0]
+                    wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
             elif re.search("kia", i):
-                pass
-            else:
-                pass
+                get_date = self._get_day(2).split("-")
+                day = get_date[2]
+                month = get_date[1]
+                year = get_date[0]
+                wod = self.week_days[datetime.date(int(year), int(month), int(day)).weekday()]
+            result.append((wod, day, month, year))
+        return result
             #TODO inference date for non_format
