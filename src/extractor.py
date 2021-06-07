@@ -1,7 +1,9 @@
 import re
+
 from underthesea import ner
 from src.utils.util import read_dict, get_ngram, tokenize
 from src.utils.pattern import get_person_pattern, get_phone_pattern
+from src.utils.PMdate import PatternMatching
 
 class Extractor:
     def __init__(self,n_gram = 4,dict_path='./src/data/fullname.pkl'):
@@ -13,11 +15,20 @@ class Extractor:
 
         self.person_explicit, self.person_pronoun, self.person_semi_pronoun, self.matches = self.build_person_name_pattern()
 
+        self.patternmatching_date = PatternMatching()
+
     def extract_time(self,utterance):
         pass
 
     def extract_date(self,utterance):
-        pass
+        '''
+        Input:
+            input string
+        Output:
+            return tuple of (dow,dd,mm,yyyy)
+        '''
+        result = self.patternmatching_date.extract_date(utterance)
+        return result
 
     def extract_person_name(self,utterance,mode='pattern'):
         '''
@@ -92,10 +103,11 @@ class Extractor:
         '''
         utterance = tokenize(utterance).lower()
         if any(x in utterance for x in self.matches):
-            for pattern in self.person_pronoun:
-                pronoun = pattern.search(utterance)
-                if pronoun != None and pronoun.group(1) != None:
-                    return pronoun.group(1)
+            for pattern_list in self.person_pronoun:
+                for pattern in pattern_list:
+                    pronoun = re.search(pattern,utterance)
+                    if pronoun != None and pronoun.group(1) != None:
+                        return pronoun.group(1)
             semi_pronoun = self.person_semi_pronoun.search(utterance)
 
             if semi_pronoun != None and semi_pronoun.group(1) != None:
@@ -149,4 +161,4 @@ class Extractor:
         for i,pattern in enumerate(format_pronoun):
             person_pronoun[i] = re.compile("|".join(pattern))
 
-        return person_explicit, person_pronoun, person_semi_pronoun, matches
+        return person_explicit, format_pronoun, person_semi_pronoun, matches

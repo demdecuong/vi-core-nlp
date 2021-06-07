@@ -14,6 +14,7 @@ text = "sdt : 0349933957 ok chua"
 print(extractor.extract_phone_num(text))
 # 0349933957
 ```
+Inference time :  0.00015s
 
 **Extract person name**
 ```
@@ -25,10 +26,28 @@ text = "tôi tên là pham hai nam"
 print(extractor.extract_person_name(text,'pattern'))
 # pham hai nam
 ```
+Inference time :  
+ - dictionary :  0.00015s
+ - pattern :  0.00014s
+ - dictionary + pattern :  0.00017s  
+Ditionary Load Time :  22.21s  
 
-**Extract Date**
-TBD
+**Extract Date** 
+```
+from src.extractor import Extractor
 
+extractor = Extractor()
+
+text = "tôi muốn đặt lịch vào ngày 6 tháng 7"
+extractor.extract_date(text)
+# [('None', ['ngày 6 '], ['tháng 7'], 'None')]
+
+
+text = "tôi sinh vào ngày 21-3-1997"
+extractor.extract_date(text)
+# [('Thứ 6', '21', '3', '1997')]
+```
+Inference time : 4.76e-07  
 **Extract Time**
 TBD
 
