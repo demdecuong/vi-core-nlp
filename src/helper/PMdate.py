@@ -56,11 +56,17 @@ class PatternMatching(object):
                 if not day:
                     day = ['None'] * tmp
                 else:
-                    day = [re.search("\d+", x).group() for x in day]
+                    try:
+                        day = [re.search("\d+", x).group() for x in day]
+                    except:
+                        day = day
                 if not month:
                     month = ['None'] * tmp
                 else:
-                    month = [re.search("\d+", x).group() for x in month]
+                    try:
+                        month = [re.search("\d+", x).group() for x in month]
+                    except:
+                        month = [re.search("(một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)", x).group() for x in month]
                 if not year:
                     year = ['None'] * tmp
                 else:
