@@ -70,7 +70,7 @@ class PatternMatching(object):
                         wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(tmp)]
                     except:
                         wod = ["None"] * tmp
-                return  [(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)]
+                result.extend([(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)])
                 #TODO  inference week day month year is None
             return result
 
@@ -253,3 +253,6 @@ class PatternMatching(object):
         return results # [("thứ 2", 1,1,111), ("thứ 3", 2, 1, 1111) ... ("chủ nhật", 7, 1, 1111)]
 
     # def _fill_none(result):
+    #     for i in result:
+    #         if i[1] != 'None' and i[2] != 'None':
+                
