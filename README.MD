@@ -21,15 +21,27 @@ Inference time :  0.00015s
 from src.extractor import Extractor
 
 extractor = Extractor()
-text = "tôi tên là pham hai nam"
 
+text = "tôi tên là pham hai nam"
 print(extractor.extract_person_name(text,'pattern'))
-# pham hai nam
+
+text = "tôi cần đặt bác sĩ tạ biên cương"
+print(extractor.extract_person_name(text,'pattern'))
+
+text = "trời hôm nay nhiều mây cực"
+print(extractor.extract_person_name(text,'pattern'))
+```
+The expected output should be:
+```
+{'entities': [{'start': 11, 'end': 23, 'entity': 'person_name', 'value': 'Pham Hai Nam', 'confidence': 1.0, 'extractor': 'pattern'}]}
+{'entities': [{'start': 19, 'end': 32, 'entity': 'person_name', 'value': 'Tạ Biên Cương', 'confidence': 1.0, 'extractor': 'pattern'}]}
+{'entities': []}
 ```
 Inference time :  
  - dictionary :  0.00015s
  - pattern :  0.00014s
  - dictionary + pattern :  0.00017s  
+ 
 Ditionary Load Time :  22.21s  
 
 **Extract Date** 

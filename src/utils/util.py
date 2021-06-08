@@ -26,7 +26,7 @@ def save_dict(data,path):
         pickle.dump(data, file)
 
 def get_ngram(sentence, n = 1):
-    sentence = tokenize(sentence)
+    # sentence = tokenize(sentence)
     return ngrams(sentence.split(' '), n)
 
 def tokenize(sentence):

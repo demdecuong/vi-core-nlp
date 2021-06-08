@@ -204,18 +204,18 @@ def get_person_pattern():
     ]
 
     format_pronoun = [
+        format_pronoun12,
         format_pronoun1,
         format_pronoun2,
         format_pronoun3,
-        format_pronoun4,
         format_pronoun5,
-        format_pronoun6,
         format_pronoun7,
-        format_pronoun8,
         format_pronoun9,
+        format_pronoun4,
+        format_pronoun6,
+        format_pronoun8,
         format_pronoun10,
         format_pronoun11,
-        format_pronoun12,
     ]
 
     return format_explicit, format_pronoun, format_semi_pronoun, matches
@@ -223,3 +223,29 @@ def get_person_pattern():
 def get_phone_pattern():
     pattern = r"(84|0[3|5|7|8|9])+([0-9]{8})\b"
     return pattern
+
+def get_time_pattern():
+    # absolute 1 
+    # 5:30 , 6:15 , 8:53 , 3:00 , 3.14.52 , 5.21
+
+    # 11 am, 12pm, 1pm, 2:15pm, 3.30pm ,4.45, 5:30, 06:15, 07:30pm, 8:30 pm, 9.15 pm
+    abs_pattern =  [
+        "(?:0?[1-9]|1[0-2])(?!\d| (?![ap]))[:.]?(?:(?:[0-5][0-9]))",
+        "(?=((?: |^)[0-2]?\d[:. ]?[0-5]\d(?:[:. ]?[0-5]\d)?(?:|$)))"
+    ]
+
+    # contains giờ (logic)
+    #   - sáng/chiều/tối (8 giờ chieu)
+    #   - tám giờ chiều (số --> chữ)
+    #   - 
+    #   - 
+
+    # extract AM or PM
+    am_pattern = ['am','sáng', 'giờ sáng', 'buổi sáng', 'sunup', 'morning']
+    pm_pattern = ['pm','tối','chiều','buổi chiều', 'buổi tối', 'giờ chiều', 'giờ tối' ,'trưa', 'buổi trưa', 'giờ trưa', 'xế chiều', 'chiều tà', 'noon','afternoon','evening']
+    
+    # relative : 
+    # 2 giờ nữa, 15 phút nữa 
+
+    relative_pattern = []
+    return abs_pattern, am_pattern, pm_pattern

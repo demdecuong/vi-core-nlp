@@ -1,7 +1,7 @@
 import re
 from datetime import date
 import datetime
-# from Preprocess import Preprocess
+# from src.utils.Preprocess import Preprocess
 
 def format():
     format_date = ['(\d+(,|\s|\.|-|\/|_)+\d+(,|\s|\.|-|\/|_)+\d+)', # 21/03/1997  21-03-1997  21.03.1997
@@ -44,10 +44,10 @@ class PatternMatching(object):
 
         self.week_days=["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"]
 
-        # pre_process = Preprocess()
+        # self.pre_process = Preprocess()
 
     def extract_date(self, text):
-        # text = pre_process.preprocess(text)
+        # text = self.pre_process.preprocess(text)
         result_non_format = [x.group() for x in re.finditer(self.non_format, text)]
         result_format = [x.group() for x in re.finditer(self.format_date, text)]
 

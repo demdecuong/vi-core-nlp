@@ -2,8 +2,9 @@ import re
 
 from underthesea import ner
 from src.utils.util import read_dict, get_ngram, tokenize
-from src.utils.pattern import get_person_pattern, get_phone_pattern
+from src.utils.pattern import get_person_pattern, get_phone_pattern, get_time_pattern
 from src.utils.PMdate import PatternMatching
+from src.utils.Preprocess import Preprocess
 
 class Extractor:
     def __init__(self,n_gram = 4,dict_path='./src/data/fullname.pkl'):
@@ -17,9 +18,39 @@ class Extractor:
 
         self.patternmatching_date = PatternMatching()
 
-    def extract_time(self,utterance):
-        pass
+        self.time_absolute, self.am_pattern, self.pm_pattern = get_time_pattern()
 
+        self.preprocessor = Preprocess()
+        
+    def extract_time(self,utterance):
+        '''
+        1. Get hour and minute
+        2. Get AM/PM
+        Input:
+            input string
+        Return:
+            tuple of (hour,minute,AM/PM)
+        '''
+        utterance = tokenize(utterance).lower()
+
+        if utterance.find('giờ') != -1:
+            list_of_words = utterance.split(' ')
+            key_index = list_of_words.index('giờ')
+            pot_num = 2
+            potential_range = list_of_words[max(0,key_index - pot_num):min(key_index + pot_num,len(list_of_words))]
+            # for token in potential_range:
+
+        else:
+            # Get raw form in hour/minute
+            for pattern in self.time_absolute:
+                time = re.search(pattern,utterance)
+            if '.' in time:
+                hour,minute = time.split('.')
+            elif ':' in time:
+                hour,minute = time.split(':')
+
+        # Get AM/PM       
+        
     def extract_date(self,utterance):
         '''
         Input:
@@ -45,15 +76,29 @@ class Extractor:
             'Invalid'   :   otherwise
         '''
         assert mode in ['dictionary','pattern','hybrid']
-
+        # Normalize Uncicode
+        # utterance = self.preprocessor.preprocess(utterance)
+        utterance = tokenize(utterance).lower()
         if mode == 'dictionary':
             # Aho-corasik searching
             dict_result = self.extract_person_name_dict(utterance)
-            return dict_result
+            return self.output_format(
+                    output = dict_result, 
+                    utterance = utterance,
+                    extractor = mode,
+                    entity = 'person_name'
+                )
         elif mode == 'pattern':
             # Pattern matching
             pattern_result = self.extract_person_name_pattern(utterance)
-            return pattern_result
+            if pattern_result != 'Invalid':
+                pattern_result = [pattern_result]
+            return self.output_format(
+                    output = pattern_result, 
+                    utterance = utterance,
+                    extractor = mode,
+                    entity = 'person_name'
+                )
         else:
             # Dictionay + pattern matching
             result = []
@@ -65,9 +110,19 @@ class Extractor:
                 result.append(pattern_result)
             result = list(set(result))
             if result != []:
-                return result[0]
+                return  self.output_format(
+                        output = result, 
+                        utterance = utterance,
+                        extractor = mode,
+                        entity = 'person_name'
+                    )
             else:
-                return 'Invalid'
+                return  self.output_format(
+                        output = 'Invalid',
+                        utterance = utterance,
+                        extractor = mode,
+                        entity = 'person_name'
+                    )
 
     def extract_person_name_dict(self,utterance):
         '''
@@ -84,7 +139,7 @@ class Extractor:
             ngrams = get_ngram(utterance.lower(),i)
             for item in ngrams:
                 item = ' '.join(item)
-                if self.get_name(item) != 'not_exists':
+                if self.get_name(item) != 'not_exists' and item not in result:
                     result.append(item)
         if result != []:         
             return result   
@@ -101,7 +156,6 @@ class Extractor:
             stirng      :   persone name
             'Invalid'   :   otherwise
         '''
-        utterance = tokenize(utterance).lower()
         if any(x in utterance for x in self.matches):
             for pattern_list in self.person_pronoun:
                 for pattern in pattern_list:
@@ -109,16 +163,17 @@ class Extractor:
                     if pronoun != None and pronoun.group(1) != None:
                         return pronoun.group(1)
             semi_pronoun = self.person_semi_pronoun.search(utterance)
-
-            if semi_pronoun != None and semi_pronoun.group(1) != None:
-                return semi_pronoun.group(1)
-            else:
+            try:
+                if semi_pronoun != None and semi_pronoun.group(1) != None:
+                    return semi_pronoun.group(1)
+            except:
                 return 'Invalid' 
         else:
             explicit = self.person_explicit.search(utterance)
-            if explicit != None and explicit.group(1) != None:
-                return explicit.group(1)
-            else:
+            try:
+                if explicit != None and explicit.group(1) != None:
+                    return explicit.group(1)
+            except:
                 return 'Invalid'
 
     def get_name(self,s):
@@ -162,3 +217,45 @@ class Extractor:
             person_pronoun[i] = re.compile("|".join(pattern))
 
         return person_explicit, format_pronoun, person_semi_pronoun, matches
+    
+    def output_format(self,output,utterance,extractor,entity):
+        if entity == 'person_name':
+            if output == 'Invalid':
+                return {
+                    'entities' : []
+                }
+            else:
+                entities = []
+                for ent in output:
+                    entities.append(self.output_person_format(ent,utterance,extractor))
+                return {
+                    'entities' : entities
+                }
+
+    def output_person_format(self,output,utterance,extractor):
+        '''
+        1. Get start/end index
+        2. Capitalize entity
+        Input:
+            output - string
+                person name entity
+            utterance - string
+                raw input string from user
+            extractor - string in ['dictionary','pattern','hybrid']
+                method of extractor 
+        '''
+        start = utterance.find(output)
+        end = start + len(output)
+
+        output = output.split(' ')
+        value = ' '.join([x.capitalize() for x in output])
+        
+        return {
+                "start": start,
+                "end": end,
+                "entity": "person_name",
+                "value": value,
+                "confidence": 1.0,
+                "extractor": extractor
+                }
+
