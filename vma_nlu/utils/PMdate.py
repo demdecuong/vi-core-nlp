@@ -1,7 +1,7 @@
 import re
 from datetime import date
 import datetime
-from src.utils.pattern import get_date_absolute, get_date_relative
+from vma_nlu.utils.pattern import get_date_absolute, get_date_relative
 # from Preprocess import Preprocess
 
 

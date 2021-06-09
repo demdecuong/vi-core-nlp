@@ -1,13 +1,13 @@
 import re
 
 from underthesea import ner
-from src.utils.util import read_dict, get_ngram, tokenize
-from src.utils.pattern import get_person_pattern, get_phone_pattern, get_time_pattern
-from src.utils.PMdate import PatternMatching
-from src.utils.Preprocess import Preprocess
+from vma_nlu.utils.util import read_dict, get_ngram, tokenize
+from vma_nlu.utils.pattern import get_person_pattern, get_phone_pattern, get_time_pattern
+from vma_nlu.utils.PMdate import PatternMatching
+from vma_nlu.utils.Preprocess import Preprocess
 
 class Extractor:
-    def __init__(self,n_gram = 4, dict_path='./src/data/fullname.pkl',load_dict=False):
+    def __init__(self,n_gram = 4, dict_path='./vma_nlu/data/fullname.pkl',load_dict=False):
 
         self.max_n_gram = n_gram
         if load_dict:
@@ -268,6 +268,6 @@ class Extractor:
                 "extractor": extractor
                 }
 
-    def load_dict(self,dict_path='./src/data/fullname.pkl'):
+    def load_dict(self,dict_path='./vma_nlu/data/fullname.pkl'):
         print('Loading person name vocabulary ...')
         self.fullname_dict = read_dict(dict_path)
