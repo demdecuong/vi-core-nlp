@@ -1,6 +1,10 @@
 import re
+import json
+
 from datetime import date
 import datetime
+
+
 from src.helper.pattern_date import absolute, relative
 # from Preprocess import Preprocess
 
@@ -23,174 +27,232 @@ class PatternMatching(object):
 
         self.week_days=["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"]
 
+        with open("./src/helper/dictionary_normalize_date.json", "r", encoding="utf-8") as f:
+            self.dict_normalize = json.load(f)
 
 
     def extract_date(self, text):
         text = text.lower()
 
-        result_non_format = [x.group() for x in re.finditer(self.non_format, text)]
-        result_format = [x.group() for x in re.finditer(self.format_date, text)]
+        get_pattern_absolute = [(x.group(), x.span()) for x in re.finditer(self.format_date, text)]
+        get_pattern_relative = [(x.group(), x.span()) for x in re.finditer(self.non_format, text)]
 
-        if not result_non_format and not result_format:
-            result = []
-            semi_format = [x.group() for x in re.finditer(self.semi_format, text)]
-            print(semi_format)
+        value = []
+        entities = []
+
+        if not get_pattern_relative and not get_pattern_absolute:
+            semi_format = [(x.group(), x.span()) for x in re.finditer(self.semi_format, text)]
             if semi_format:
-                year = datetime.date.today().year
-                year = [year] * len(semi_format)
-                list_date = [re.split('(,|\s|\.|-|\/|_)', x) for x in semi_format]
-                day = [x[0] for x in list_date]
-                month = [x[2] for x in list_date]
-                wod  = []
-                for i in range(len(day)):
-                    wod.append(self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()])
-                result.extend([(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)])
-            else:
-                wod = [x.group() for x in re.finditer(self.wod, text)]
-                day = [x.group() for x in re.finditer(self.day, text)]
-                month = [x.group() for x in re.finditer(self.month, text)]
-                year = [x.group() for x in re.finditer(self.year, text)]
-                tmp = max(len(wod), len(day), len(month), len(year))
-                if tmp == 0:
-                    return "Invalid"
-                if not day:
-                    day = ['None'] * tmp
-                else:
-                    try:
-                        day = [re.search("\d+", x).group() for x in day]
-                    except:
-                        day = day
-                if not month:
-                    month = ['None'] * tmp
-                else:
-                    try:
-                        month = [re.search("\d+", x).group() for x in month]
-                    except:
-                        month = [re.search("(một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)", x).group() for x in month]
-                if not year:
-                    year = ['None'] * tmp
-                else:
-                    year = [re.search("\d+", x).group() for x in year]
+                for pattern, span in semi_format:
+                    tmp = re.split('(,|\s|\.|-|\/|_)', pattern)
+                    day = int(tmp[0])
+                    month = int(tmp[2])
+                    wod = "None"
+                    year = "None"
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append([(wod, day, month, year)])
+
+            wod = [(x.group(), x.span()) for x in re.finditer(self.wod, text)]
+            day = [(x.group(), x.span()) for x in re.finditer(self.day, text)]
+            month = [(x.group(), x.span()) for x in re.finditer(self.month, text)]
+            year = [(x.group(), x.span()) for x in re.finditer(self.year, text)]
+
+            tmp = max(len(wod), len(day), len(month), len(year))
+            if tmp == 0 and entities:
+                return entities, value
+
+            for i in range(tmp):
                 if not wod:
-                    try:
-                        wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(tmp)]
-                    except:
-                        wod = ["None"] * tmp
-                result.extend([(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)])
-                #TODO  inference week day month year is None
-            return result
+                    wod = "None"
+                else:
+                    wod = wod[i][0]
+                
+                if not day:
+                    day = "None"
+                else:
+                    day = re.search("(\d+)|(((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mươi))(\s|$)((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mươi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mốt))*(\s|$)*)", day).group()
+                    day = self.dict_normalize[day]
+                
+                if not month:
+                    month = "None"
+                else:
+                    month = re.search("(\d+)|((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap))", month).group()
+                    month = self.dict_normalize[day]
+                
+                if not year:
+                    year = "None"
+                else:
+                    year = int(re.search("\d+", year).group())
+                    
+            value.append([(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)])
+            return entities, value
 
         else:
-            result = []
-            if result_format:
-                list_date = [re.split('(,|\s|\.|-|\/|_)', x) for x in result_format]
-                day = [x[0] for x in list_date]
-                month = [x[2] for x in list_date]
-                year = [x[4] for x in list_date]
-                wod  = []
-                for i in range(len(day)):
-                    wod.append(self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()])
-                result.extend([(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)])
+            if get_pattern_absolute:
+                for pattern, span in get_pattern_absolute:
+                    tmp = re.split('(,|\s|\.|-|\/|_)', pattern)
+                    day = int(tmp[0])
+                    month = int(tmp[2])
+                    year = int(tmp[4])
+                    wod = self.week_days[datetime.date(year, month, day).weekday()]
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append([(wod, day, month, year)])
 
-            if result_non_format: # result_non_format = ['ngày mai', 'tháng này', ... ]
-                result.extend(self._map_non_format_to_date(result_non_format=result_non_format))
+            if get_pattern_relative: # get_pattern_relative = ['ngày mai', 'tháng này', ... ]
+                ent, val = self._map_relative_to_date(get_pattern_relative=get_pattern_relative)
 
-            return result
+                entities.extend(ent)
+                value.extend(val)
 
-    def _map_non_format_to_date(self, result_non_format):
+            return value, entities
 
-        results = []
-        for i in result_non_format:
-            if re.search("qua", i):
+    def _map_relative_to_date(self, get_pattern_relative):
+
+        entities = []
+        value = []
+
+        for pattern, span in get_pattern_relative:
+            if re.search("qua", pattern):
                 
-                if re.search("(ngày)|(ngay)|(ngayf)", i) or re.search("(hôm)|(hom)", i) or re.search("(sáng)|(sang)", i) or re.search("(trưa)|(trua)", i) or re.search("(chiều)|(chieu)", i) or re.search("(tối)|(toi)", i):
+                if re.search("(ngày)|(ngay)|(ngayf)", pattern) or re.search("(hôm)|(hom)", pattern) or re.search("(sáng)|(sang)", pattern) or re.search("(trưa)|(trua)", pattern) or re.search("(chiều)|(chieu)", pattern) or re.search("(tối)|(toi)", pattern):
                     get_date = self._get_day(timedelta=1, mode="sub")
-                    day = [get_date[2]]
-                    month = [get_date[1]]
-                    year = [get_date[0]]
-                    wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                    result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
+                    day = int(get_date[2])
+                    month = int(get_date[1])
+                    year = int(get_date[0])
+                    wod = self.week_days[datetime.date(year, month, day).weekday()]
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append([(wod, day, month, year)])
+                    
                 
-                elif re.search("(tuần)|(tuan)", i):
-                    result = self._get_week(mode="sub")
+                elif re.search("(tuần)|(tuan)", pattern):
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append(self._get_week(mode="sub"))
 
-                elif re.search("(tháng)|(thang)", i):
-                    get_date = self._get_month("sub")
-                    day = get_date[2]
-                    month = get_date[1]
-                    year = get_date[0]
+                elif re.search("(tháng)|(thang)", pattern):
+                    get_month = self._get_month("sub")
+                    day = get_month[2]
+                    month = get_month[1]
+                    year = get_month[0]
                     wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                    result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append([(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)])
             
-            elif re.search("(này)|(nay)", i):
+            elif re.search("(này)|(nay)", pattern):
 
-                if re.search("(ngày)|(ngay)|(ngayf)", i) or re.search("(hôm)|(hom)", i) or re.search("(sáng)|(sang)", i) or re.search("(trưa)|(trua)", i) or re.search("(chiều)|(chieu)", i) or re.search("(tối)|(toi)", i):
+                if re.search("(ngày)|(ngay)|(ngayf)", pattern) or re.search("(hôm)|(hom)", pattern) or re.search("(sáng)|(sang)", pattern) or re.search("(trưa)|(trua)", pattern) or re.search("(chiều)|(chieu)", pattern) or re.search("(tối)|(toi)", pattern):
                     get_date = self._get_day(timedelta=0, mode="add")
-                    day = [get_date[2]]
-                    month = [get_date[1]]
-                    year = [get_date[0]]
-                    wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                    result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
+                    day = int(get_date[2])
+                    month = int(get_date[1])
+                    year = int(get_date[0])
+                    wod = self.week_days[datetime.date(year, month, day).weekday()]
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append([(wod, day, month, year)])
 
-                elif re.search("(tuần)|(tuan)", i):
+                elif re.search("(tuần)|(tuan)", pattern):
                     today = datetime.date.today()
                     weekday = today.weekday()
                     result = []
                     for i in range(7-int(weekday)):
                         get_date = self._get_day(timedelta=i, mode="add")
-                        day = [get_date[2]]
-                        month = [get_date[1]]
-                        year = [get_date[0]]
-                        wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                        result.extend([(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)])
+                        day = int(get_date[2])
+                        month = int(get_date[1])
+                        year = int(get_date[0])
+                        wod = self.week_days[datetime.date(year, month, day).weekday()]
+                        result.append((wod, day, month, year))
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })    
+                    value.append(result)
 
-                elif re.search("(tháng)|(thang)", i):
-                    get_date = self._get_month("current")
-                    day = get_date[2]
-                    month = get_date[1]
-                    year = get_date[0]
+                elif re.search("(tháng)|(thang)", pattern):
+                    get_month = self._get_month("current")
+                    day = get_month[2]
+                    month = get_month[1]
+                    year = get_month[0]
                     wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                    result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append([(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)])
             
-            elif re.search("mai", i) or re.search("tới", i) or re.search("sau", i):
+            elif re.search("mai", pattern) or re.search("tới", pattern) or re.search("sau", pattern):
                 
-                if re.search("(ngày)|(ngay)|(ngayf)", i) or re.search("(hôm)|(hom)", i) or re.search("(sáng)|(sang)", i) or re.search("(trưa)|(trua)", i) or re.search("(chiều)|(chieu)", i) or re.search("(tối)|(toi)", i):
+                if re.search("(ngày)|(ngay)|(ngayf)", pattern) or re.search("(hôm)|(hom)", pattern) or re.search("(sáng)|(sang)", pattern) or re.search("(trưa)|(trua)", pattern) or re.search("(chiều)|(chieu)", pattern) or re.search("(tối)|(toi)", pattern):
                     get_date = self._get_day(timedelta=1, mode="add")
-                    day = [get_date[2]]
-                    month = [get_date[1]]
-                    year = [get_date[0]]
-                    wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                    result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
+                    day = int(get_date[2])
+                    month = int(get_date[1])
+                    year = int(get_date[0])
+                    wod = self.week_days[datetime.date(year, month, day).weekday()]
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append([(wod, day, month, year)])
 
-                elif re.search("(tuần)|(tuan)", i):
-                    result = self._get_week(mode="add")
+                elif re.search("(tuần)|(tuan)", pattern):
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append(self._get_week(mode="add"))
 
-                elif re.search("(tháng)|(thang)", i):
+                elif re.search("(tháng)|(thang)", pattern):
                     get_date = self._get_month("add")
                     day = get_date[2]
                     month = get_date[1]
                     year = get_date[0]
                     wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                    result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
+                    entities.append({
+                        "start": span[0],
+                        "end": span[1]
+                    })
+                    value.append([(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)])
 
-            elif re.search("mốt", i):
+            elif re.search("mốt", pattern):
                 get_date = self._get_day(timedelta=2, mode="add")
-                day = [get_date[2]]
-                month = [get_date[1]]
-                year = [get_date[0]]
-                wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
+                day = int(get_date[2])
+                month = int(get_date[1])
+                year = int(get_date[0])
+                wod = self.week_days[datetime.date(year, month, day).weekday()]
+                entities.append({
+                    "start": span[0],
+                    "end": span[1]
+                })
+                value.append([(wod, day, month, year)])
 
-            elif re.search("kia", i):
+            elif re.search("kia", pattern):
                 get_date = self._get_day(timedelta=3, mode="add")
-                day = [get_date[2]]
-                month = [get_date[1]]
-                year = [get_date[0]]
-                wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
-
-            results.extend(result)
-        return results
+                day = int(get_date[2])
+                month = int(get_date[1])
+                year = int(get_date[0])
+                wod = self.week_days[datetime.date(year, month, day).weekday()]
+                entities.append({
+                    "start": span[0],
+                    "end": span[1]
+                })
+                value.append([(wod, day, month, year)])
+            
+        return entities, value
 
 
     def _get_month(self, mode):
@@ -238,25 +300,23 @@ class PatternMatching(object):
         today = datetime.date.today()
         start_delta = datetime.timedelta(today.weekday())
         start_of_week = today - start_delta
-        results = []
+        value = []
         for i in range(7,14):
             if mode == "add":
                 get_date = self._get_day(start_of_week, timedelta=i, mode=mode)
-                day = [get_date[2]]
-                month = [get_date[1]]
-                year = [get_date[0]]
-                wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
-                results.extend(result)
+                day = int(get_date[2])
+                month = int(get_date[1])
+                year = int(get_date[0])
+                wod = self.week_days[datetime.date(year, month, day).weekday()]
+                value.append((wod, day, month, year))
             elif mode == "sub":
                 get_date = self._get_day(start_of_week, 14-i, mode=mode)
-                day = [get_date[2]]
-                month = [get_date[1]]
-                year = [get_date[0]]
-                wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
-                result = [(w, d, m, y) for w, d, m ,y in zip(wod, day, month, year)]
-                results.extend(result)
-        return results # [("thứ 2", 1,1,111), ("thứ 3", 2, 1, 1111) ... ("chủ nhật", 7, 1, 1111)]
+                day = int(get_date[2])
+                month = int(get_date[1])
+                year = int(get_date[0])
+                wod = self.week_days[datetime.date(year, month, day).weekday()]
+                value.append((wod, day, month, year))
+        return value # [("thứ 2", 1,1,111), ("thứ 3", 2, 1, 1111) ... ("chủ nhật", 7, 1, 1111)]
 
     # def _fill_none(result):
     #     for i in result:

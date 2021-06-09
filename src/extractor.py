@@ -22,8 +22,8 @@ class Extractor:
         Output:
             return tuple of (dow,dd,mm,yyyy)
         '''
-        result = self.patternmatching_date.extract_date(input)
-        return result
+        value, entities = self.patternmatching_date.extract_date(input)
+        return value, entities
 
 
     def extract_time(self,input):
