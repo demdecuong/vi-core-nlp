@@ -5,6 +5,9 @@ extractor = Extractor(load_dict=False) # True: Load dictionary path
 text = "tôi tên là pham hai nam"
 print(extractor.extract_person_name(text,'pattern'))
 
+text = "tôi tên là Nam"
+print(extractor.extract_person_name(text,'pattern'))
+
 text = "tôi cần đặt bác sĩ tạ biên cương"
 print(extractor.extract_person_name(text,'pattern'))
 
@@ -23,4 +26,4 @@ print(extractor.extract_date(text))
 
 text = "tôi sinh vào ngày 21-3-1997"
 print(extractor.extract_date(text))
-[('Thứ 6', '21', '3', '1997')]
+# [('Thứ 6', '21', '3', '1997')]
