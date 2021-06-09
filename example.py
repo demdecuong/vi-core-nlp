@@ -17,6 +17,12 @@ print(extractor.extract_person_name(text,'pattern'))
 text = "216565489421"
 print(extractor.extract_person_name(text,'pattern'))
 
+text = "xin cái điện chỉ nhà thằng Văn"
+print(extractor.extract_person_name(text,'pattern'))
+
+text = "không biết hôm nay trời mưa không"
+print(extractor.extract_person_name(text,'pattern'))
+
 text = "trời hôm nay nhiều mây cực"
 print(extractor.extract_person_name(text,'pattern'))
 
