@@ -168,10 +168,9 @@ class Extractor:
                     if pronoun != None and pronoun.group(1) != None:
                         return pronoun.group(1)
             semi_pronoun = self.person_semi_pronoun.search(utterance)
-            try:
-                if semi_pronoun != None and semi_pronoun.group(1) != None:
-                    return semi_pronoun.group(1)
-            except:
+            if semi_pronoun != None and semi_pronoun.group(1) != None:
+                return semi_pronoun.group(1)
+            else:
                 return 'Invalid' 
         else:
             explicit = self.person_explicit.search(utterance)
@@ -188,6 +187,7 @@ class Extractor:
             print('Your dictionary is now empty')
             print('Ensure you have load the vocabulary for fullname_dict ! Otherwise you can run self.load_dict() update the dictionary .')
             return 'not_exists'
+    
     def extract_phone_num(self,utterance):
         '''
         Use regex for pattern matching (nha mang + remain numbers)

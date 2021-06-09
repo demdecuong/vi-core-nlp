@@ -8,6 +8,9 @@ print(extractor.extract_person_name(text,'pattern'))
 text = "tôi cần đặt bác sĩ tạ biên cương"
 print(extractor.extract_person_name(text,'pattern'))
 
+text = "tao 653216565489421"
+print(extractor.extract_person_name(text,'pattern'))
+
 text = "trời hôm nay nhiều mây cực"
 print(extractor.extract_person_name(text,'pattern'))
 
