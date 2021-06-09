@@ -174,10 +174,9 @@ class Extractor:
                 return 'Invalid' 
         else:
             explicit = self.person_explicit.search(utterance)
-            try:
-                if explicit != None and explicit.group(1) != None:
-                    return explicit.group(1)
-            except:
+            if explicit != None and explicit.group(1) != None:
+                return explicit.group(1)
+            else:
                 return 'Invalid'
 
     def get_name(self,s):

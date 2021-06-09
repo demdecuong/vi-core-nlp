@@ -11,6 +11,9 @@ print(extractor.extract_person_name(text,'pattern'))
 text = "tao 653216565489421"
 print(extractor.extract_person_name(text,'pattern'))
 
+text = "216565489421"
+print(extractor.extract_person_name(text,'pattern'))
+
 text = "trời hôm nay nhiều mây cực"
 print(extractor.extract_person_name(text,'pattern'))
 
@@ -20,4 +23,4 @@ print(extractor.extract_date(text))
 
 text = "tôi sinh vào ngày 21-3-1997"
 print(extractor.extract_date(text))
-# [('Thứ 6', '21', '3', '1997')]
+[('Thứ 6', '21', '3', '1997')]
