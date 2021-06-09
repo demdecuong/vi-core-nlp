@@ -27,7 +27,7 @@ def get_person_pattern():
     # 1 person name
     format_explicit = [r"[^()0-9-]+",r"[A-Z][a-z]+,?\s+(?:[A-Z][a-z]*\.?\s*)?[A-Z][a-z]+"] 
 
-    # (tao/tôi/tui/chúbác/cô/dìôngbàemcậudượngbác sĩ) la [Name]
+    # (tao/tôi/tui/chúbác/cô/dì/ông/bà/em/cậu/dượng/bác sĩ) la [Name]
 
     format_pronoun1 = [
         ' tao là \.?([^()0-9-]+)',
@@ -43,6 +43,7 @@ def get_person_pattern():
         ' tao : \.?([^()0-9-.*]+)',
         ' tao: \.?([^()0-9-.*]+)'
         ]
+
     format_pronoun2 = [
         ' tôi tên là \.?([^()0-9-]+)',
         ' tôi tên là \.?([^()0-9-.*]+)',

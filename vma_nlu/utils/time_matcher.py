@@ -135,7 +135,7 @@ class TimeMatcher:
             'ngày','phút','tháng','năm','buổi'
         ]
         # for token
-        
+
     def get_minute(self,minute_range):
         pass
 
@@ -148,12 +148,12 @@ class TimeMatcher:
 
 if __name__ == '__main__':
     matcher = TimeMatcher()
-    # text = '14:30 sáng thứ 7 tuần này'
-    # print(matcher.extract_absolute_time(text))
-    # text = '18:30 tiếng kém mười lăm'
-    # print(matcher.extract_absolute_time(text))
-    # text = 'ngày 7 tháng 6 lúc 14.15.00 giờ'
-    # print(matcher.extract_absolute_time(text))
+    text = '14:30 sáng thứ 7 tuần này'
+    print(matcher.extract_absolute_time(text))
+    text = '18:30 tiếng kém mười lăm'
+    print(matcher.extract_absolute_time(text))
+    text = 'ngày 7 tháng 6 lúc 14.15.00 giờ'
+    print(matcher.extract_absolute_time(text))
     
     text = 'lúc 14 giờ 30 ngày 7 tháng 6'
     print(matcher.extract_relative_time(text))

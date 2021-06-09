@@ -7,13 +7,15 @@ from vma_nlu.utils.PMdate import PatternMatching
 from vma_nlu.utils.Preprocess import Preprocess
 
 class Extractor:
-    def __init__(self,n_gram = 4, dict_path='./vma_nlu/data/fullname.pkl',load_dict=False):
+    def __init__(self,n_gram = 4, dict_path='./vma_nlu/data/fullname.pkl',sw_path='./vma_nlu/data/stopwords.pkl',load_dict=False):
 
         self.max_n_gram = n_gram
         if load_dict:
             self.fullname_dict = read_dict(dict_path)
         else:
             self.fullname_dict = None
+        
+        self.stopwords_dict = read_dict(sw_path)
 
         self.phone_regex = get_phone_pattern()
 
@@ -64,7 +66,7 @@ class Extractor:
         result = self.patternmatching_date.extract_date(utterance)
         return result
 
-    def extract_person_name(self,utterance,mode='pattern'):
+    def extract_person_name(self,utterance,mode='pattern',rt='relative'):
         '''
         1. Extract ngrams from (max_ngram,2)
         2. Check each ngram is in dictionary (aho-corasik)
@@ -74,6 +76,13 @@ class Extractor:
                 dictionary : dictionary-based
                 pattern : pattern matching
                 hybrid : dictionary + pattern
+            rt - string
+                exact : 
+                    yes --> NER
+                    no  --> None
+                relative:
+                    yes --> NER
+                    no  --> filter stopwords 
         Return:
             string      :   persone name
             'Invalid'   :   otherwise
@@ -90,7 +99,8 @@ class Extractor:
                     output = dict_result, 
                     utterance = utterance,
                     extractor = mode,
-                    entity = 'person_name'
+                    entity = 'person_name',
+                    rt= rt
                 )
         elif mode == 'pattern':
             # Pattern matching
@@ -101,7 +111,8 @@ class Extractor:
                     output = pattern_result, 
                     utterance = utterance,
                     extractor = mode,
-                    entity = 'person_name'
+                    entity = 'person_name',
+                    rt= rt
                 )
         else:
             # Dictionay + pattern matching
@@ -118,14 +129,16 @@ class Extractor:
                         output = result, 
                         utterance = utterance,
                         extractor = mode,
-                        entity = 'person_name'
+                        entity = 'person_name',
+                        rt= rt
                     )
             else:
                 return  self.output_format(
                         output = 'Invalid',
                         utterance = utterance,
                         extractor = mode,
-                        entity = 'person_name'
+                        entity = 'person_name',
+                        rt= rt
                     )
 
     def extract_person_name_dict(self,utterance):
@@ -229,12 +242,19 @@ class Extractor:
 
         return person_explicit, format_pronoun, person_semi_pronoun, matches
     
-    def output_format(self,output,utterance,extractor,entity):
+    def output_format(self,output,utterance,extractor,entity,rt):
         if entity == 'person_name':
             if output == 'Invalid':
-                return {
-                    'entities' : []
-                }
+                if rt == 'exact':
+                    return {
+                        'entities' : []
+                    }
+                else: # Use stopwords for generate
+                    ent = self.get_back_up_name(utterance)
+                    entity = self.output_person_format(ent,utterance,extractor)
+                    return {
+                        'entities' : [entity]
+                    }
             else:
                 entities = []
                 for ent in output:
@@ -273,3 +293,14 @@ class Extractor:
     def load_dict(self,dict_path='./vma_nlu/data/fullname.pkl'):
         print('Loading person name vocabulary ...')
         self.fullname_dict = read_dict(dict_path)
+    
+    def get_back_up_name(self,utterance):
+        utterance = utterance.split(' ')
+        name = []
+        for token in utterance:
+            if self.get_stop_word(token) == 'not_exists':
+                name.append(token)
+        return ' '.join(name)
+
+    def get_stop_word(self,s):
+        return self.stopwords_dict.get(s,'not_exists')

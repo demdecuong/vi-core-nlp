@@ -9,7 +9,7 @@ import json
 import ast
 import re
 
-from vma_nlu.utils.util import save
+from utils.util import save
 
 def read(path):
     data = []
@@ -78,6 +78,6 @@ if __name__ == '__main__':
     # build_full_name()
 
     build_dict(
-        path='./fullname.txt',
-        path_out = './data/fullname.pkl'
+        path='./stopwords.txt',
+        path_out = './data/stopwords.pkl'
     )
