@@ -1,12 +1,12 @@
 # Installation
 ```
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 # Usage
 
 **Extract Vietnamese phone number**
 ```
-from src.extractor import Extractor
+from vma_nlu.extractor import Extractor
 
 extractor = Extractor()
 text = "sdt : 0349933957 ok chua"
@@ -18,7 +18,7 @@ Inference time :  0.00015s
 
 **Extract person name**
 ```
-from src.extractor import Extractor
+from vma_nlu.extractor import Extractor
 
 extractor = Extractor()
 
@@ -46,7 +46,7 @@ Ditionary Load Time :  22.21s
 
 **Extract Date** 
 ```
-from src.extractor import Extractor
+from vma_nlu.extractor import Extractor
 
 extractor = Extractor()
 
@@ -66,5 +66,5 @@ TBD
 If you want to use dictionary-based:  
 - Download dictionay `fullname.pkl` (5.4GB) in [here](
 https://drive.google.com/drive/u/1/folders/1lilHx7coHnCFB-EZoCz32sIn-VEdiniG)  
-- Then copy that file into `src/data` and remove comment line in constructor of Extractor class.  
+- Then copy that file into `vma_nlu/data` and remove comment line in constructor of Extractor class.  
 - Minimum requirement : RAM >= 25 GB
