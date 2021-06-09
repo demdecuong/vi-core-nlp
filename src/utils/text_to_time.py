@@ -42,14 +42,10 @@ class TimeConvertor:
         hour_range = text[max(0,hour_index - self.left_shift): hour_index]
 
         minute_range = text[hour_index + 1: min(hour_index + self.right_shift, len(text))]
-
+        
 
     def time2text(self,text):  
         pass
 
     def text2time(self,text):
-        
-pattern = '(?:^|\S+\s+\S+)(giờ|tiếng)(?:\s*\S+\s+\S+|$)'
-text = 'tám giờ kém ba mươi'
-p = re.search(pattern,text)
-print(p)
+        pass
