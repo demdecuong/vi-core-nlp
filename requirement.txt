@@ -1,1 +1,2 @@
 pyahocorasick==1.4.2
+vietnam-number==1.0.3

@@ -7,10 +7,13 @@ from src.utils.PMdate import PatternMatching
 from src.utils.Preprocess import Preprocess
 
 class Extractor:
-    def __init__(self,n_gram = 4,dict_path='./src/data/fullname.pkl'):
+    def __init__(self,n_gram = 4, dict_path='./src/data/fullname.pkl',load_dict=False):
 
         self.max_n_gram = n_gram
-        # self.fullname_dict = read_dict(dict_path)
+        if load_dict:
+            self.fullname_dict = read_dict(dict_path)
+        else:
+            self.fullname_dict = None
 
         self.phone_regex = get_phone_pattern()
 
@@ -31,23 +34,23 @@ class Extractor:
         Return:
             tuple of (hour,minute,AM/PM)
         '''
-        utterance = tokenize(utterance).lower()
+        pass
+        # utterance = tokenize(utterance).lower()
 
-        if utterance.find('giờ') != -1:
-            list_of_words = utterance.split(' ')
-            key_index = list_of_words.index('giờ')
-            pot_num = 2
-            potential_range = list_of_words[max(0,key_index - pot_num):min(key_index + pot_num,len(list_of_words))]
-            # for token in potential_range:
-
-        else:
-            # Get raw form in hour/minute
-            for pattern in self.time_absolute:
-                time = re.search(pattern,utterance)
-            if '.' in time:
-                hour,minute = time.split('.')
-            elif ':' in time:
-                hour,minute = time.split(':')
+        # if utterance.find('giờ') != -1:
+        #     list_of_words = utterance.split(' ')
+        #     key_index = list_of_words.index('giờ')
+        #     pot_num = 2
+        #     potential_range = list_of_words[max(0,key_index - pot_num):min(key_index + pot_num,len(list_of_words))]
+        #     # for token in potential_range:
+        # else:
+        #     # Get raw form in hour/minute
+        #     for pattern in self.time_absolute:
+        #         time = re.search(pattern,utterance)
+        #     if '.' in time:
+        #         hour,minute = time.split('.')
+        #     elif ':' in time:
+        #         hour,minute = time.split(':')
 
         # Get AM/PM       
         
@@ -80,6 +83,7 @@ class Extractor:
         # utterance = self.preprocessor.preprocess(utterance)
         utterance = tokenize(utterance).lower()
         if mode == 'dictionary':
+            assert self.fullname_dict != None
             # Aho-corasik searching
             dict_result = self.extract_person_name_dict(utterance)
             return self.output_format(
@@ -134,6 +138,7 @@ class Extractor:
             list      :   list of persone name
             'Invalid'   :   otherwise
         '''
+        assert self.fullname_dict != None # Can not empty dictionary
         result = []
         for i in range(self.max_n_gram,2,-1):
             ngrams = get_ngram(utterance.lower(),i)
@@ -177,8 +182,12 @@ class Extractor:
                 return 'Invalid'
 
     def get_name(self,s):
-        return self.fullname_dict.get(s,'not_exists')
-
+        try:
+            return self.fullname_dict.get(s,'not_exists')
+        except:
+            print('Your dictionary is now empty')
+            print('Ensure you have load the vocabulary for fullname_dict ! Otherwise you can run self.load_dict() update the dictionary .')
+            return 'not_exists'
     def extract_phone_num(self,utterance):
         '''
         Use regex for pattern matching (nha mang + remain numbers)
@@ -259,3 +268,6 @@ class Extractor:
                 "extractor": extractor
                 }
 
+    def load_dict(self,dict_path='./src/data/fullname.pkl'):
+        print('Loading person name vocabulary ...')
+        self.fullname_dict = read_dict(dict_path)
