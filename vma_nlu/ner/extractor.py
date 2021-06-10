@@ -27,6 +27,36 @@ class Extractor:
         self.time_extractor = TimeMatcher()
 
         self.preprocessor = Preprocess()
+
+    def extract_ner(self,utterance, intent):
+        '''
+        Extract NER based on given intent
+        Input:
+            utterance   -   string
+            intent      -   string 
+        Return
+        '''
+        assert intent in ['greet','goodbye','thank','book_apt','change_apt','cancel_apt','inform','agree','disagree']
+
+        if intent in ['inform','book_apt','change_apt']:
+            result = []
+            person_name = self.extract_person_name(utterance)['entities']
+            print(person_name)
+            if person_name != []:
+                result.extend(person_name)
+            time = self.extract_time(utterance)['entities']
+            print(time)
+            if time != []:
+                result.extend(time)
+            date = self.extract_date(utterance)['entities']
+            print(date)
+            if date != []:
+                result.extend(date)
+            return result
+        else:
+            return {
+                'entities' : []
+            }
         
     def extract_time(self,utterance):
         '''

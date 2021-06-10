@@ -137,12 +137,12 @@ class TimeMatcher:
         if status[1] == -1:
             hour = int(hour)
             hour -= 1
-            minute = 60 - minute
+            minute = 60 - int(minute)
 
         if status[2] == 1:
             now = datetime.datetime.now()
             hour = now.hour + int(hour)
-            minute = now.minute + minute
+            minute = now.minute + int(minute)
         return hour, minute
 
     def get_hour(self,hour_range):
@@ -188,6 +188,7 @@ class TimeMatcher:
                 'entities':[{
                     'start' : time_result[0],
                     'end' : time_result[1],
+                    'entity' : 'time',
                     'value' : (time_result[2],time_result[3]),
                     'confidence' : 1.0,
                     'extractor' : extractor
