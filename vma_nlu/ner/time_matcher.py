@@ -20,7 +20,7 @@ VALUE1 : 2 ITEM
 VALUE1 : 1 ITEM
 (?:một|hai|ba|bốn|tư|tứ|năm|sáu|bảy|tám|chín|mười|mươi|mốt)(?= giờ|tiếng)
 '''
-
+import datetime
 import threading
 import re
 
@@ -30,8 +30,8 @@ from vietnam_number import w2n
 
 class TimeMatcher:
     def __init__(self):
-        self.default_hour = 8
-        self.default_min = 30
+        self.default_hour = 0
+        self.default_min = 0
         self.left_shift = 3
         self.right_shift = 4
 
@@ -40,11 +40,13 @@ class TimeMatcher:
 
     def extract_time(self, text):
         text = text.replace('tiếng','giờ')
-        if text.find('giờ') != -1:
-            time_result = self.extract_relative_time(text)
+
+        time_result = self.extract_absolute_time(text)
+        if time_result[2] != 0 and time_result[3] != 0:
+            return self.output_format(time_result,'absolute_pattern')
         else:
-            time_result = self.extract_absolute_time(text)
-        return time_result
+            time_result = self.extract_relative_time(text)        
+        return self.output_format(time_result,'relative_pattern')
 
     def extract_relative_time(self, text):
         hour = self.default_hour
@@ -61,38 +63,17 @@ class TimeMatcher:
         hour = self.get_hour(hour_range)
         minute = self.get_minute(minute_range)
 
-        if status == 'pm' and hour < 12:
-            hour += 12
-
-        if 'kém' in minute_range:
-            hour -= 1
-            minute = 60 - minute
-        # elif 'nữa' in minute_range:
-
+        hour, minute = self.refine_hour_minute(hour,minute,status)
+        
         start = max(0, hour_index - self.left_shift)
         end = min(hour_index + self.right_shift, len(text))
         
-        if start != -1:
-            return {
-                'entities': [
-                    {
-                        "start": start,
-                        "end": end,
-                        "entity": "time",
-                        "value": (hour, minute),
-                        "confidence": 1.0,
-                        "extractor": 'relative_pattern'
-                    }]
-                }
-        else:
-            return {
-                'entities': []
-            }
+        return start,end, hour, minute
      
     def extract_absolute_time(self, text):
+        status = self.get_time_status(text)
         hour = self.default_hour
         minute = self.default_min
-        status = None
         start = -1
         end = -1
 
@@ -107,42 +88,62 @@ class TimeMatcher:
                 start = text.find(time)
                 end = start + len(time)
                 break
-        # Get status and edit hour
-        status = self.get_time_status(text)
-        if status == 'pm' and hour < 12:
-            hour += 12
-        if start != -1:
-            return {
-                'entities': [
-                    {
-                        "start": start,
-                        "end": end,
-                        "entity": "time",
-                        "value": (hour, minute),
-                        "confidence": 1.0,
-                        "extractor": 'absoulte_pattern'
-                    }]
-                }
 
-        else:
-            return {
-                'entities': []
-            }
+        hour, minute = self.refine_hour_minute(hour,minute,status)
+
+        return start, end, hour, minute
 
     def get_time_status(self, text):
-        status = None
+        '''
+        Return:
+            result - tuple (A,B,C)
+                A : am(0) or pm(1)
+                B : kém(-1) or hơn(1)
+                C : có nữa/tiếp theo/kế tiếp/lát/lát nữa không ? (0/1)
+        '''
+        c_pattern = ['nữa','tiếp theo','kế tiếp','lát','lát nữa','kế','sắp tới']
+        result = [0,0,0]
+        status = 'am'
+
         for pattern in self.am_pattern:
             if text.find(pattern) != -1:
-                status = 'am'
-        if status != None:
-            return status
+                result[0] = 0 #'am'
+                break
         for pattern in self.pm_pattern:
             if text.find(pattern) != -1:
-                status = 'pm'
-        if status != None:
-            return status
-        else:
-            return 'Invalid'
+                result[0] = 1 #'pm'
+                break
+
+        if text.find('kém') != -1:
+            result[1] = -1
+        elif text.find('hơn') != -1: 
+            result[1] = 1
+
+        for pattern in c_pattern:
+            if text.find(pattern) != -1:
+                result[2] = 1 #yes
+
+        return result
+
+    def refine_hour_minute(self,hour,minute,status):
+        
+        # Check hour/minute is valid
+        if hour==0 and minute == 0:
+            return hour, minute
+
+        if status[0] == 1 and hour < 12:
+            hour += 12
+        
+        if status[1] == -1:
+            hour = int(hour)
+            hour -= 1
+            minute = 60 - minute
+
+        if status[2] == 1:
+            now = datetime.datetime.now()
+            hour = now.hour + int(hour)
+            minute = now.minute + minute
+        return hour, minute
 
     def get_hour(self,hour_range):
         if hour_range[-1].isdigit():
@@ -177,8 +178,23 @@ class TimeMatcher:
                 minute = self.default_min
             return minute
             
+    def output_format(self,time_result,extractor):
+        if time_result[0] == -1:
+            return {
+                'entities' : []
+            }
+        else:
+            return {
+                'entities':[{
+                    'start' : time_result[0],
+                    'end' : time_result[1],
+                    'value' : (time_result[2],time_result[3]),
+                    'confidence' : 1.0,
+                    'extractor' : extractor
+                }]
+            }
 
-
+        
 if __name__ == '__main__':
     matcher = TimeMatcher()
     # text = '14:30 sáng thứ 7 tuần này'
@@ -210,4 +226,5 @@ if __name__ == '__main__':
     print(matcher.extract_relative_time(text))
 
     # text = 'bảy rưỡi mùng 10 tháng 3'
+    # text = 'ba tiếng nữa'
     # print(matcher.extract_relative_time(text))

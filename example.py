@@ -26,13 +26,16 @@ extractor = Extractor(load_dict=False) # True: Load dictionary path
 # text = "trời hôm nay nhiều mây cực"
 # print(extractor.extract_person_name(text,'pattern'))
 
-text = "tôi muốn đặt lịch vào ngày 6 tháng 7"
-print(extractor.extract_date(text))
-# [('None', ['ngày 6 '], ['tháng 7'], 'None')]
+# text = "tôi muốn đặt lịch vào ngày 6 tháng 7"
+# print(extractor.extract_date(text))
+# # [('None', ['ngày 6 '], ['tháng 7'], 'None')]
 
-text = "vào sáng 1 tuần sau ngày 2.3"
-print(extractor.extract_date(text))
-# [('Thứ 6', '21', '3', '1997')]
+# text = "vào sáng 1 tuần sau ngày 2.3"
+# print(extractor.extract_date(text))
+# # [('Thứ 6', '21', '3', '1997')]
+
+# text = '14:50 ngày 7 tháng 6'
+# print(extractor.extract_time(text))
 
 # text = 'lúc 14 giờ 30 ngày 7 tháng 6'
 # print(extractor.extract_time(text))
@@ -40,12 +43,17 @@ print(extractor.extract_date(text))
 # text = 'mười bốn giờ 30 phút ngày 7 tháng 6'
 # print(extractor.extract_time(text))
 
-# text = 'hai mươi ba giờ 30 phút ngày 7 tháng 6'
-# print(extractor.extract_time(text))
-
 # text = 'ngày 7 tháng 6 lúc 14.15.00 giờ'
 # print(extractor.extract_time(text))
 
-# text = '18:30 tiếng kém mười lăm'
-# print(extractor.extract_time(text))
+text = '18 giờ kém mười lăm'
+print(extractor.extract_time(text))
 
+text = '2 tiếng nữa tại vinmec'
+print(extractor.extract_time(text))
+
+text = '3 giờ tiếp theo nhưng vào ngày mai'
+print(extractor.extract_time(text))
+
+# text = '3 giờ 20 phút kế tiếp'
+# print(extractor.extract_time(text))

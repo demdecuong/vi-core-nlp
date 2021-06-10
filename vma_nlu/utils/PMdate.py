@@ -333,7 +333,6 @@ class PatternMatching(object):
             
         return entities, value
 
-
     def _get_month(self, mode):
         today = datetime.date.today()
         month = int(str(today).split("-")[1])
