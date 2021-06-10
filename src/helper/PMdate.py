@@ -130,36 +130,8 @@ class PatternMatching(object):
 
             if get_pattern_relative: # get_pattern_relative = ['ngày mai', 'tháng này', ... ]
                 ent, val = self._map_relative_to_date(get_pattern_relative=get_pattern_relative)
-                wod_pattern = []
-                wod_span = []
-                day_pattern = []
-                day_span = []
-                month_pattern = []
-                month_span = []
-                year_pattern = []
-                year_span = []
-                for x in re.finditer(self.wod, text):
-                    wod_pattern.append(x.group())
-                    wod_span.append(x.span())
-                for x in re.finditer(self.day, text):
-                    day_pattern.append(x.group())
-                    day_span.append(x.span())
-                for x in re.finditer(self.month, text):
-                    month_pattern.append(x.group())
-                    month_span.append(x.span())
-                for x in re.finditer(self.year, text):
-                    year_pattern.append(x.group())
-                    year_span.append(x.span())
-                
-                tmp = max(len(wod_pattern), len(day_pattern), len(month_pattern), len(year_pattern)) 
-                if tmp == 0:
-                    entities.extend(ent)
-                    value.extend(val)
-                    return value, entities
-                
-                if wod_pattern:
-                    
-
+                entities.extend(ent)
+                value.extend(val)
             return value, entities
 
     def _map_relative_to_date(self, get_pattern_relative):
