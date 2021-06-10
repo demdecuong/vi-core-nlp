@@ -130,8 +130,10 @@ class PatternMatching(object):
 
             if get_pattern_relative: # get_pattern_relative = ['ngày mai', 'tháng này', ... ]
                 ent, val = self._map_relative_to_date(get_pattern_relative=get_pattern_relative)
+
                 entities.extend(ent)
                 value.extend(val)
+
             return value, entities
 
     def _map_relative_to_date(self, get_pattern_relative):
