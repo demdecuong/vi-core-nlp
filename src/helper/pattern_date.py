@@ -12,6 +12,8 @@ def absolute():
 
     year = ['('+'|'.join([str(i) for i in list(range(1900, 2050))])+')']
 
+    only_number = ['^\d+$']
+
     return format_date, wod, wod_vn, day_vn, month, month_vn, year
 
 def relative():
@@ -21,4 +23,6 @@ def relative():
     
     semi_format = ['([0-3][0-9](,|\s|\.|-|\/|_)[0-1][0-9])|((^|\s)\d(,|\s|\.|-|\/|_)\d(\s|$))|([0-3][0-9](,|\s|\.|-|\/|_)[0-9](\s|$))|((^|\s)\d(,|\s|\.|-|\/|_)(1[0-2]))'] # 21 / 03
     
+    
+
     return short_time, long_time, semi_format
