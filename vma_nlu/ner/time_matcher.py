@@ -7,7 +7,6 @@ mười bốn giờ
 tám giờ kém mười lăm
 tám giờ kém 15
 8 giờ kém 15
-
 2 tiếng nữa
 '''
 
@@ -26,34 +25,33 @@ import threading
 import re
 
 from nltk import ngrams
-from pattern import get_time_pattern
+from vma_nlu.utils.pattern import get_time_pattern
 from vietnam_number import w2n
 
 class TimeMatcher:
     def __init__(self):
-        self.default_hour = 0
-        self.default_min = 0
-        self.left_shift = 2
+        self.default_hour = 8
+        self.default_min = 30
+        self.left_shift = 3
         self.right_shift = 4
 
         self.max_n_grams = 3
         self.absolute_pattern, self.am_pattern, self.pm_pattern = get_time_pattern()
 
     def extract_time(self, text):
-        t1 = threading.Thread(target=extract_relative_time, args=(text,))
-        t2 = threading.Thread(target=extract_absolute_time, args=(text,))
-
-        t1.start()
-        t2.start()
-
-        t1.join()
-        t2.join()
-
-        print('Done')
+        text = text.replace('tiếng','giờ')
+        if text.find('giờ') != -1:
+            time_result = self.extract_relative_time(text)
+        else:
+            time_result = self.extract_absolute_time(text)
+        return time_result
 
     def extract_relative_time(self, text):
         hour = self.default_hour
         minute = self.default_min
+
+        status = self.get_time_status(text)
+        
         text = text.split(' ')
         hour_index = text.index('giờ')
         hour_range = text[max(0, hour_index - self.left_shift): hour_index]
@@ -61,10 +59,36 @@ class TimeMatcher:
                             1: min(hour_index + self.right_shift, len(text))]
 
         hour = self.get_hour(hour_range)
-        print(hour,minute_range)
-        # minute = self.get_minute(minute_range)
+        minute = self.get_minute(minute_range)
 
+        if status == 'pm' and hour < 12:
+            hour += 12
 
+        if 'kém' in minute_range:
+            hour -= 1
+            minute = 60 - minute
+        # elif 'nữa' in minute_range:
+
+        start = max(0, hour_index - self.left_shift)
+        end = min(hour_index + self.right_shift, len(text))
+        
+        if start != -1:
+            return {
+                'entities': [
+                    {
+                        "start": start,
+                        "end": end,
+                        "entity": "time",
+                        "value": (hour, minute),
+                        "confidence": 1.0,
+                        "extractor": 'relative_pattern'
+                    }]
+                }
+        else:
+            return {
+                'entities': []
+            }
+     
     def extract_absolute_time(self, text):
         hour = self.default_hour
         minute = self.default_min
@@ -127,33 +151,42 @@ class TimeMatcher:
             try:
                 hour = w2n(' '.join(hour_range))
             except:
-                hour = 0
+                hour = self.default_hour
             return hour
 
     def filter_minute_rage(self,minute_range):
         fil = [
             'ngày','phút','tháng','năm','buổi'
         ]
-        # for token
-
+        for i in range(len(minute_range)):
+            if minute_range[i] in fil:
+                minute_range = minute_range[i-1:]
+                return minute_range
+        return minute_range
+        
     def get_minute(self,minute_range):
-        pass
-
-    def time2text(self, text):
-        pass
-
-    def text2time(self, text):
-        pass
+        minute_range = self.filter_minute_rage(minute_range)
+        if minute_range[0].isdigit():
+            return minute_range[0]
+        elif 'rưỡi' in minute_range:
+            return 30
+        else:
+            try:
+                minute = w2n(' '.join(minute_range))
+            except:
+                minute = self.default_min
+            return minute
+            
 
 
 if __name__ == '__main__':
     matcher = TimeMatcher()
-    text = '14:30 sáng thứ 7 tuần này'
-    print(matcher.extract_absolute_time(text))
-    text = '18:30 tiếng kém mười lăm'
-    print(matcher.extract_absolute_time(text))
-    text = 'ngày 7 tháng 6 lúc 14.15.00 giờ'
-    print(matcher.extract_absolute_time(text))
+    # text = '14:30 sáng thứ 7 tuần này'
+    # print(matcher.extract_absolute_time(text))
+    # text = '18:30 tiếng kém mười lăm'
+    # print(matcher.extract_absolute_time(text))
+    # text = 'ngày 7 tháng 6 lúc 14.15.00 giờ'
+    # print(matcher.extract_absolute_time(text))
     
     text = 'lúc 14 giờ 30 ngày 7 tháng 6'
     print(matcher.extract_relative_time(text))
@@ -161,11 +194,20 @@ if __name__ == '__main__':
     text = 'mười bốn giờ 30 phút ngày 7 tháng 6'
     print(matcher.extract_relative_time(text))
 
-    text = 'bống bẩy giờ 30 phút ngày 7 tháng 6'
+    text = 'hai mươi ba giờ 30 phút ngày 7 tháng 6'
     print(matcher.extract_relative_time(text))
 
-    text = 'sáu giờ 30 phút nữa ngày 7 tháng 6'
+    text = 'sáu giờ ba mươi phút nữa ngày 7 tháng 6'
+    print(matcher.extract_relative_time(text))
+
+    text = 'bảy giờ rưỡi phút nữa ngày 7 tháng 6'
     print(matcher.extract_relative_time(text))
 
     text = 'hôm nay lúc tám giờ kém mười lăm'
     print(matcher.extract_relative_time(text))
+
+    text = 'bây giờ nên làm gì'
+    print(matcher.extract_relative_time(text))
+
+    # text = 'bảy rưỡi mùng 10 tháng 3'
+    # print(matcher.extract_relative_time(text))

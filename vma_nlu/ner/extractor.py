@@ -5,6 +5,7 @@ from vma_nlu.utils.util import read_dict, get_ngram, tokenize
 from vma_nlu.utils.pattern import get_person_pattern, get_phone_pattern, get_time_pattern
 from vma_nlu.utils.PMdate import PatternMatching
 from vma_nlu.utils.Preprocess import Preprocess
+from vma_nlu.ner.time_matcher import TimeMatcher
 
 class Extractor:
     def __init__(self,n_gram = 4, dict_path='./vma_nlu/data/fullname.pkl',sw_path='./vma_nlu/data/stopwords.pkl',load_dict=False):
@@ -23,39 +24,20 @@ class Extractor:
 
         self.patternmatching_date = PatternMatching()
 
-        self.time_absolute, self.am_pattern, self.pm_pattern = get_time_pattern()
+        self.time_extractor = TimeMatcher()
 
         self.preprocessor = Preprocess()
         
     def extract_time(self,utterance):
         '''
-        1. Get hour and minute
-        2. Get AM/PM
         Input:
             input string
-        Return:
-            tuple of (hour,minute,AM/PM)
+        Output:
+            return value of (hour,minute)
         '''
-        pass
-        # utterance = tokenize(utterance).lower()
+        result = self.time_extractor.extract_time(utterance)
+        return result
 
-        # if utterance.find('giờ') != -1:
-        #     list_of_words = utterance.split(' ')
-        #     key_index = list_of_words.index('giờ')
-        #     pot_num = 2
-        #     potential_range = list_of_words[max(0,key_index - pot_num):min(key_index + pot_num,len(list_of_words))]
-        #     # for token in potential_range:
-        # else:
-        #     # Get raw form in hour/minute
-        #     for pattern in self.time_absolute:
-        #         time = re.search(pattern,utterance)
-        #     if '.' in time:
-        #         hour,minute = time.split('.')
-        #     elif ':' in time:
-        #         hour,minute = time.split(':')
-
-        # Get AM/PM       
-        
     def extract_date(self,utterance):
         '''
         Input:
@@ -63,8 +45,24 @@ class Extractor:
         Output:
             return tuple of (dow,dd,mm,yyyy)
         '''
-        result = self.patternmatching_date.extract_date(utterance)
-        return result
+        
+        value, entities = self.patternmatching_date.extract_date(utterance)
+        if not value:
+            return {
+                "entities": []       
+            }
+        else:
+            result = []
+            for i in range(len(value)):
+                result.append({
+                    "start": entities[i]["start"],
+                    "end": entities[i]["end"],
+                    "entity": "date_time",
+                    "value": value[i],
+                    "confidence": 1.0,
+                    "extractor": "Pattern_Matching"
+                })
+            return result
 
     def extract_person_name(self,utterance,mode='pattern',rt='relative'):
         '''

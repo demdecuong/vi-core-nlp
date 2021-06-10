@@ -10,6 +10,10 @@ vma_nlu/last_name.txt
 vma_nlu/mid_name.txt
 vma_nlu/midlastname.txt
 vma_nlu/utils/__pycache__
+vma_nlu/ic/__pycache__
+vma_nlu/ner/__pycache__
+
+
 
 # IDE & Editor folder
 /.vscode/
