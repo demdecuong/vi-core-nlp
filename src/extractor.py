@@ -26,14 +26,7 @@ class Extractor:
         value, entities = self.patternmatching_date.extract_date(input)
         if not value:
             return {
-                "entities": [{
-                    "start": None,
-                    "end": None,
-                    "entity": "date",
-                    "value": None,
-                    "confidence": 1.0,
-                    "extractor": "Pattern_Matching"
-                }]       
+                "entities": []       
             }
         else:
             result = []
@@ -41,7 +34,7 @@ class Extractor:
                 result.append({
                     "start": entities[i]["start"],
                     "end": entities[i]["end"],
-                    "entity": "date",
+                    "entity": "date_time",
                     "value": value[i],
                     "confidence": 1.0,
                     "extractor": "Pattern_Matching"
