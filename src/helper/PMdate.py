@@ -51,66 +51,121 @@ class PatternMatching(object):
                         "end": span[1]
                     })
                     value.append([(wod, day, month, year)])
-
-            wod_pattern = []
-            wod_span = []
-            day_pattern = []
-            day_span = []
-            month_pattern = []
-            month_span = []
-            year_pattern = []
-            year_span = []
-            for x in re.finditer(self.wod, text):
-                wod_pattern.append(x.group())
-                wod_span.append(x.span())
-            for x in re.finditer(self.day, text):
-                day_pattern.append(x.group())
-                day_span.append(x.span())
-            for x in re.finditer(self.month, text):
-                month_pattern.append(x.group())
-                month_span.append(x.span())
-            for x in re.finditer(self.year, text):
-                year_pattern.append(x.group())
-                year_span.append(x.span())
             
-            tmp = max(len(wod_pattern), len(day_pattern), len(month_pattern), len(year_pattern)) 
+            wod = [(x.group(), x.span()) for x in re.finditer(self.wod, text)]
+            day = [(x.group(), x.span()) for x in re.finditer(self.day, text)]
+            month = [(x.group(), x.span()) for x in re.finditer(self.month, text)]
+            year = [(x.group(), x.span()) for x in re.finditer(self.year, text)]
+
+            tmp = max(len(wod), len(day), len(month), len(year)) 
             if tmp == 0:
                 return entities, value
+
+            if wod:
+                wod_tmp = [x[0] for x in wod]
+                day_tmp = ["None"] * len(wod)
+                month_tmp = ["None"] * len(wod)
+                year_tmp = ["None"] * len(wod)
+                for i in range(len(wod)):
+                    value.append([(wod_tmp[i], day_tmp[i], month_tmp[i], year_tmp[i])])
+                    entities.append({
+                        "start": wod[i][1][0],
+                        "end": wod[i][1][1]
+                    })
+            if day:
+                wod_tmp = ["None"] * len(day)
+                day_tmp = [self.dict_normalize[re.search("(\d+)|(((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mươi))(\s|$)((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mươi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mốt))*(\s|$)*)", x[0]).group()] for x in day]
+                month_tmp = ["None"] * len(day)
+                year_tmp = ["None"] * len(day)
+                for i in range(len(day)):
+                    value.append([(wod_tmp[i], day_tmp[i], month_tmp[i], year_tmp[i])])
+                    entities.append({
+                        "start": day[i][1][0],
+                        "end": day[i][1][1]
+                    })
+
+            if month:
+                wod_tmp = ["None"] * len(month)
+                day_tmp = ["None"] * len(month)
+                month_tmp = [self.dict_normalize[re.search("(\d+)|(((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mươi))(\s|$)((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mươi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mốt))*(\s|$)*)", x[0]).group()] for x in month]
+                year_tmp = ["None"] * len(month)
+                for i in range(len(month)):
+                    value.append([(wod_tmp[i], day_tmp[i], month_tmp[i], year_tmp[i])])
+                    entities.append({
+                        "start": month[i][1][0],
+                        "end": month[i][1][1]
+                    })
+            if year:
+                wod_tmp = ["None"] * len(year)
+                day_tmp = ["None"] * len(year)
+                month_tmp = ["None"] * len(year)
+                year_tmp = [int(re.search("\d+", x[0]).group()) for x in year]
+                for i in range(len(year)):
+                    value.append([(wod_tmp[i], day_tmp[i], month_tmp[i], year_tmp[i])])
+                    entities.append({
+                        "start": year[i][1][0],
+                        "end": year[i][1][1]
+                    })
+
+            # wod_pattern = []
+            # wod_span = []
+            # day_pattern = []
+            # day_span = []
+            # month_pattern = []
+            # month_span = []
+            # year_pattern = []
+            # year_span = []
+            # for x in re.finditer(self.wod, text):
+            #     wod_pattern.append(x.group())
+            #     wod_span.append(x.span())
+            # for x in re.finditer(self.day, text):
+            #     day_pattern.append(x.group())
+            #     day_span.append(x.span())
+            # for x in re.finditer(self.month, text):
+            #     month_pattern.append(x.group())
+            #     month_span.append(x.span())
+            # for x in re.finditer(self.year, text):
+            #     year_pattern.append(x.group())
+            #     year_span.append(x.span())
             
-            all_span = wod_span + day_span + month_span + year_span
-            start_span = min(all_span, key= lambda x: x[0])
-            end_span = max(all_span, key= lambda x: x[1])
+            # tmp = max(len(wod_pattern), len(day_pattern), len(month_pattern), len(year_pattern)) 
+            # if tmp == 0:
+            #     return entities, value
+            
+            # all_span = wod_span + day_span + month_span + year_span
+            # start_span = min(all_span, key= lambda x: x[0])
+            # end_span = max(all_span, key= lambda x: x[1])
 
-            wod = ["None"] * tmp
-            day = ["None"] * tmp
-            month = ["None"] * tmp
-            year = ["None"] * tmp
+            # wod = ["None"] * tmp
+            # day = ["None"] * tmp
+            # month = ["None"] * tmp
+            # year = ["None"] * tmp
 
-            if wod_pattern:
-                wod = wod_pattern * tmp
-                wod = wod[:tmp]
+            # if wod_pattern:
+            #     wod = wod_pattern * tmp
+            #     wod = wod[:tmp]
                 
-            if day_pattern:
-                day_pattern = [self.dict_normalize[re.search("(\d+)|(((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mươi))(\s|$)((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mươi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mốt))*(\s|$)*)", x).group()] for x in day_pattern]
-                day = day_pattern * tmp
-                day = day[:tmp]
+            # if day_pattern:
+            #     day_pattern = [self.dict_normalize[re.search("(\d+)|(((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mươi))(\s|$)((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mươi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mốt))*(\s|$)*)", x).group()] for x in day_pattern]
+            #     day = day_pattern * tmp
+            #     day = day[:tmp]
             
-            if month_pattern:
-                month_pattern = [self.dict_normalize[re.search("(\d+)|(((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mươi))(\s|$)((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mươi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mốt))*(\s|$)*)", x).group()] for x in month_pattern]
-                month = month_pattern * tmp
-                month = month[:tmp]
+            # if month_pattern:
+            #     month_pattern = [self.dict_normalize[re.search("(\d+)|(((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mươi))(\s|$)((một)|(mot)|(hai)|(ba)|(bốn)|(bon)|(tư)|(tu)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(bảy)|(bay)|(tám)|(tam)|(chín)|(chin)|(mười)|(muoi)|(mươi)|(mười một)|(muoi mot)|(mười hai)|(muoi hai)|(giêng)|(gieng)|(chạp)|(chap)|(mốt))*(\s|$)*)", x).group()] for x in month_pattern]
+            #     month = month_pattern * tmp
+            #     month = month[:tmp]
             
-            if year_pattern:
-                year_pattern = [int(re.search("\d+", x).group()) for x in year_pattern]
-                year = year_pattern * tmp
-                year = year[:tmp]
+            # if year_pattern:
+            #     year_pattern = [int(re.search("\d+", x).group()) for x in year_pattern]
+            #     year = year_pattern * tmp
+            #     year = year[:tmp]
 
-            entities.append({
-                "start": start_span[0],
-                "end": end_span[1]
-            })
+            # entities.append({
+            #     "start": start_span[0],
+            #     "end": end_span[1]
+            # })
 
-            value.append([(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)])
+            # value.append([(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)])
 
             return value, entities 
 

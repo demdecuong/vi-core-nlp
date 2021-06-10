@@ -22,8 +22,32 @@ class Extractor:
         Output:
             return tuple of (dow,dd,mm,yyyy)
         '''
+        
         value, entities = self.patternmatching_date.extract_date(input)
-        return value, entities
+        if not value:
+            return {
+                "entities": [{
+                    "start": None,
+                    "end": None,
+                    "entity": "date",
+                    "value": None,
+                    "confidence": 1.0,
+                    "extractor": "Pattern_Matching"
+                }]       
+            }
+        else:
+            result = []
+            for i in range(len(value)):
+                result.append({
+                    "start": entities[i]["start"],
+                    "end": entities[i]["end"],
+                    "entity": "date",
+                    "value": value[i],
+                    "confidence": 1.0,
+                    "extractor": "Pattern_Matching"
+                })
+            return result
+            
 
 
     def extract_time(self,input):
