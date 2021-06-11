@@ -54,7 +54,7 @@ def get_person_name_tc():
         'Hoàng Nguyễn',
         'Nguyễn Dương Phước Phúc',
         'Nguyễn Thị Khánh Vy',
-        'Nguyễn Thị khánh Vân',
+        'Nguyễn Thị Khánh Vân',
         'Ngyễn Mậu Sn',
         'Lê Văn Ponn',
         'Nguyen Thi Ta',
@@ -65,7 +65,7 @@ def get_person_name_tc():
 
     testcase2 = [
         'Văn Trần Chuyên',
-        'Ngọc Đại Nghĩa'
+        'Ngọc Đại Nghĩa',
         'ĐÌNH CHUNG',
         'YẾN TRANG',
         'nguyễn',
@@ -79,7 +79,7 @@ def get_person_name_tc():
     ]
     expected_result2 = [
         'Văn Trần Chuyên',
-        'Ngọc Đại Nghĩa'
+        'Ngọc Đại Nghĩa',
         'Đình Chung',
         'Yến Trang',
         'Nguyễn',
@@ -168,3 +168,10 @@ def get_person_name_tc():
     final_expected_result.append(expected_result5)
     
     return final_testcase, final_expected_result
+
+def get_time_tc():
+    final_tc = []
+    final_expected_result = []
+    
+
+    return final_tc, final_expected_result

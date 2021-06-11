@@ -1,5 +1,5 @@
 from vma_nlu.ner.extractor import Extractor
-from vma_nlu.test_cases import get_person_name_tc
+from vma_nlu.testcase.test_cases import get_person_name_tc
 from termcolor import colored
 
 class Tester:
@@ -17,17 +17,22 @@ class Tester:
                 pred = self.extractor.extract_person_name(test,mode='pattern', rt='relative')['entities']
                 if pred[0]['value'] in label:
                     acc += 1
+                # print(pred[0]['value'], label , acc)
             self.write_result(tc_num,acc,len(tc))
             tc_num += 1
             total_len += len(tc)
             total_acc += (acc)
         self.write_result('Total',total_acc,total_len)
+
     def test_time(self):
         pass
 
     def test_date(self):
         pass
 
+    def test_intent(self):
+        pass
+    
     def read_test_cases(self,path): 
         pass
 

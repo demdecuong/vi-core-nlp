@@ -12,6 +12,7 @@ vma_nlu/midlastname.txt
 vma_nlu/utils/__pycache__
 vma_nlu/ic/__pycache__
 vma_nlu/ner/__pycache__
+vma_nlu/testcase/__pycache__
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
