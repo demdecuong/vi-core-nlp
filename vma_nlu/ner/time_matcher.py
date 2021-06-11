@@ -51,24 +51,27 @@ class TimeMatcher:
     def extract_relative_time(self, text):
         hour = self.default_hour
         minute = self.default_min
-
+        start = 0
+        end = 0
         status = self.get_time_status(text)
-        
-        text = text.split(' ')
-        hour_index = text.index('giờ')
-        hour_range = text[max(0, hour_index - self.left_shift): hour_index]
-        minute_range = text[hour_index +
-                            1: min(hour_index + self.right_shift, len(text))]
+        try:
+            text = text.split(' ')
+            hour_index = text.index('giờ')
+            hour_range = text[max(0, hour_index - self.left_shift): hour_index]
+            minute_range = text[hour_index +
+                                1: min(hour_index + self.right_shift, len(text))]
 
-        hour = self.get_hour(hour_range)
-        minute = self.get_minute(minute_range)
+            hour = self.get_hour(hour_range)
+            minute = self.get_minute(minute_range)
 
-        hour, minute = self.refine_hour_minute(hour,minute,status)
-        
-        start = max(0, hour_index - self.left_shift)
-        end = min(hour_index + self.right_shift, len(text))
-        
-        return start,end, hour, minute
+            hour, minute = self.refine_hour_minute(hour,minute,status)
+            
+            start = max(0, hour_index - self.left_shift)
+            end = min(hour_index + self.right_shift, len(text))
+            return start,end, hour, minute
+        except:
+            return start,end, hour, minute
+
      
     def extract_absolute_time(self, text):
         status = self.get_time_status(text)
