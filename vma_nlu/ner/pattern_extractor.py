@@ -12,7 +12,6 @@ class PatternExtractor(EntityExtractor):
     name = "PatternExtractor"
     defaults = {
         "n_gram": 4,
-        "dict_path": './vma_nlu/data/fullname.pkl',
         "load_dict": False,
         "mode": "pattern",
     }
@@ -23,7 +22,7 @@ class PatternExtractor(EntityExtractor):
     ) -> None:
         super(PatternExtractor, self).__init__(component_config)
 
-        self.extractor = Extractor(self.component_config["n_gram"], self.component_config["dict_path"], self.component_config["load_dict"])
+        self.extractor = Extractor(self.component_config["n_gram"], self.component_config["load_dict"])
 
     def train(
         self,
@@ -46,11 +45,23 @@ class PatternExtractor(EntityExtractor):
     def process(self, message: Message, **kwargs: Any) -> None:
         """Process an incoming message."""
         text = message.data.get('text')
+        intent = message.data.get('intent')
         if text:
-            output = self.extractor.extract_person_name(text, self.component_config["mode"])
+            output = self.extractor.extract_ner(text, intent['name'])
             old_entities = message.data.get("entities")
-            for entity in output.get("entities"):
-                old_entities.append(entity)
+            for entity in output:
+                if entity['entity'] == 'time' and len(entity['value']) == 2:
+                    entity['value'] = f'{entity["value"][0]}:{entity["value"][1]}'
+                    old_entities.append(entity)
+                elif entity['entity'] == 'date_time' and len(entity['value']) == 4:
+                    if entity["value"][1] and entity["value"][2] and entity["value"][3]:
+                        entity['value'] = f'{entity["value"][1]}/{entity["value"][2]}/{entity["value"][3]}'
+                        old_entities.append(entity)
+                    elif entity["value"][1] and entity["value"][2]:
+                        entity['value'] = f'{entity["value"][1]}/{entity["value"][2]}'
+                        old_entities.append(entity)
+                else:
+                    old_entities.append(entity)
             message.set("entities", old_entities, add_to_output=True)
         
 
