@@ -7,7 +7,7 @@ import datetime
 from vma_nlu.utils.pattern import get_date_absolute, get_date_relative
 
 class PatternMatching(object):
-    def __init__(self) -> None:
+    def __init__(self, dict_path = "./vma_nlu/data/dictionary_normalize_date.json") -> None:
         super().__init__()
 
         self.format_date, self.wod, self.wod_vn, self.day_vn, self.month, self.month_vn, self.year = get_date_absolute()
@@ -24,7 +24,7 @@ class PatternMatching(object):
 
         self.week_days=["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"]
 
-        with open("./vma_nlu/data/dictionary_normalize_date.json", "r", encoding="utf-8") as f:
+        with open(dict_path, "r", encoding="utf-8") as f:
             self.dict_normalize = json.load(f)
 
 
