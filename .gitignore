@@ -13,7 +13,10 @@ vma_nlu/utils/__pycache__
 vma_nlu/ic/__pycache__
 vma_nlu/ner/__pycache__
 
-
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
 # IDE & Editor folder
 /.vscode/

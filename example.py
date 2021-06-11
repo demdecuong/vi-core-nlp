@@ -60,3 +60,6 @@ print(extractor.extract_ner(text,'inform'))
 
 text = 'tôi là Nguyễn Phúc Minh'
 print(extractor.extract_ner(text,'inform'))
+
+text = '31/07/1994'
+print(extractor.extract_date(text))

@@ -1,4 +1,5 @@
 import re
+import os
 
 from underthesea import ner
 from vma_nlu.utils.util import read_dict, get_ngram, tokenize
@@ -7,22 +8,26 @@ from vma_nlu.utils.PMdate import PatternMatching
 from vma_nlu.utils.Preprocess import Preprocess
 from vma_nlu.ner.time_matcher import TimeMatcher
 
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+NAME_PATH = os.path.join(ROOT_DIR, 'data/fullname.pkl')
+SW_PATH = os.path.join(ROOT_DIR, 'data/stopwords.pkl')
+DATE_PATH = os.path.join(ROOT_DIR, 'data/dictionary_normalize_date.json')
 class Extractor:
-    def __init__(self,n_gram = 4, dict_path='./vma_nlu/data/fullname.pkl',sw_path='./vma_nlu/data/stopwords.pkl',load_dict=False):
+    def __init__(self,n_gram = 4, load_dict=False):
 
         self.max_n_gram = n_gram
         if load_dict:
-            self.fullname_dict = read_dict(dict_path)
+            self.fullname_dict = read_dict(NAME_PATH)
         else:
             self.fullname_dict = None
         
-        self.stopwords_dict = read_dict(sw_path)
+        self.stopwords_dict = read_dict(SW_PATH)
 
         self.phone_regex = get_phone_pattern()
 
         self.person_explicit, self.person_pronoun, self.person_semi_pronoun, self.matches = self.build_person_name_pattern()
 
-        self.patternmatching_date = PatternMatching()
+        self.patternmatching_date = PatternMatching(DATE_PATH)
 
         self.time_extractor = TimeMatcher()
 
@@ -36,7 +41,7 @@ class Extractor:
             intent      -   string 
         Return
         '''
-        assert intent in ['greet','goodbye','thank','book_apt','change_apt','cancel_apt','inform','agree','disagree']
+        #assert intent in ['greet','goodbye','thank','book_apt','change_apt','cancel_apt','inform','agree','disagree']
 
         if intent in ['inform','book_apt','change_apt']:
             result = []
@@ -54,9 +59,7 @@ class Extractor:
                 result.extend(date)
             return result
         else:
-            return {
-                'entities' : []
-            }
+            return []
         
     def extract_time(self,utterance):
         '''
@@ -82,9 +85,11 @@ class Extractor:
                 "entities": []       
             }
         else:
-            result = []
+            result = {
+                "entities": []
+            }
             for i in range(len(value)):
-                result.append({
+                result["entities"].append({
                     "start": entities[i]["start"],
                     "end": entities[i]["end"],
                     "entity": "date_time",
