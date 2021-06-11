@@ -53,6 +53,9 @@ class Extractor:
             if date != []:
                 result.extend(date)
             return result
+            # return {
+            #         'entities' : result
+            #     }
         else:
             return {
                 'entities' : []
