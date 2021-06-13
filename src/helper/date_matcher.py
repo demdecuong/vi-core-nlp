@@ -6,12 +6,12 @@ import datetime
 
 from src.helper.pattern_date import absolute, relative
 
-class PatternMatching(object):
+class DateMatcher(object):
     def __init__(self) -> None:
         super().__init__()
 
-        self.format_date, self.wod, self.wod_vn, self.day_vn, self.month, self.month_vn, self.year = absolute()
-        self.format_date = "|".join([x for x in self.format_date])
+        self.abs_pattern, self.wod, self.wod_vn, self.day_vn, self.month, self.month_vn, self.year = absolute()
+        self.abs_pattern = "|".join([x for x in self.abs_pattern])
 
         self.wod = "|".join([self.wod[0], self.wod_vn[0]])
         self.day = self.day_vn[0]
@@ -20,7 +20,7 @@ class PatternMatching(object):
 
         self.short_time, self.long_time, self.semi_format = relative()
         self.semi_format = self.semi_format[0]
-        self.non_format = "|".join([self.short_time[0], self.long_time[0]])
+        self.rel_pattern = "|".join([self.short_time[0], self.long_time[0]])
 
         self.week_days=["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"]
 
@@ -31,8 +31,8 @@ class PatternMatching(object):
     def extract_date(self, text):
         text = text.lower()
 
-        get_pattern_absolute = [(x.group(), x.span()) for x in re.finditer(self.format_date, text)]
-        get_pattern_relative = [(x.group(), x.span()) for x in re.finditer(self.non_format, text)]
+        get_pattern_absolute = [(x.group(), x.span()) for x in re.finditer(self.abs_pattern, text)]
+        get_pattern_relative = [(x.group(), x.span()) for x in re.finditer(self.rel_pattern, text)]
 
         value = []
         entities = []
@@ -59,7 +59,7 @@ class PatternMatching(object):
 
             tmp = max(len(wod), len(day), len(month), len(year)) 
             if tmp == 0:
-                return entities, value
+                return self.output_format(value=value, entities=entities, extractor="date_matcher")
 
             if wod:
                 wod_tmp = [x[0] for x in wod]
@@ -167,7 +167,7 @@ class PatternMatching(object):
 
             # value.append([(w, d, m, y) for w, d, m, y in zip(wod, day, month, year)])
 
-            return value, entities 
+            return self.output_format(value=value, entities=entities, extractor="date_matcher") 
 
         else:
             if get_pattern_absolute:
@@ -189,7 +189,7 @@ class PatternMatching(object):
                 entities.extend(ent)
                 value.extend(val)
 
-            return value, entities
+            return self.output_format(value=value, entities=entities, extractor="date_matcher")
 
     def _map_relative_to_date(self, get_pattern_relative):
 
@@ -396,3 +396,25 @@ class PatternMatching(object):
                 wod = self.week_days[datetime.date(year, month, day).weekday()]
                 value.append((wod, day, month, year))
         return value # [("thứ 2", 1,1,111), ("thứ 3", 2, 1, 1111) ... ("chủ nhật", 7, 1, 1111)]          
+
+    def output_format(self, value, entities, extractor):
+        if not value:
+            return {
+                "entities": []
+            }
+        else:
+            result = {
+                "entities": []
+            }
+            for i in range(len(value)):
+                result["entities"].append(
+                    {
+                        "start": entities[i]["start"],
+                        "end": entities[i]["end"],
+                        "entity": "date_time",
+                        "value": value[i],
+                        "confidence": 1.0,
+                        "extractor": extractor
+                    }
+                )
+            return result

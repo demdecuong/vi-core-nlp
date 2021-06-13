@@ -1,12 +1,12 @@
 import re
-from src.helper.PMdate import PatternMatching
+from src.helper.date_matcher import DateMatcher
 
 
 class Extractor:
     def __init__(self):
 
         self.phone_regex = r"(84|0[3|5|7|8|9])+([0-9]{8})\b"
-        self.patternmatching_date = PatternMatching()
+        self.patternmatching_date = DateMatcher()
 
 
     def extract_time(self,input):
@@ -23,23 +23,9 @@ class Extractor:
             return tuple of (dow,dd,mm,yyyy)
         '''
         
-        value, entities = self.patternmatching_date.extract_date(input)
-        if not value:
-            return {
-                "entities": []       
-            }
-        else:
-            result = []
-            for i in range(len(value)):
-                result.append({
-                    "start": entities[i]["start"],
-                    "end": entities[i]["end"],
-                    "entity": "date_time",
-                    "value": value[i],
-                    "confidence": 1.0,
-                    "extractor": "Pattern_Matching"
-                })
-            return result
+        result = self.patternmatching_date.extract_date(input)
+        
+        return result
             
 
 
