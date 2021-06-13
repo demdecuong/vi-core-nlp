@@ -8,26 +8,11 @@ import pandas as pd
 #   - viết sai chính tả
 #   - viết thiếu dấu
 # Case 2 : tên đứng 1 mình thiếu họ
-#   - viết Hoa
-#   - viết hoa hết
-#   - viết thường
-#   - viết hoa ngẫu nhiên
-#   - viết sai chính tả
-#   - viết thiếu dấu
 # Case 3 : tên đứng 1 mình thiếu tên
-#   - viết Hoa
-#   - viết hoa hết
-#   - viết thường
-#   - viết hoa ngẫu nhiên
-#   - viết sai chính tả
-#   - viết thiếu dấu
 # Case 4 : có tân ngữ (tôi/tui/chú/bác/cô/dì/ông/bà/em/bác sĩ)
-#   - 
 # Case 5 : có nhiều tên trong 1 câu/ phức tạp/ tự nhiên
-#   - 
 # Case 6 : Không có tên trong câu
 
-# testcase 1
 def get_person_name_tc():
     final_testcase = []
     final_expected_result = [] 
@@ -172,6 +157,55 @@ def get_person_name_tc():
 def get_time_tc():
     final_tc = []
     final_expected_result = []
-    
+
+    # 7:30  [VALUE] tiếng [VALUE]    
+    tc1 = [
+        'tôi đặt bác sĩ Hoàn vào lúc 8:30 phút ngày 1/2/2021',
+        '7:15 sáng thứ hai tuần sau',
+        '5.45 chiều ngày 1/6 tuần này',
+        'trưa 1.30.00 thứ ba hàng tuần',
+        '9h sáng hôm sau',
+        '15h30 ngày 2/4/2021',
+        'tôi hẹn bác sĩ Toàn lúc 17h05 được không ạ',
+        'tôi muốn đặt lịch lúc 7:00 với bác sĩ Minh',
+        'tôi muốn đặt lịch lúc 7h00 với bác sĩ Minh',
+        'đồng hồ chỉ 10:30:30 là tôi đến',
+    ]
+    exp_res1 = [
+        (8,30),
+        (7,15),
+        (5,45),
+        (1,30),
+        (9,0),
+        (15,30),
+        (17,5),
+        (7,0),
+        (7,0),
+        (10,30),
+    ]
+
+    final_tc.append(tc1)
+    final_expected_result.append(exp_res1)
+
+    # 7 giờ 20 phút    
+    tc2 = [
+        'tôi đặt bác sĩ Hoàn vào lúc 8 giờ 30 phút ngày 1/2/2021',
+        '7 giờ 15 sáng thứ hai tuần sau',
+        '7 giờ 15 sáng thứ hai tuần sau',
+        '7 giờ 15 sáng thứ hai tuần sau',
+        '7 giờ 15 sáng thứ hai tuần sau',
+        '7 giờ 15 sáng thứ hai tuần sau',
+        '7 giờ 15 sáng thứ hai tuần sau',
+    ]
+
+    # bảy giờ hay mươi phút 
+    tc3 = []
+
+    # bảy giờ kém/hơn mươi phút    
+    tc4 = []
+
+    # 7 tieng nua    
+    tc5 = []
+
 
     return final_tc, final_expected_result

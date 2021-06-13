@@ -88,6 +88,10 @@ class TimeMatcher:
                     hour, minute = time.split('.')
                 elif ':' in time:
                     hour, minute = time.split(':')
+                elif 'h' in time:
+                    hour, minute = time.split('h')
+                elif 'g' in time:
+                    hour, minute = time.split('g')
                 start = text.find(time)
                 end = start + len(time)
                 break
