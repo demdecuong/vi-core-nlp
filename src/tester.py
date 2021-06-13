@@ -15,14 +15,20 @@ class Tester(object):
         len_test = 0
 
         for inputs, targets in zip(self.input, self.target):
-            len_test += len(inputs)
+            # len_test += len(inputs)
             for input, target in zip(inputs, targets):
+                # print(input)
+                # print(target)
                 pred = self.extractor.extract_date(input)['entities']
-                value = pred['value']
-                for i in value:
-                    if i not in target:
-                        not_exact += 1
-                        break
+                # print(pred)
+                len_test += len(pred)
+                for i in pred:
+                    value = i['value']
+                    for j in value:
+                        if j not in target:
+                            not_exact += 1
+                            break
+                
         acc = 1 - float(not_exact)/len_test
         return acc
                 

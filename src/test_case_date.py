@@ -13,6 +13,9 @@
 
 def get_date_test_case():
 
+    final_test = []
+    expected_result = []
+
     # TEST CASE 
     test_case_1_1 = [
         '21/03/1997',
@@ -32,12 +35,16 @@ def get_date_test_case():
         [('thứ 7', 22, 3, 1997), ('thứ 2', 24, 3, 1997)]
     ]
 
+    final_test.append(test_case_1_1)
+    expected_result.append(expected_result_test_case_1_1)
+
     test_case_1_2 = [
         'thứ 6',
         'ngày 22 tháng 5',
         'thứ 6 ngày 21 tháng 3 năm 1997',
         'năm 2021'
-    ],
+    ]
+
 
     expected_result_test_case_1_2 = [
         [('thứ 6', None, None, None)],
@@ -45,6 +52,9 @@ def get_date_test_case():
         [('thứ 6', 21, 3, 1997)],
         [(None, None, None, 2021)]
     ]
+
+    final_test.append(test_case_1_2)
+    expected_result.append(expected_result_test_case_1_2)
     # TEST CASE 2
     test_case_2_1 = [
         'tuần sau',
@@ -126,10 +136,13 @@ def get_date_test_case():
          ('thứ 5', 17, 6, 2021),
          ('thứ 6', 18, 6, 2021),
          ('thứ 7', 19, 6, 2021),
-         ('chủ nhật', 20, 6, 2021)],
+         ('chủ nhật', 20, 6, 2021)]     
+    ]
+    
+    final_test.append(list(test_case_2_1))
+    expected_result.append(expected_result_test_case_2_1)
 
-         
-    ],
+
     test_case_2_2 = [
         'hôm qua',
         'hôm nay',
@@ -138,7 +151,7 @@ def get_date_test_case():
         'thứ 2 tuần sau',
         'thứ 5 tuần vừa rồi',
         'tuần đầu tiên tháng 6',
-    ],
+    ]
 
     expected_result_test_case_2_2 = [
         [('thứ 7', 12, 6, 2021)],
@@ -156,18 +169,10 @@ def get_date_test_case():
          ('chủ nhật', 6, 6, 2021)]
     ]
 
-    final_test = []
-    expected_result = []
-
-    final_test.append(test_case_1_1)
-    final_test.append(test_case_1_2)
-    final_test.append(test_case_2_1)
     final_test.append(test_case_2_2)
-
-    expected_result.append(expected_result_test_case_1_1)
-    expected_result.append(expected_result_test_case_1_2)
-    expected_result.append(expected_result_test_case_2_1)
     expected_result.append(expected_result_test_case_2_2)
+    print(final_test)
+    # print(expected_result)
 
     return final_test, expected_result
 
