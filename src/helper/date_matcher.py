@@ -171,17 +171,7 @@ class DateMatcher(object):
 
         else:
             if get_pattern_absolute:
-                for pattern, span in get_pattern_absolute:
-                    tmp = re.split('(,|\s|\.|-|\/|_)', pattern)
-                    day = int(tmp[0])
-                    month = int(tmp[2])
-                    year = int(tmp[4])
-                    wod = self.week_days[datetime.date(year, month, day).weekday()]
-                    entities.append({
-                        "start": span[0],
-                        "end": span[1]
-                    })
-                    value.append([(wod, day, month, year)])
+                value, entities = self.extract_date_abs_number(get_pattern_absolute)
 
             if get_pattern_relative: # get_pattern_relative = ['ngày mai', 'tháng này', ... ]
                 ent, val = self._map_relative_to_date(get_pattern_relative=get_pattern_relative)
@@ -418,3 +408,20 @@ class DateMatcher(object):
                     }
                 )
             return result
+
+    def extract_date_abs_number(self, patterns): #[21/03/1997 21-03-1997 21_03-1997, ... ]
+        value = []
+        entities = []
+        for pattern, span in patterns:
+            tmp = re.split('(,|\s|\.|-|\/|_)', pattern)
+            day = int(tmp[0])
+            month = int(tmp[2])
+            year = int(tmp[4])
+            wod = self.week_days[datetime.date(year, month, day).weekday()]
+            entities.append({
+                "start": span[0],
+                "end": span[1]
+            })
+            value.append([(wod, day, month, year)])
+        return value, entities
+    
