@@ -174,8 +174,8 @@ def get_time_tc():
     exp_res1 = [
         (8,30),
         (7,15),
-        (5,45),
-        (1,30),
+        (17,45),
+        (13,30),
         (9,0),
         (15,30),
         (17,5),
@@ -194,7 +194,7 @@ def get_time_tc():
         'sáng ngày 3/7 lúc 15 giờ',
         '7 giờ 00 sáng thứ ba đầu tiên của tháng sau',
         'ngày 10/3, 9h giờ rưỡi',
-        'thứ 2 ngày 15/06, 9giờ45',
+        'thứ 2 ngày 15/06, 9 giờ 45',
         'tuần tới tôi mới rãnh, nhưng khoảng 4 giờ rưỡi tôi rãnh',
         '4 giờ rưỡi chiều mai tại vinmec',
         '4 giờ sáng thứ sáu ngày mai nhé',
@@ -249,7 +249,7 @@ def get_time_tc():
 
     # bảy giờ kém/hơn mươi phút    
     tc4 = [
-        'tôi đặt bác sĩ Hoàn vào lúc 8 kém 20 phút ngày 1/2/2021',
+        'tôi đặt bác sĩ Hoàn vào lúc 8 giờ kém 20 phút ngày 1/2/2021',
         'tuần sau lúc 7 giờ hơn 15',
         'sáng ngày 3/7 lúc 15 giờ kém 5 phút',
         '7 giờ 20 kém 5 phút sáng thứ ba đầu tiên của tháng sau',
@@ -262,7 +262,7 @@ def get_time_tc():
     ]
 
     exp_res4 = [
-        (8,30),
+        (7,40),
         (7,15),
         (14,55),
         (7,15),

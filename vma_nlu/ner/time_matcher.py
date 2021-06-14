@@ -30,8 +30,8 @@ from vietnam_number import w2n
 
 class TimeMatcher:
     def __init__(self):
-        self.default_hour = 0
-        self.default_min = 0
+        self.default_hour = -1
+        self.default_min = -1
         self.left_shift = 3
         self.right_shift = 4
 
@@ -39,10 +39,12 @@ class TimeMatcher:
         self.absolute_pattern, self.am_pattern, self.pm_pattern = get_time_pattern()
 
     def extract_time(self, text):
+        text = self.preprocess(text)
         text = text.replace('tiếng','giờ')
 
         time_result = self.extract_absolute_time(text)
-        if time_result[2] != 0 and time_result[3] != 0:
+        
+        if time_result[2] != self.default_hour and time_result[3] != self.default_min:
             return self.output_format(time_result,'absolute_pattern')
         else:
             time_result = self.extract_relative_time(text)        
@@ -54,25 +56,27 @@ class TimeMatcher:
         start = 0
         end = 0
         status = self.get_time_status(text)
-        try:
-            text = text.split(' ')
-            hour_index = text.index('giờ')
-            hour_range = text[max(0, hour_index - self.left_shift): hour_index]
-            minute_range = text[hour_index +
-                                1: min(hour_index + self.right_shift, len(text))]
+         
+        text = text.split(' ')
 
-            hour = self.get_hour(hour_range)
-            minute = self.get_minute(minute_range)
-
-            hour, minute = self.refine_hour_minute(hour,minute,status)
-            
-            start = max(0, hour_index - self.left_shift)
-            end = min(hour_index + self.right_shift, len(text))
-            return start,end, hour, minute
-        except:
+        if 'giờ' not in text:
             return start,end, hour, minute
 
-     
+        hour_index = text.index('giờ')
+        hour_range = text[max(0, hour_index - self.left_shift): hour_index]
+        minute_range = text[hour_index +
+                            1: min(hour_index + self.right_shift, len(text))]
+
+
+        hour = self.get_hour(hour_range)
+        minute = self.get_minute(minute_range)
+
+        hour, minute = self.refine_hour_minute(hour,minute,status)
+        
+        start = max(0, hour_index - self.left_shift)
+        end = min(hour_index + self.right_shift, len(text))
+        return start,end, hour, minute
+
     def extract_absolute_time(self, text):
         status = self.get_time_status(text)
         hour = self.default_hour
@@ -95,12 +99,14 @@ class TimeMatcher:
                 start = text.find(time)
                 end = start + len(time)
                 break
-
+        # Case 9h -> minute = ''
+        if minute == '':
+            minute = 0
         hour, minute = self.refine_hour_minute(hour,minute,status)
 
         return start, end, hour, minute
 
-    def get_time_status(self, text):
+    def get_time_status(self, text, minunte_range=None):
         '''
         Return:
             result - tuple (A,B,C)
@@ -109,6 +115,7 @@ class TimeMatcher:
                 C : có nữa/tiếp theo/kế tiếp/lát/lát nữa không ? (0/1)
         '''
         c_pattern = ['nữa','tiếp theo','kế tiếp','lát','lát nữa','kế','sắp tới']
+        # min_pattern = ['sau']
         result = [0,0,0]
         status = 'am'
 
@@ -129,22 +136,23 @@ class TimeMatcher:
         for pattern in c_pattern:
             if text.find(pattern) != -1:
                 result[2] = 1 #yes
-
+        
         return result
 
     def refine_hour_minute(self,hour,minute,status):
         hour = int(hour)
         minute = int(minute)
-        
+
+        if hour != self.default_hour and minute == self.default_min:
+            minute = 0
         # Check hour/minute is valid
-        if hour==0 and minute == 0:
+        if hour == self.default_hour and minute == self.default_min:
             return hour, minute
 
         if status[0] == 1 and hour < 12:
             hour += 12
         
         if status[1] == -1:
-            hour = int(hour)
             hour -= 1
             minute = 60 - int(minute)
 
@@ -152,11 +160,17 @@ class TimeMatcher:
             now = datetime.datetime.now()
             hour = now.hour + int(hour)
             minute = now.minute + int(minute)
+        
+        if minute >= 60:
+            minute -= 60
+            hour += 1
+
         return hour, minute
 
     def get_hour(self,hour_range):
-        if hour_range[-1].isdigit():
-            return hour_range[-1]
+        # 9h gio ruoi
+        if hour_range[-1].replace('h','').replace('g','').isdigit():
+            return hour_range[-1].replace('h','').replace('g','')
         else:
             try:
                 hour = w2n(' '.join(hour_range))
@@ -166,25 +180,32 @@ class TimeMatcher:
 
     def filter_minute_rage(self,minute_range):
         fil = [
-            'ngày','phút','tháng','năm','buổi'
+            'ngày','phút','tháng','năm','buổi','thứ','chiều','sáng','trưa','tối','xế'
         ]
         for i in range(len(minute_range)):
             if minute_range[i] in fil:
-                minute_range = minute_range[i-1:]
+                minute_range = minute_range[:i]
                 return minute_range
         return minute_range
         
     def get_minute(self,minute_range):
+        if minute_range == []:
+            return 0
         minute_range = self.filter_minute_rage(minute_range)
-        if minute_range[0].isdigit():
+        if minute_range == []:
+            return 0
+        elif minute_range[0].isdigit():
             return minute_range[0]
+        elif minute_range[-1].isdigit():
+            return minute_range[-1]
         elif 'rưỡi' in minute_range:
             return 30
+        
         else:
             try:
                 minute = w2n(' '.join(minute_range))
             except:
-                minute = self.default_min
+                minute = 0
             return minute
             
     def output_format(self,time_result,extractor):
@@ -204,6 +225,10 @@ class TimeMatcher:
                 }]
             }
 
+    def preprocess(self,text):
+        text = text.replace('\n','').strip()
+        text = re.sub('(?<! )(?=[,!?()])|(?<=[,!?()])(?! )', r' ', text)
+        return text
         
 if __name__ == '__main__':
     matcher = TimeMatcher()

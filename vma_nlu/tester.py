@@ -32,10 +32,10 @@ class Tester:
         for tc, ex_result in zip(self.time_tc,self.time_expected_result):
             acc = 0
             for test, label in zip(tc,ex_result):
-                pred = self.extractor.extract_time(test)['entities']
+                pred = self.extractor.extract_time(test)['entities']    
                 if pred[0]['value'] == label:
                     acc += 1
-                # print(pred[0]['value'], label , acc)
+                # print(pred[0]['value'], label , acc,pred[0]['extractor'])
             self.write_result(tc_num,acc,len(tc))
             tc_num += 1
             total_len += len(tc)
@@ -46,11 +46,11 @@ class Tester:
                 pred = self.extractor.extract_time(test)['entities']
                 pred = pred[0]['value']
                 now = datetime.datetime.now()
-                hour = now.hour + int(pred[0])
-                minute = now.minute + int(pred[1])
-                if hour - pred[0] == 0 and minute - pred[0] <= 1:
+                hour = now.hour + int(label[0])
+                minute = now.minute + int(label[1])
+                if hour - pred[0] == 0 and minute - pred[1] <= 1:
                     acc += 1
-                # print(pred[0]['value'], label , acc)
+                # print(pred, hour ,minute, acc)
             self.write_result(tc_num,acc,len(tc))
             tc_num += 1
             total_len += len(tc)
