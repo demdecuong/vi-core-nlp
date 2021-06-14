@@ -1,5 +1,9 @@
 from vma_nlu.tester import Tester
 
-print('Test person name')
 tester = Tester()
-tester.test_person_name()
+
+# print('Test person name')
+# tester.test_person_name()
+
+print('Test time')
+tester.test_time()

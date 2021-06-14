@@ -133,6 +133,8 @@ class TimeMatcher:
         return result
 
     def refine_hour_minute(self,hour,minute,status):
+        hour = int(hour)
+        minute = int(minute)
         
         # Check hour/minute is valid
         if hour==0 and minute == 0:

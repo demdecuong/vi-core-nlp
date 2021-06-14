@@ -1,6 +1,0 @@
-pyahocorasick==1.4.2
-vietnam-number==1.0.3
-rasa==2.6.3
-pandas==1.2.4
-numpy==1.18.5
-sklearn

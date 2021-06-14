@@ -20,12 +20,42 @@ Mỗi testcase đảm bảo các data
 ### testcase 5 : có nhiều tên trong 1 câu/ phức tạp/ tự nhiên
 -   số lương : 10 
 
+### Result
+| Testcase | Accuracy |
+| --- | --- |
+| 1 | 12/12 |
+| 2 | 12/12 |
+| 3 | 5/5 |
+| 4 | 10/10 |
+| 5 | 2/10 |
+| Total | 41/49 |
 
 ## Time
-TBD
+### testcase 1 : 7:30 (straight forward)  
+-   số lương : 10
+### testcase 2 : 7 giờ 20 phút  (giờ và phút ghi số)
+-   số lương : 10 
+### testcase 3 : bảy giờ hay mươi phút (giờ và phút ghi chữ)
+-   số lương : 10
+### testcase 4 :bảy giờ kém/hơn mươi phút (giờ và phút ghi chữ + hơn/kém)
+-   số lương : 10 
+### testcase 5 : 2 tiếng nữa tại vinmec (giờ phút hiện tại)
+-   số lương : 8
+
+### Result
+| Testcase | Accuracy |
+| --- | --- |
+| 1 | 5/10 |
+| 2 | 5/10 |
+| 3 | 5/10 |
+| 4 | 4/10 |
+| 5 | 0/8 |
+| Total | 19/48 |
+
 
 ## Date
 TBD
 
 ## Intent
 TBD
+
