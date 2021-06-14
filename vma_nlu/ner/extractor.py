@@ -2,6 +2,7 @@ import re
 import os
 
 # from underthesea import ner
+from vma_nlu.ner import date_matcher
 from vma_nlu.utils.util import read_dict, get_ngram, tokenize
 from vma_nlu.utils.pattern import get_person_pattern, get_phone_pattern, get_time_pattern
 from vma_nlu.ner.date_matcher import DateMatcher
@@ -83,7 +84,6 @@ class Extractor:
         '''
         
         result = self.patternmatching_date.extract_date(utterance)
-        
         return result
 
     def extract_person_name(self,utterance,mode='pattern',rt='relative'):

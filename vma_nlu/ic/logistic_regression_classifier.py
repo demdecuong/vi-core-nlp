@@ -11,15 +11,15 @@ from rasa.shared.nlu.training_data.training_data import TrainingData
 from rasa.shared.nlu.training_data.message import Message
 
 WORK_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(WORK_DIR, "weight/naive_bayes_model.pkl")
+MODEL_PATH = os.path.join(WORK_DIR, "weight/LR_model.pkl")
 
 logger = logging.getLogger(__name__)
 
-class NaiveBayesClassifier(IntentClassifier):
-    name = "NaiveBayesClassifier"
+class LogisticRegressionClassifier(IntentClassifier):
+    name = "LogisticRegressionClassifier"
 
     def __init__(self, component_config: Optional[Dict[Text, Any]] = None, learner = None) -> None:
-        super(NaiveBayesClassifier, self).__init__(component_config)
+        super(LogisticRegressionClassifier, self).__init__(component_config)
         self.learner = learner
 
     def train(
@@ -72,15 +72,15 @@ class NaiveBayesClassifier(IntentClassifier):
         """Load this component from file."""
 
         if not os.path.isfile(MODEL_PATH):
-            logger.error(f"File not found. Cannot load Logistic Regression model: {MODEL_PATH}")
+            logger.error(f"File not found. Cannot load Naive Bayes model: {MODEL_PATH}")
             return cls(component_config=meta)
         else:
             try:
                 learner = pickle.load(open(MODEL_PATH, 'rb'))
-                logger.debug(f"Load Logistic Regression model successfully ")
+                logger.debug(f"Load {{self.__class__.__name__}} Naive Bayes model successfully ")
                 return cls(meta, learner)
             except Exception as ex:
-                logger.error(f"Cannot load Logistic Regression model: {MODEL_PATH}: error: {ex}")
+                logger.error(f"Cannot load Naive Bayes model: {MODEL_PATH}: error: {ex}")
 
     def predict(self, text: Text):
         text = [text]
