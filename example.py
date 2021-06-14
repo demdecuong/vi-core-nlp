@@ -50,7 +50,7 @@ extractor = Extractor(load_dict=False) # True: Load dictionary path
 # text = 'ngày 7 tháng 6 lúc 14.15.00 giờ'
 # print(extractor.extract_time(text))
 
-text = 'tôi đặt bác sĩ Hoàn vào lúc 8 giờ kém 20 phút ngày 1/2/2021'
+text = '7 giờ 20 kém 5 phút sáng thứ ba đầu tiên của tháng sau'
 
 print(extractor.extract_time(text))
 

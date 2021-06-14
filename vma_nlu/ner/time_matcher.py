@@ -128,7 +128,7 @@ class TimeMatcher:
                 result[0] = 1 #'pm'
                 break
 
-        if text.find('kém') != -1:
+        if text.find('kém') != -1 or text.find('thiếu') != -1:
             result[1] = -1
         elif text.find('hơn') != -1: 
             result[1] = 1
