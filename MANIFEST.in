@@ -1,0 +1,2 @@
+include vma_nlu/ic/weight/*
+include vma_nlu/data/*

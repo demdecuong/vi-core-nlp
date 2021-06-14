@@ -4,10 +4,9 @@ import json
 from datetime import date
 import datetime
 
-from src.helper.pattern_date import absolute, relative
-
+from vma_nlu.utils.pattern import absolute, relative
 class DateMatcher(object):
-    def __init__(self) -> None:
+    def __init__(self, dict_path = "./vma_nlu/data/dictionary_normalize_date.json") -> None:
         super().__init__()
 
         self.abs_pattern, self.wod, self.wod_vn, self.day_vn, self.month, self.month_vn, self.year, self.only_number, self.short_abs = absolute()
@@ -26,7 +25,7 @@ class DateMatcher(object):
         self.rel_pattern = "|".join([self.short_time[0], self.long_time[0]])
 
         self.week_days=["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"]
-        with open("./src/helper/dictionary_normalize_day.json", "r", encoding="utf-8") as f:
+        with open(dict_path, "r", encoding="utf-8") as f:
             self.dict_normalize = json.load(f)
 
 
