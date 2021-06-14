@@ -14,15 +14,13 @@ def absolute():
 
     only_number = ['^\d+$']
 
-    return absolute, wod, wod_vn, day_vn, month, month_vn, year
+    short_abs = ['([0-3][0-9](,|\s|\.|-|\/|_)[0-1][0-9])|((^|\s)\d(,|\s|\.|-|\/|_)\d(\s|$))|([0-3][0-9](,|\s|\.|-|\/|_)[0-9](\s|$))|((^|\s)\d(,|\s|\.|-|\/|_)(1[0-2]))'] # 21 / 03
+
+    return absolute, wod, wod_vn, day_vn, month, month_vn, year, only_number, short_abs
 
 def relative():
     short_time = ['(hôm\s*qua)|(hôm\s*nay)|(hôm\s*kia)|(ngày\s(hôm\s)*qua)|(sáng\s(hôm\s)*qua)|(trưa\s(hôm\s)*qua)|(chiều\s(hôm\s)*qua)|(tối\s(hôm\s)*qua)|(ngày\s(hôm\s)*nay)|(sáng\s(hôm\s)*nay)|(trưa\s(hôm\s)*nay)|(chiều\s(hôm\s)*nay)|(tối\s(hôm\s)*nay)|(ngày\s(hôm\s)*mai)|(sáng\s(hôm\s)*mai)|(trưa\s(hôm\s)*mai)|(chiều\s(hôm\s)*mai)|(tối\s(hôm\s)*mai)|(ngày\s(hôm\s)*mốt)|(sáng\s(hôm\s)*mốt)|(trưa\s(hôm\s)*mốt)|(chiều\s(hôm\s)*mốt)|(tối\s(hôm\s)*mốt)|(ngày\s(hôm\s)*kia)|(sáng\s(hôm\s)*kia)|(trưa\s(hôm\s)*kia)|(chiều\s(hôm\s)*kia)|(tối\s(hôm\s)*kia)|(buổi\ssáng)|(buổi\strưa)|(buổi\schiều)|(buổi\stối)']
 
     long_time = ['(((tuần)|(tuan))\s((này)|(nay)))|(((tuần)|(tuan))\ssau)|(((tuần)|(tuan))\squa)|(((tuần)|(tuan))\s((tới)|(toi)))|(((tháng)|(thang))\s((này)|(nay)))|(((tháng)|(thang))\ssau)|(((tháng)|(thang))\squa)|(((tháng)|(thang))\s((tới)|(toi)))']
     
-    semi_format = ['([0-3][0-9](,|\s|\.|-|\/|_)[0-1][0-9])|((^|\s)\d(,|\s|\.|-|\/|_)\d(\s|$))|([0-3][0-9](,|\s|\.|-|\/|_)[0-9](\s|$))|((^|\s)\d(,|\s|\.|-|\/|_)(1[0-2]))'] # 21 / 03
-    
-    
-
-    return short_time, long_time, semi_format
+    return short_time, long_time
