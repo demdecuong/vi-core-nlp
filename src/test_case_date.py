@@ -18,12 +18,12 @@ def get_date_test_case():
 
     # TEST CASE 
     test_case_1_1 = [
-        '21/03/1997',
-        '21/3/1997',
-        '21/3/97',
-        '21-3-1997',
-        '21 3 1997',
-        '22/3/1997 và 24/3/1997'
+        'tôi sinh vào ngày 21/03/1997',
+        'Tôi sinh vào 21/3/1997',
+        'tôi sinh ngày 21/3/97',
+        'ngày tháng năm sinh của tôi là 21-3-1997',
+        '21 3 1997 là ngày tháng năm sinh của tôi',
+        'tôi và bạn tôi sinh lần lượt vào 22/3/1997 và 24/3/1997'
     ]
     
     expected_result_test_case_1_1 = [
@@ -39,10 +39,10 @@ def get_date_test_case():
     expected_result.append(expected_result_test_case_1_1)
 
     test_case_1_2 = [
-        'thứ 6',
-        'ngày 22 tháng 5',
-        'thứ 6 ngày 21 tháng 3 năm 1997',
-        'năm 2021'
+        'tôi muốn đặt lịch vào thứ 6',
+        'tôi muốn đặt lịch ngày 22 tháng 5',
+        'tôi sinh vào thứ 6 ngày 21 tháng 3 năm 1997',
+        'tôi điều trị vào năm 2021'
     ]
 
 
@@ -57,12 +57,12 @@ def get_date_test_case():
     expected_result.append(expected_result_test_case_1_2)
     # TEST CASE 2
     test_case_2_1 = [
-        'tuần sau',
-        'tháng sau',
-        'tuần vừa rồi',
-        'tuần qua',
-        'đầu tuần sau',
-        'cuối tuần'
+        'đặt lịch vào tuần sau',
+        'đặt lịch tháng sau',
+        'tuần vừa rồi tôi đã khám lâm sàng',
+        'tuần qua tôi có ho',
+        'đầu tuần sau tôi rãnh',
+        'cuối tuần tôi rãnh'
     ]
 
     expected_result_test_case_2_1 = [
@@ -144,13 +144,13 @@ def get_date_test_case():
 
 
     test_case_2_2 = [
-        'hôm qua',
-        'hôm nay',
-        'ngày mai',
-        'ngày kia',
-        'thứ 2 tuần sau',
-        'thứ 5 tuần vừa rồi',
-        'tuần đầu tiên tháng 6',
+        'hôm qua tôi hơi sốt',
+        'hôm nay tôi muốn đặt lịch hẹn bác sỹ',
+        'ngày mai tôi được khám koong?',
+        'ngày kia tôi rãnh',
+        'thứ 2 tuần sau tôi khám được không?',
+        'thứ 5 tuần vừa rồi bạn tôi đã đặt lịch',
+        'tuần đầu tiên tháng 6 tôi muốn có một lịch hẹn',
     ]
 
     expected_result_test_case_2_2 = [
