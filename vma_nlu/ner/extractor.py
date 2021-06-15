@@ -6,7 +6,7 @@ from vma_nlu.ner import date_matcher
 from vma_nlu.utils.util import read_dict, get_ngram, tokenize
 from vma_nlu.utils.pattern import get_person_pattern, get_phone_pattern, get_time_pattern
 from vma_nlu.ner.date_matcher import DateMatcher
-from vma_nlu.utils.Preprocess import Preprocess
+from vma_nlu.utils.preproces import Preprocess
 from vma_nlu.ner.time_matcher import TimeMatcher
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
@@ -324,3 +324,6 @@ class Extractor:
 
     def get_stop_word(self,s):
         return self.stopwords_dict.get(s,'not_exists')
+
+    def preprocessing(self, text):
+        return self.preprocessor.preprocess(text)
