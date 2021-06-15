@@ -80,6 +80,36 @@ class Preprocess(object):
                         chars[1] = self.vowel[5][diacritic] if chars[1] == 'i' else self.vowel[9][diacritic]
                 return ''.join(chars)
             return word
+        
+        for index in vowel_index:
+            x, y = self.vowel_to_idx[chars[index]]
+            if x == 4 or x == 8:  # ê, ơ
+                chars[index] = self.vowel[x][diacritic]
+                # for index2 in vowel_index:
+                #     if index2 != index:
+                #         x, y = vowel_to_idx[chars[index]]
+                #         chars[index2] = vowel[x][0]
+                return ''.join(chars)
+
+        if len(vowel_index) == 2:
+            if vowel_index[-1] == len(chars) - 1:
+                x, y = self.vowel_to_idx[chars[vowel_index[0]]]
+                chars[vowel_index[0]] = self.vowel[x][diacritic]
+                # x, y = vowel_to_idx[chars[vowel_index[1]]]
+                # chars[vowel_index[1]] = vowel[x][0]
+            else:
+                # x, y = vowel_to_idx[chars[vowel_index[0]]]
+                # chars[vowel_index[0]] = vowel[x][0]
+                x, y = self.vowel_to_idx[chars[vowel_index[1]]]
+                chars[vowel_index[1]] = self.vowel[x][diacritic]
+        else:
+            # x, y = vowel_to_idx[chars[vowel_index[0]]]
+            # chars[vowel_index[0]] = vowel[x][0]
+            x, y = self.vowel_to_idx[chars[vowel_index[1]]]
+            chars[vowel_index[1]] = self.vowel[x][diacritic]
+            # x, y = vowel_to_idx[chars[vowel_index[2]]]
+            # chars[vowel_index[2]] = vowel[x][0]
+        return ''.join(chars)
 
     def normalize_diacritic(self,text):
         """
@@ -91,10 +121,8 @@ class Preprocess(object):
         """
         sentence = text.lower()
         words = sentence.split()
-        print(words)
         for index, word in enumerate(words):
-            cw = re.sub(r'(^\p{P}*)([p{L}.]*\p{L}+)(\p{P}*$)', r'\1/\2/\3', word).split('/')
-            # print(cw)
+            cw = re.sub(r'(^\W*)([\w.]*\w+)(\W*$)', r'\1/\2/\3', word).split('/')
             if len(cw) == 3:
                 cw[1] = self.normalize_word_diacritic(cw[1])
             words[index] = ''.join(cw)
