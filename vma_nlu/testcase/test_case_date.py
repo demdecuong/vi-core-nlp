@@ -49,14 +49,34 @@ def get_date_test_case():
 
 
     expected_result_test_case_1_2 = [
-        [('thứ 6', None, None, None)],
-        [(None, 22, 5, None)],
+        [('thứ 6', 'None', 'None', 'None')],
+        [('None', 22, 5, 'None')],
         [('thứ 6', 21, 3, 1997)],
-        [(None, None, None, 2021)]
+        [('None', 'None', 'None', 2021)]
     ]
 
     final_test.append(test_case_1_2)
     expected_result.append(expected_result_test_case_1_2)
+
+    test_case_1_3 = [
+        'ngày hai mot tháng ba',
+        'ngày hai hai'
+        'ngay hai muoi hai',
+        'thứ sáu ngày hai mươi lăm',
+        'tháng giêng'
+    ]
+    expected_result_test_case_1_3 = [
+        [('None', 21, 3, 'None')],
+        [('None', 22, 'None', 'None')],
+        [('None', 22, 'None', 'None')],
+        [('thứ 6', 25, 'None', 'None')],
+        [('None', 'None', 1, 'None')]
+
+    ]
+
+    final_test.append(test_case_1_3)
+    expected_result.append(expected_result_test_case_1_3)
+
     # TEST CASE 2
     test_case_2_1 = [
         'tuần sau',
@@ -82,31 +102,7 @@ def get_date_test_case():
          ('chủ nhật', 4, 7, 2021),
          ('thứ 2', 5, 7, 2021),
          ('thứ 3', 6, 7, 2021),
-         ('thứ 4', 7, 7, 2021),
-         ('thứ 5', 8, 7, 2021),
-         ('thứ 6', 9, 7, 2021),
-         ('thứ 7', 10, 7, 2021),
-         ('chủ nhật', 11, 7, 2021),
-         ('thứ 2', 12, 7, 2021),
-         ('thứ 3', 13, 7, 2021),
-         ('thứ 4', 14, 7, 2021),
-         ('thứ 5', 15, 7, 2021),
-         ('thứ 6', 16, 7, 2021),
-         ('thứ 7', 17, 7, 2021),
-         ('chủ nhật', 18, 7, 2021),
-         ('thứ 2', 19, 7, 2021),
-         ('thứ 3', 20, 7, 2021),
-         ('thứ 4', 21, 7, 2021),
-         ('thứ 5', 22, 7, 2021),
-         ('thứ 6', 23, 7, 2021),
-         ('thứ 7', 24, 7, 2021),
-         ('chủ nhật', 25, 7, 2021),
-         ('thứ 2', 26, 7, 2021),
-         ('thứ 3', 27, 7, 2021),
-         ('thứ 4', 28, 7, 2021),
-         ('thứ 5', 29, 7, 2021),
-         ('thứ 6', 30, 7, 2021),
-         ('thứ 7', 31, 7, 2021)],
+         ('thứ 4', 7, 7, 2021)],
 
         [('thứ 2', 7, 6, 2021),
          ('thứ 3', 8, 6, 2021),
@@ -132,27 +128,14 @@ def get_date_test_case():
          ('thứ 7', 26, 6, 2021),
          ('chủ nhật', 27, 6, 2021)],
 
-         [('thứ 2', 21, 6, 2021),
-         ('thứ 3', 22, 6, 2021),
-         ('thứ 4', 23, 6, 2021),
-         ('thứ 5', 24, 6, 2021),
-         ('thứ 6', 25, 6, 2021),
-         ('thứ 7', 26, 6, 2021),
+        [('thứ 7', 26, 6, 2021),
          ('chủ nhật', 27, 6, 2021)]     
     ]
     
     final_test.append(list(test_case_2_1))
     expected_result.append(expected_result_test_case_2_1)
     
-    test_case_1_3 = [
-        'ngày hai mot tháng ba',
-        'ngày hai hai'
-        'ngay hai muoi hai',
-        'thu sau ngay hai muoi lam',
-        'tháng giêng'
-
-    ]
-
+    
     test_case_2_2 = [
         'hôm qua',
         'hôm nay',
@@ -164,10 +147,10 @@ def get_date_test_case():
     ]
 
     expected_result_test_case_2_2 = [
-        [('chủ nhật', 13, 6, 2021)],
         [('thứ 2', 14, 6, 2021)],
         [('thứ 3', 15, 6, 2021)],
-        [('thứ 5', 17, 6, 2021)],
+        [('thứ 4', 16, 6, 2021)],
+        [('thứ 6', 18, 6, 2021)],
         [('thứ 2', 21, 6, 2021)],
         [('thứ 5', 10, 6, 2021)],
 

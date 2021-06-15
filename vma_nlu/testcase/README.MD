@@ -77,12 +77,12 @@ Mỗi testcase đảm bảo các data
 
 | Testcase | Accuracy |
 | --- | --- |
-| 1 | 7/7 |
+| 1 | 6/7 |
 | 2 | 4/4 |
 | 3 | 4/5 |
-| 4 | 6/6 |
+| 4 | 5/6 |
 | 5 | 4/7 |
-| Total | 25/29 |
+| Total | 23/29 |
 ## Intent
 TBD
 
