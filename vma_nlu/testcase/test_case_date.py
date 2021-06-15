@@ -24,6 +24,7 @@ def get_date_test_case():
         '21-3-1997',
         '21 3 1997',
         '22/3/1997 và 24/3/1997'
+        '21-3'
     ]
     
     expected_result_test_case_1_1 = [
@@ -32,7 +33,8 @@ def get_date_test_case():
         [('thứ 6', 21, 3, 1997)],
         [('thứ 6', 21, 3, 1997)],
         [('thứ 6', 21, 3, 1997)],
-        [('thứ 7', 22, 3, 1997), ('thứ 2', 24, 3, 1997)]
+        [('thứ 7', 22, 3, 1997), ('thứ 2', 24, 3, 1997)],
+        [('None', 21, 3, 'None')]
     ]
 
     final_test.append(test_case_1_1)
@@ -141,7 +143,15 @@ def get_date_test_case():
     
     final_test.append(list(test_case_2_1))
     expected_result.append(expected_result_test_case_2_1)
+    
+    test_case_1_3 = [
+        'ngày hai mot tháng ba',
+        'ngày hai hai'
+        'ngay hai muoi hai',
+        'thu sau ngay hai muoi lam',
+        'tháng giêng'
 
+    ]
 
     test_case_2_2 = [
         'hôm qua',
@@ -149,7 +159,7 @@ def get_date_test_case():
         'ngày mai',
         'ngày kia',
         'thứ 2 tuần sau',
-        'thứ 5 tuần vừa',
+        'thứ 5 tuần vừa qua',
         'tuần đầu tiên tháng 6',
     ]
 

@@ -54,8 +54,35 @@ Mỗi testcase đảm bảo các data
 
 
 ## Date
-TBD
+### testcase 1: Absolute - Number (21/3/1997, 21/3, 21-3, ... )
+ - số lượng: 7
 
+### testcase 2: Absolute - Number and String (vd: ngày 21 tháng 3 năm 1997, ngày 21, ngày 21 tháng 3, ... )
+
+- số lượng: 4
+
+### testcase 3: Absolute - String (vd: ngày hai mốt tháng ba, ... )
+
+- số lượng: 5
+
+### testcase 4: Relative - Unclear (vd: tuần sau, tuần qua, tháng tới, đầu tháng tới... )
+
+- số lượng: 6
+
+### testcase: Relative - Clear (vd: ngay mai, ngày kia, thứ 3 tuần sau, ngày đầu tiên tuần sau)
+
+- số lượng: 7
+
+### Result:
+
+| Testcase | Accuracy |
+| --- | --- |
+| 1 | 7/7 |
+| 2 | 4/4 |
+| 3 | 4/5 |
+| 4 | 6/6 |
+| 5 | 4/7 |
+| Total | 25/29 |
 ## Intent
 TBD
 
