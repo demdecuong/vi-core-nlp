@@ -315,26 +315,8 @@ class Extractor:
         self.fullname_dict = read_dict(dict_path)
     
     def get_back_up_name(self,utterance):
-        '''
-        Get name in case pattern/dict-based is failed
-        1. Get name based on popular first name
-        2. Remove stopwords then return
-        '''
-        popular_first_name = []
-        name = []
-        name_max_len = 5
         utterance = utterance.split(' ')
-
-        # Get name based on popular first name
-        for i, token in enumerate(utterance):
-            if token in popular_first_name:
-                name = utterance[i:min(i+5,len(utterance))]                
-        if name != []:
-            # Post processing name
-
-            return ' '.join(name)
-        
-        # Remove stopwords then return
+        name = []
         for token in utterance:
             if self.get_stop_word(token) == 'not_exists':
                 name.append(token)
