@@ -354,6 +354,12 @@ class DateMatcher(object):
                 values.append(e)
                 continue
             if wod:
+                start_span = 100
+                end_span = 0
+                start_span = min([i[1][0] for i in wod])
+                start_span = min(start_span, e['start'])
+                end_span = max([i[1][1] for i in wod])
+                end_span = max(end_span, e['end'])
                 value = []
                 tmp = [i[0] for i in v]
                 tmp_1 = [i[0] for i in wod]
@@ -362,12 +368,23 @@ class DateMatcher(object):
                         value.extend([v[index]])
                 if not value:
                     value = v
-                entities.append(e)
-                values.append(value)
+                    entities.append(e)
+                else:
+                    entities.append({
+                        "start": start_span,
+                        "end": end_span
+                    })
+                    values.append(value)
 
 
             if day:
                 value = []
+                start_span = 100
+                end_span = 0
+                start_span = min([i[1][0] for i in day])
+                start_span = min(start_span, e['start'])
+                end_span = max([i[1][1] for i in day])
+                end_span = max(end_span, e['end'])
                 tmp = [i[1] for i in v]
                 tmp_1 = [i[0] for i in day]
                 for index, i in enumerate(tmp):
@@ -375,8 +392,13 @@ class DateMatcher(object):
                         value.extend([v[index]])
                 if not value:
                     value = v
-                entities.append(e)
-                values.append(value)              
+                    entities.append(e)
+                else:
+                    entities.append({
+                        "strart": start_span,
+                        "end": end_span
+                    })
+                    values.append(value)              
         return values, entities
 
 
