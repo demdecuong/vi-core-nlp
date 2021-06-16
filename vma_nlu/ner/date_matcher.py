@@ -347,7 +347,12 @@ class DateMatcher(object):
             return val, ent
         entities = []
         values = []
+
         for v, e in zip(val, ent): # [[("thứ 2", 22, 2, 2222)], [("thứ 2", 22, 2, 2222), ("thứ 3", 22, 3, 2232)]] # [{"start": 10, "end": 20 },  {"start": 20, "end":25}]
+            if len(v) == 1:
+                entities.append(v)
+                values.append(e)
+                continue
             if wod:
                 value = []
                 tmp = [i[0] for i in v]
@@ -355,8 +360,11 @@ class DateMatcher(object):
                 for index, i in enumerate(tmp):
                     if i in tmp_1:
                         value.extend([v[index]])
+                if not value:
+                    value = v
                 entities.append(e)
                 values.append(value)
+
 
             if day:
                 value = []
@@ -365,6 +373,8 @@ class DateMatcher(object):
                 for index, i in enumerate(tmp):
                     if i in tmp_1:
                         value.extend([v[index]])
+                if not value:
+                    value = v
                 entities.append(e)
                 values.append(value)              
         return values, entities

@@ -140,7 +140,7 @@ def get_date_test_case():
         'ngày mai',
         'ngày kia',
         'thứ 2 tuần sau',
-        'thứ 5 tuần vừa qua',
+        'thứ 5 tuần qua',
         'tuần đầu tiên tháng 6',
     ]
 
