@@ -1,5 +1,3 @@
-
-
 # Case 1: - Absolute
 # Case 1.1: Number
 # Case 1.2: Number and string
@@ -23,7 +21,7 @@ def get_date_test_case():
         '21/3/97',
         '21-3-1997',
         '21 3 1997',
-        '22/3/1997 và 24/3/1997'
+        '22/3/1997 và 24/3/1997',
         '21-3'
     ]
     
@@ -60,7 +58,7 @@ def get_date_test_case():
 
     test_case_1_3 = [
         'ngày hai mot tháng ba',
-        'ngày hai hai'
+        'ngày hai hai',
         'ngay hai muoi hai',
         'thứ sáu ngày hai mươi lăm',
         'tháng giêng'

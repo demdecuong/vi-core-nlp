@@ -4,9 +4,9 @@ def absolute():
                    '((monday|tuesday|wednesday|thursday|friday|saturday|sunday)(,|\s|\.|-|\/|_)\d+(,|\s|\.|-|\/|_)*\d*(,|\s|\.|-|\/|_)*\d*)', # Monday 21 3 
                 ] 
     wod = ['(monday|tuesday|wednesday|friday|saturday|sunday)']
-    wod_vn = ['(((thứ)|(thu)|(thuws))(\s+|\.+)*[2-8])|(((thứ)|(thu)|(thuws))(\s+|\.+)*(hai|ba|tư|tu|bốn|bon|năm|nam|lăm|lam|sáu|say|bảy|bay))|((chủ nhật)|(chu nhat)|(cn))']
+    wod_vn = ['(((thứ)|(thu)|(thuws))(\s+|\.+)*[2-8])|(((thứ)|(thu)|(thuws))(\s+|\.+)*((hai)|(bay)|(tư)|(tu)|(bốn)|(bon)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(say)|(bảy)|(ba)))|((chủ nhật)|(chu nhat)|(cn))']
 
-    day_vn = ['(((ngày)|(ngay)|(ngafy))(\s+|\.+)*(\d\d|\d)($|\s))|(((ngày)|(ngay)|(ngafy))\s+(không|khong|một|mốt|mot|hai|ba|bốn|bon|tư|tu|năm|lăm|nam|lam|sáu|sau|bảy|bay|tám|tam|chín|chin|mười|mươi|muoi)(\s*(không|khong|một|mốt|mot|hai|ba|bốn|bon|tư|tu|năm|lăm|nam|lam|sáu|sau|bảy|bay|tám|tam|chín|chin|mười|mươi|muoi))?(\s*(không|khong|một|mốt|mot|hai|ba|bốn|bon|tư|tu|năm|lăm|nam|lam|sáu|sau|bảy|bay|tám|tam|chín|chin|mười|mươi|muoi))?)']
+    day_vn = ['(((ngày)|(ngay)|(ngafy))(\s+|\.+)*(\d\d|\d)($|\s))|(((ngày)|(ngay)|(ngafy))\s+((không)|(khong)|(một)|(mốt)|(mot)|(hai)|(bay)|(bốn)|(bon)|(tư)|(tu)|(năm)|(lăm)|(nam)|(lam)|(sáu)|(sau)|(bảy)|(ba)|(tám)|(tam)|(chín)|(chin)|(mười)|(mươi)|(muoi))(\s*((không)|(khong)|(một)|(mốt)|(mot)|(hai)|(bay)|(bốn)|(bon)|(tư)|(tu)|(năm)|(lăm)|(nam)|(lam)|(sáu)|(sau)|(bảy)|(ba)|(tám)|(tam)|(chín)|(chin)|(mười)|(mươi)|(muoi)))?(\s*((không)|(khong)|(một)|(mốt)|(mot)|(hai)|(bay)|(bốn)|(bon)|(tư)|(tu)|(năm)|(lăm)|(nam)|(lam)|(sáu)|(sau)|(bảy)|(ba)|(tám)|(tam)|(chín)|(chin)|(mười)|(mươi)|(muoi)))?)']
 
     month = ['(january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sep|october|oct|november|nov|december|dec)']
     month_vn = ['(((tháng)|(thang)|(thasng))(\s+|\.+)*(\d\d|\d)($|\s))|(((tháng)|(thang))(\s+|\.+)*(một|mot|hai|ba|bốn|bon|tư|tu|năm|nam|lăm|lam|sáu|bảy|bay|tám|tam|chín|chin|mười|muoi|mười một|muoi mot|mười hai|muoi hai|giêng|gieng|chạp|chap))']

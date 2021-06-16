@@ -24,7 +24,7 @@ class DateMatcher(object):
         self.short_time, self.long_time = relative()
         self.rel_pattern = "|".join([self.short_time[0], self.long_time[0]])
 
-        self.week_days=["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"]
+        self.week_days=["thứ 2","thứ 3","thứ 4","thứ 5","thứ 6","thứ 7","chủ nhật"]
         with open(dict_path, "r", encoding="utf-8") as f:
             self.dict_normalize = json.load(f)
 
@@ -39,11 +39,13 @@ class DateMatcher(object):
         get_pattern_absolute = [(x.group(), x.span()) for x in re.finditer(self.abs_pattern, text)]
         get_pattern_relative = [(x.group(), x.span()) for x in re.finditer(self.rel_pattern, text)]
 
-        wod = [(x.group(), x.span()) for x in re.finditer(self.wod, text)] # TODO normalize
-        day = [(x.group(), x.span()) for x in re.finditer(self.day, text)] # TODO normalize
+        wod = [(x.group(), x.span()) for x in re.finditer(self.wod, text)]
+        day = [(x.group(), x.span()) for x in re.finditer(self.day, text)]
         # print(day)
-        month = [(x.group(), x.span()) for x in re.finditer(self.month, text)] # TODO normalize
-        year = [(x.group(), x.span()) for x in re.finditer(self.year, text)] # TODO normalize
+        month = [(x.group(), x.span()) for x in re.finditer(self.month, text)]
+        year = [(x.group(), x.span()) for x in re.finditer(self.year, text)]
+
+        wod, day, month, year = self.normalize_date_2(wod, day, month, year)
 
         short_abs = [(x.group(), x.span()) for x in re.finditer(self.short_abs, text)]
 
@@ -67,7 +69,7 @@ class DateMatcher(object):
         if get_pattern_relative: # Relative
             val, ent  = self._map_relative_to_date(get_pattern_relative)
             # Relative clear
-            # val, ent = self.extract_date_rel_clearly(val, ent, wod, day, month, year)
+            val, ent = self.extract_date_rel_clearly(val, ent, wod, day)
             value.extend(val)
             entities.extend(ent)
             return self.output_format(value=value, entities=entities, extractor="date_matcher")
@@ -334,19 +336,39 @@ class DateMatcher(object):
         return value, entities
 
     def normalize_date(self, input_date): # (WOD, DD, MM, YYYY)
-        WOD = str(input_date[0]) #TODO normalize
+        WOD = str(input_date[0])
         DD = int(input_date[1])
         MM = int(input_date[2])
         YYYY = input_date[3]
         return (WOD, DD, MM, YYYY)
 
-    def extract_date_rel_clearly(self, val, ent, wod, day, month, year): # Ex: thứ 5 tuần sau, thứ 2 tuần tới
+    def extract_date_rel_clearly(self, val, ent, wod, day): # Ex: thứ 5 tuần sau, thứ 2 tuần tới
+        if not wod and not day:
+            return val, ent
+        entities = []
+        values = []
         for v, e in zip(val, ent): # [[("thứ 2", 22, 2, 2222)], [("thứ 2", 22, 2, 2222), ("thứ 3", 22, 3, 2232)]] # [{"start": 10, "end": 20 },  {"start": 20, "end":25}]
-            if wod: # assume wod = [("thứ 2", (10, 20))]
-                for i in v:
-                    if wod[0][0] in i:
-                        pass
-            pass
+            if wod:
+                value = []
+                tmp = [i[0] for i in v]
+                tmp_1 = [i[0] for i in wod]
+                for index, i in enumerate(tmp):
+                    if i in tmp_1:
+                        value.extend([v[index]])
+                entities.append(e)
+                values.append(value)
+
+            if day:
+                value = []
+                tmp = [i[1] for i in v]
+                tmp_1 = [i[0] for i in day]
+                for index, i in enumerate(tmp):
+                    if i in tmp_1:
+                        value.extend([v[index]])
+                entities.append(e)
+                values.append(value)              
+        return values, entities
+
 
     def extract_date_abs_string_number(self, wod, day, month, year):
         tmp = max(len(wod), len(day), len(month), len(year))
@@ -388,3 +410,40 @@ class DateMatcher(object):
         }]
         value.append([(w, d, m, y) for w, d, m, y in zip(wod_tmp, day_tmp, month_tmp, year_tmp)])
         return value, entities
+
+    def normalize_date_2(self, wod, day, month, year):
+        if wod:
+            wod_tmp = []
+            for i in wod:
+                value = re.sub('(thứ)|(thu)|(thuws)|(Thứ)', '', i[0])
+                value = value.strip()
+                value = self.dict_normalize.get(value, value)
+                if value != "chủ nhật":
+                    value = 'thứ '+ str(value)
+                wod_tmp.append((value, i[1]))
+            wod = wod_tmp
+        if day:
+            day_tmp = []
+            for i in day:
+                value = re.sub('(ngày)|(ngay)|(ngafy)', '', i[0])
+                value = value.strip()
+                value = self.dict_normalize.get(value, value)
+                day_tmp.append((value, i[1]))
+            day = day_tmp
+        if month:
+            month_tmp = []
+            for i in month:
+                value = re.sub('(tháng)|(thang)|(thasng)', '', i[0])
+                value = value.strip()
+                value = self.dict_normalize.get(value, value)
+                month_tmp.append((value, i[1]))
+            month = month_tmp
+        if year:
+            year_tmp = []
+            for i in year:
+                value = re.sub('(năm)|(nam)', '', i[0])
+                value = value.strip()
+                value = int(value)
+                year_tmp.append((value, i[1]))
+            year = year_tmp
+        return wod, day, month, year            
