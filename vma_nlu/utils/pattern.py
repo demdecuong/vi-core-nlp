@@ -20,11 +20,18 @@ def absolute():
     return absolute, wod, wod_vn, day_vn, month, month_vn, year, only_number, short_abs
 
 def relative():
-    short_time = ['(((hôm)|(hom))\s*qua)|(((hôm)|(hom))\s*nay)|(((hôm)|(hom))\s*kia)|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*qua)|(sáng\s(((hôm)|(hom))\s)*qua)|(trưa\s(((hôm)|(hom))\s)*qua)|(chiều\s(((hôm)|(hom))\s)*qua)|(tối\s(((hôm)|(hom))\s)*qua)|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*nay)|(sáng\s(((hôm)|(hom))\s)*nay)|(trưa\s(((hôm)|(hom))\s)*nay)|(chiều\s(((hôm)|(hom))\s)*nay)|(tối\s(((hôm)|(hom))\s)*nay)|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*mai)|(sáng\s(((hôm)|(hom))\s)*mai)|(trưa\s(((hôm)|(hom))\s)*mai)|(chiều\s(((hôm)|(hom))\s)*mai)|(tối\s(((hôm)|(hom))\s)*mai)|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*mốt)|(sáng\s(((hôm)|(hom))\s)*mốt)|(trưa\s(((hôm)|(hom))\s)*mốt)|(chiều\s(((hôm)|(hom))\s)*mốt)|(tối\s(((hôm)|(hom))\s)*mốt)|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*kia)|(sáng\s(((hôm)|(hom))\s)*kia)|(trưa\s(((hôm)|(hom))\s)*kia)|(chiều\s(((hôm)|(hom))\s)*kia)|(tối\s(((hôm)|(hom))\s)*kia)|(buổi\ssáng)|(buổi\strưa)|(buổi\schiều)|(buổi\stối)']
+    short_time = ['(((hôm)|(hom))\s*((qua)|(rồi)|(vừa rồi)|(roi)))|(((hôm)|(hom))\s*nay)|(((hôm)|(hom))\s*kia)|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*((qua)|(rồi)|(vừa rồi)|(roi)))|(sáng\s(((hôm)|(hom))\s)*((qua)|(rồi)|(vừa rồi)|(roi)))|(trưa\s(((hôm)|(hom))\s)*((qua)|(rồi)|(vừa rồi)|(roi)))|(chiều\s(((hôm)|(hom))\s)*((qua)|(rồi)|(vừa rồi)|(roi)))|(tối\s(((hôm)|(hom))\s)*((qua)|(rồi)|(vừa rồi)|(roi)))|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*nay)|(sáng\s(((hôm)|(hom))\s)*nay)|(trưa\s(((hôm)|(hom))\s)*nay)|(chiều\s(((hôm)|(hom))\s)*nay)|(tối\s(((hôm)|(hom))\s)*nay)|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*mai)|(sáng\s(((hôm)|(hom))\s)*mai)|(trưa\s(((hôm)|(hom))\s)*mai)|(chiều\s(((hôm)|(hom))\s)*mai)|(tối\s(((hôm)|(hom))\s)*mai)|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*mốt)|(sáng\s(((hôm)|(hom))\s)*mốt)|(trưa\s(((hôm)|(hom))\s)*mốt)|(chiều\s(((hôm)|(hom))\s)*mốt)|(tối\s(((hôm)|(hom))\s)*mốt)|(((ngày)|(ngay))\s(((hôm)|(hom))\s)*kia)|(sáng\s(((hôm)|(hom))\s)*kia)|(trưa\s(((hôm)|(hom))\s)*kia)|(chiều\s(((hôm)|(hom))\s)*kia)|(tối\s(((hôm)|(hom))\s)*kia)|(buổi\ssáng)|(buổi\strưa)|(buổi\schiều)|(buổi\stối)']
 
-    long_time = ['(((tuần)|(tuan))\s((này)|(nay)))|(((tuần)|(tuan))\ssau)|(((tuần)|(tuan))\squa)|(((tuần)|(tuan))\s((tới)|(toi)))|(((tháng)|(thang))\s((này)|(nay)))|(((tháng)|(thang))\ssau)|(((tháng)|(thang))\squa)|(((tháng)|(thang))\s((tới)|(toi)))']
+    long_time = ['(((tuần)|(tuan))\s((này)|(nay)))|(((tuần)|(tuan))\ssau)|(((tuần)|(tuan))\s((qua)|(rồi)|(roi)|(vừa rồi)))|(((tuần)|(tuan))\s((tới)|(toi)))|(((tháng)|(thang))\s((này)|(nay)))|(((tháng)|(thang))\ssau)|(((tháng)|(thang))\s((qua)|(rồi)|(roi)|(vừa rồi)))|(((tháng)|(thang))\s((tới)|(toi)))']
     
-    return short_time, long_time
+    adj_pattern_top = ['((đầu)|(dau))\s*((tuần)|(tuan)|(tháng)|(thang))']
+    adj_pattern_middle = ['((giữa)|(giua))\s*((tuần)|(tuan)|(tháng)|(thang))']
+    adj_pattern_bot = ['((cuối)|(cuoi))\s*((tuần)|(tuan)|(tháng)|(thang))']
+
+
+    return short_time, long_time, adj_pattern_top, adj_pattern_middle, adj_pattern_bot
+
+
 
 def get_person_pattern():
     # 1 person name

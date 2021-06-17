@@ -21,8 +21,12 @@ class DateMatcher(object):
         self.short_abs = self.short_abs[0]
         self.only_number = self.only_number[0]
         ####################################################
-        self.short_time, self.long_time = relative()
+        self.short_time, self.long_time, self.adj_pattern_top, self.adj_pattern_middle, self.adj_pattern_bot = relative()
         self.rel_pattern = "|".join([self.short_time[0], self.long_time[0]])
+
+        self.adj_pattern_top = self.adj_pattern_top[0]
+        self.adj_pattern_middle = self.adj_pattern_middle[0]
+        self.adj_pattern_bot = self.adj_pattern_bot[0]
 
         self.week_days=["thứ 2","thứ 3","thứ 4","thứ 5","thứ 6","thứ 7","chủ nhật"]
         with open(dict_path, "r", encoding="utf-8") as f:
@@ -69,7 +73,10 @@ class DateMatcher(object):
         if get_pattern_relative: # Relative
             val, ent  = self._map_relative_to_date(get_pattern_relative)
             # Relative clear
-            val, ent = self.extract_date_rel_clearly(val, ent, wod, day)
+            val, ent, flag = self.extract_date_rel_with_adj(val, ent, self.adj_pattern_top, self.adj_pattern_middle, self.adj_pattern_bot, text)
+            val, ent = self.extract_date_rel_clearly(val, ent, wod, day, flag)
+            # print(val)
+            # print(ent)
             value.extend(val)
             entities.extend(ent)
             return self.output_format(value=value, entities=entities, extractor="date_matcher")
@@ -92,7 +99,7 @@ class DateMatcher(object):
         entities = []
         
         for pattern, span in get_pattern_relative:
-            if re.search("qua", pattern):
+            if re.search("((qua)|(rồi))", pattern):
                 
                 if re.search("(ngày)|(ngay)|(ngayf)", pattern) or re.search("(hôm)|(hom)", pattern) or re.search("(sáng)|(sang)", pattern) or re.search("(trưa)|(trua)", pattern) or re.search("(chiều)|(chieu)", pattern) or re.search("(tối)|(toi)", pattern):
                     get_date = self._get_day(timedelta=1, mode="sub")
@@ -116,9 +123,9 @@ class DateMatcher(object):
 
                 elif re.search("(tháng)|(thang)", pattern):
                     get_month = self._get_month("sub")
-                    day = get_month[2][-7:]
-                    month = get_month[1][-7:]
-                    year = get_month[0][-7:]
+                    day = get_month[2]
+                    month = get_month[1]
+                    year = get_month[0]
                     wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
                     entities.append({
                         "start": span[0],
@@ -193,9 +200,9 @@ class DateMatcher(object):
 
                 elif re.search("(tháng)|(thang)", pattern):
                     get_date = self._get_month("add")
-                    day = get_date[2][:7]
-                    month = get_date[1][:7]
-                    year = get_date[0][:7]
+                    day = get_date[2]
+                    month = get_date[1]
+                    year = get_date[0]
                     wod = [self.week_days[datetime.date(int(year[i]), int(month[i]), int(day[i])).weekday()] for i in range(len(day))]
                     entities.append({
                         "start": span[0],
@@ -350,9 +357,18 @@ class DateMatcher(object):
         YYYY = input_date[3]
         return (WOD, DD, MM, YYYY)
 
-    def extract_date_rel_clearly(self, val, ent, wod, day): # Ex: thứ 5 tuần sau, thứ 2 tuần tới
+    def extract_date_rel_clearly(self, val, ent, wod, day, flag): # Ex: thứ 5 tuần sau, thứ 2 tuần tới
         if not wod and not day:
-            return val, ent
+            if flag:
+                return val, ent
+            else:
+                values = []
+                entities = []
+                for vs, es in zip(val, ent):
+                    v = vs[int(len(vs)/2)]
+                    values.append(v)
+                    entities.append(es)
+                return values, entities
         entities = []
         values = []
 
@@ -403,7 +419,7 @@ class DateMatcher(object):
                     entities.append(e)
                 else:
                     entities.append({
-                        "strart": start_span,
+                        "start": start_span,
                         "end": end_span
                     })
                     values.append(value)              
@@ -486,4 +502,51 @@ class DateMatcher(object):
                 value = int(value)
                 year_tmp.append((value, i[1]))
             year = year_tmp
-        return wod, day, month, year            
+        return wod, day, month, year
+
+    def extract_date_rel_with_adj(self, val, ent, top, middle, bot, text):
+        flag = False
+        top = [(x.group(), x.span()) for x in re.finditer(top, text)]
+        middle = [(x.group(), x.span()) for x in re.finditer(middle, text)]
+        bot = [(x.group(), x.span()) for x in re.finditer(bot, text)]
+        if not top and not middle and not bot:
+            return val, ent, flag
+        else:
+            flag = True
+            values = []
+            entities = []
+            for vs, es in zip(val, ent):
+                if top:
+                    for i in top:
+                        v = vs[:round(len(vs)*0.25)]
+                        # print(v)
+                        values.append(v)
+                        start_span = min(i[1][0], es["start"])
+                        end_span = max(i[1][1], es["end"])
+                        entities.append({
+                            "start": start_span,
+                            "end": end_span
+                        })
+                if middle:
+                    for i in middle:
+                        v = vs[round(len(vs)*0.25):round(len(vs)*0.75)]
+                        values.append(v)
+                        start_span = min(i[1][0], es["start"])
+                        end_span = max(i[1][1], es["end"])
+                        entities.append({
+                            "start": start_span,
+                            "end": end_span
+                        })
+                if bot:
+                    for i in bot:
+                        v = vs[round(len(vs)*0.75):]
+                        values.append(v)
+                        start_span = min(i[1][0], es["start"])
+                        end_span = max(i[1][1], es["end"])
+                        entities.append({
+                            "start": start_span,
+                            "end": end_span
+                        })
+            return values, entities, flag
+
+
