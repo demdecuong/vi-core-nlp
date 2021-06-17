@@ -56,17 +56,20 @@ class TimeMatcher:
         start = 0
         end = 0
         status = self.get_time_status(text)
-         
+
         text = text.split(' ')
 
         if 'giờ' not in text:
+            # Maybe it contains 'phut'
+            if 'phút' in text:
+                start,end, hour, minute = self.no_hour_case(text)
+                hour, minute = self.refine_hour_minute(hour,minute,status)
             return start,end, hour, minute
 
         hour_index = text.index('giờ')
         hour_range = text[max(0, hour_index - self.left_shift): hour_index]
         minute_range = text[hour_index +
                             1: min(hour_index + self.right_shift, len(text))]
-
 
         hour = self.get_hour(hour_range)
         minute = self.get_minute(minute_range)
@@ -114,7 +117,7 @@ class TimeMatcher:
                 B : kém(-1) or hơn(1)
                 C : có nữa/tiếp theo/kế tiếp/lát/lát nữa không ? (0/1)
         '''
-        c_pattern = ['nữa','tiếp theo','kế tiếp','lát','lát nữa','kế','sắp tới']
+        c_pattern = ['nữa','tiếp theo','kế tiếp','lát','lát nữa','kế','sắp tới','phút sau','phút nữa','giờ rưỡi sau','giờ sau']
         # min_pattern = ['sau']
         result = [0,0,0]
         status = 'am'
@@ -229,7 +232,21 @@ class TimeMatcher:
         text = text.replace('\n','').strip()
         text = re.sub('(?<! )(?=[,!?()])|(?<=[,!?()])(?! )', r' ', text)
         return text
-        
+
+    def no_hour_case(self,text):
+        hour = self.default_hour
+        minute = self.default_min
+        start = 0
+        end = 0
+        for i in range(len(text)):
+            if text[i] == 'phút':
+                minute = self.get_minute(text[max(0,i - self.left_shift):i])
+                start = i - len(str(minute))
+                end = i
+                hour = 0
+                return start,end, hour, minute
+        return start,end, hour, minute
+
 if __name__ == '__main__':
     matcher = TimeMatcher()
     # text = '14:30 sáng thứ 7 tuần này'
@@ -239,27 +256,8 @@ if __name__ == '__main__':
     # text = 'ngày 7 tháng 6 lúc 14.15.00 giờ'
     # print(matcher.extract_absolute_time(text))
     
-    text = 'lúc 14 giờ 30 ngày 7 tháng 6'
+    text = 'tôi cần book lịch gấp vào 1 tiếng rưỡi sau'
     print(matcher.extract_relative_time(text))
 
-    text = 'mười bốn giờ 30 phút ngày 7 tháng 6'
+    text = '4 tiếng sau họp tại trụ sở CA'
     print(matcher.extract_relative_time(text))
-
-    text = 'hai mươi ba giờ 30 phút ngày 7 tháng 6'
-    print(matcher.extract_relative_time(text))
-
-    text = 'sáu giờ ba mươi phút nữa ngày 7 tháng 6'
-    print(matcher.extract_relative_time(text))
-
-    text = 'bảy giờ rưỡi phút nữa ngày 7 tháng 6'
-    print(matcher.extract_relative_time(text))
-
-    text = 'hôm nay lúc tám giờ kém mười lăm'
-    print(matcher.extract_relative_time(text))
-
-    text = 'bây giờ nên làm gì'
-    print(matcher.extract_relative_time(text))
-
-    # text = 'bảy rưỡi mùng 10 tháng 3'
-    # text = 'ba tiếng nữa'
-    # print(matcher.extract_relative_time(text))

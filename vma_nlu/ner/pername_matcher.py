@@ -165,16 +165,11 @@ class PernameMatcher:
         '''
         person_explicit, format_pronoun, person_semi_pronoun, matches = get_person_pattern()
         
-        person_pronoun = [0]*len(format_pronoun)
-
         person_explicit = "|".join(person_explicit)
         person_semi_pronoun = "|".join(person_semi_pronoun)
 
         person_explicit = re.compile(person_explicit)
         person_semi_pronoun = re.compile(person_semi_pronoun)
-
-        for i,pattern in enumerate(format_pronoun):
-            person_pronoun[i] = re.compile("|".join(pattern))
 
         return person_explicit, format_pronoun, person_semi_pronoun, matches
     

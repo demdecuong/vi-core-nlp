@@ -1,7 +1,11 @@
+# NER/Intent classification for Vietnamese Appointment Chatbot
 # Installation
 ```
 pip install -r requirements.txt
 ```
+
+# Logic
+NER logic details are located in `./ner_logic`
 # Usage
 
 **Extract Vietnamese phone number**

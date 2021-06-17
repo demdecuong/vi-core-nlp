@@ -102,7 +102,7 @@ def get_time_tc():
         'tuần tới tôi mới rãnh, nhưng khoảng bốn giờ rưỡi hơn tôi rãnh',
         '4 giờ thiếu 5 chiều mai tại vinmec',
         '9 giờ kém 10 sáng thứ sáu ngày mai nhé',
-        'hẹn bác sĩ lúc 5 rưỡi hơn chiều thứ 2 ngày 15/06',
+        'hẹn bác sĩ lúc 5 giờ rưỡi hơn chiều thứ 2 ngày 15/06',
     ]
 
     exp_res4 = [
@@ -132,6 +132,7 @@ def get_time_tc():
         'tôi cần book lịch gấp vào 1 tiếng rưỡi sau',
         'lát nữa sau 1 tiếng , tôi cần gặp bác sĩ gấp',
         'lát nữa sau 1 tiếng 20 phút, tôi cần gặp bác sĩ gấp',
+        'hẹn bác sĩ vào 30 phút nữa nhé'
     ]
     exp_res5 = [
         (2,0),
@@ -142,6 +143,7 @@ def get_time_tc():
         (1,30),
         (1,0),
         (1,20),
+        (0,30)
     ]
     special_tc.append(tc5)
     final_spec_expected_result.append(exp_res5)

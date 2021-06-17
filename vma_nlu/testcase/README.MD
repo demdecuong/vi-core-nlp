@@ -21,6 +21,8 @@ Mỗi testcase đảm bảo các data
 -   số lương : 10 
 
 ### Result
+- Public Testset   
+
 | Testcase | Accuracy |
 | --- | --- |
 | 1 | 12/12 |
@@ -29,6 +31,14 @@ Mỗi testcase đảm bảo các data
 | 4 | 10/10 |
 | 5 | 3/10 |
 | Total | 42/49 |
+
+- VLSP 2016 (Data contains Person Name only)
+
+| Data | Accuracy |
+| --- | --- |
+| train | 15/4924 |
+| dev | 2/571 |
+| test | 7/861 |
 
 ## Time
 ### testcase 1 : 7:30 (straight forward)  
@@ -49,8 +59,8 @@ Mỗi testcase đảm bảo các data
 | 2 | 9/10 |
 | 3 | 9/10 |
 | 4 | 8/10 |
-| 5 | 5/8 |
-| Total | 41/48 |
+| 5 | 9/9 |
+| Total | 46/49 |
 
 
 ## Date

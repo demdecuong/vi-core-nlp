@@ -10,3 +10,7 @@ tester.test_time()
 
 print('----------------- Test date -----------------')
 tester.test_date()
+
+# tester.test_person_name_vlsp('train')
+# tester.test_person_name_vlsp('dev')
+# tester.test_person_name_vlsp('test')

@@ -1,4 +1,5 @@
 import datetime
+import pandas as pd
 
 from nltk import text
 from vma_nlu.ner.extractor import Extractor
@@ -7,7 +8,7 @@ from vma_nlu.testcase.tc_pername import get_person_name_tc
 from termcolor import colored
 from vma_nlu.testcase.tc_date import get_date_test_case
 
-
+VLSP_PATH = './vma_nlu/testcase/vlsp2016'
 class Tester:
     def __init__(self):
         self.extractor = Extractor(load_dict=False)
@@ -33,6 +34,21 @@ class Tester:
             total_acc += (acc)
         self.write_result('Total', total_acc, total_len)
 
+    def test_person_name_vlsp(self,mode='train'):
+        vlsp = pd.read_csv(f"{VLSP_PATH}/{mode}_processed.csv")
+        per_tc = vlsp['src']
+        per_expected_result = vlsp['trg']
+
+        correct = 0
+
+        for test, label in zip(per_tc, per_expected_result):
+            pred = self.extractor.extract_person_name(
+                test, mode='pattern', rt='relative')['entities']
+            if pred[0]['value'] in label:
+                correct += 1
+ 
+        self.write_result('Total', correct, len(vlsp))
+ 
     def test_time(self):
         tc_num = 1
         total_acc = 0
@@ -56,9 +72,12 @@ class Tester:
                 now = datetime.datetime.now()
                 hour = now.hour + int(label[0])
                 minute = now.minute + int(label[1])
+                if minute >= 60:
+                    minute -= 60
+                    hour += 1
                 if hour - pred[0] == 0 and minute - pred[1] <= 1:
                     acc += 1
-                # print(pred, hour ,minute, acc)
+                print(pred, hour ,minute, acc)
             self.write_result(tc_num, acc, len(tc))
             tc_num += 1
             total_len += len(tc)
