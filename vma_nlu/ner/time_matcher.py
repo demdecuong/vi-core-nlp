@@ -25,7 +25,7 @@ import threading
 import re
 
 from nltk import ngrams
-from vma_nlu.utils.pattern import get_time_pattern
+from vma_nlu.utils.time_pattern import get_time_pattern
 from vietnam_number import w2n
 
 class TimeMatcher:

@@ -4,7 +4,7 @@ import json
 from datetime import date
 import datetime
 
-from vma_nlu.utils.pattern import absolute, relative
+from vma_nlu.utils.date_pattern import absolute, relative
 class DateMatcher(object):
     def __init__(self, dict_path = "./vma_nlu/data/dictionary_normalize_date.json") -> None:
         super().__init__()

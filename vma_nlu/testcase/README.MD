@@ -27,8 +27,8 @@ Mỗi testcase đảm bảo các data
 | 2 | 12/12 |
 | 3 | 5/5 |
 | 4 | 10/10 |
-| 5 | 2/10 |
-| Total | 41/49 |
+| 5 | 3/10 |
+| Total | 42/49 |
 
 ## Time
 ### testcase 1 : 7:30 (straight forward)  
