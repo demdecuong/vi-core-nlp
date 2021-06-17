@@ -323,7 +323,15 @@ class DateMatcher(object):
             day = int(tmp[0])
             month = int(tmp[2])
             if cat == "long":
-                year = int(tmp[4])
+                year = str(tmp[4])
+                if len(year) == 4:
+                    year = int(year)
+                elif len(year) == 2:
+                    if int(year) > 50:
+                        year = "19"+year
+                    else:
+                        year = "20"+year
+                    year = int(year)
                 wod = self.week_days[datetime.date(year, month, day).weekday()]
             else:
                 year = "None"
