@@ -11,7 +11,7 @@ from rasa.shared.nlu.training_data.training_data import TrainingData
 from rasa.shared.nlu.training_data.message import Message
 
 WORK_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(WORK_DIR, "weight/LR_model.pkl")
+MODEL_PATH = os.path.join(WORK_DIR, "weight/SGD_model.pkl")
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +77,7 @@ class LogisticRegressionClassifier(IntentClassifier):
         else:
             try:
                 learner = pickle.load(open(MODEL_PATH, 'rb'))
-                logger.debug(f"Load {{self.__class__.__name__}} Naive Bayes model successfully ")
+                logger.debug(f"Loads Naive Bayes model successfully ")
                 return cls(meta, learner)
             except Exception as ex:
                 logger.error(f"Cannot load Naive Bayes model: {MODEL_PATH}: error: {ex}")
