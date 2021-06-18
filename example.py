@@ -63,5 +63,5 @@ extractor = Extractor(load_dict=False) # True: Load dictionary path
 # text = '3 giờ 20 phút kế tiếp'
 # print(extractor.extract_ner(text,'inform'))
 
-text = "31"
+text = "31/06/1995"
 print(extractor.extract_date(text))
