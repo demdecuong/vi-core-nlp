@@ -72,11 +72,15 @@ class DateMatcher(object):
 
         if get_pattern_relative: # Relative
             val, ent  = self._map_relative_to_date(get_pattern_relative)
+            print(val)
+            print(ent)
             # Relative clear
             val, ent, flag = self.extract_date_rel_with_adj(val, ent, self.adj_pattern_top, self.adj_pattern_middle, self.adj_pattern_bot, text)
+            print(val)
+            print(ent)
             val, ent = self.extract_date_rel_clearly(val, ent, wod, day, flag)
-            # print(val)
-            # print(ent)
+            print(val)
+            print(ent)
             value.extend(val)
             entities.extend(ent)
             return self.output_format(value=value, entities=entities, extractor="date_matcher")
@@ -366,7 +370,7 @@ class DateMatcher(object):
                 entities = []
                 for vs, es in zip(val, ent):
                     v = vs[int(len(vs)/2)]
-                    values.append(v)
+                    values.append([v])
                     entities.append(es)
                 return values, entities
         entities = []
