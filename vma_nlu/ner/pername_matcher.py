@@ -236,11 +236,11 @@ class PernameMatcher:
         name = []
         name_max_len = 5
         utterance = utterance.split(' ')
-
         # Get name based on popular first name
         for i, token in enumerate(utterance):
             if token in popular_first_name:
-                name = utterance[i:min(i+5,len(utterance))]                
+                name = utterance[i:min(i+5,len(utterance))] 
+                break
         if name != []:
             # Post processing name : (TODO)
             return ' '.join(name)
