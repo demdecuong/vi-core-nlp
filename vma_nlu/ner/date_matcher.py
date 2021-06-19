@@ -72,8 +72,12 @@ class DateMatcher(object):
 
         if get_pattern_relative: # Relative
             val, ent  = self._map_relative_to_date(get_pattern_relative)
+            # print(val)
+            # print(ent)
             # Relative clear
             val, ent, flag = self.extract_date_rel_with_adj(val, ent, self.adj_pattern_top, self.adj_pattern_middle, self.adj_pattern_bot, text)
+            # print(val)
+            # print(ent)
             val, ent = self.extract_date_rel_clearly(val, ent, wod, day, flag)
             # print(val)
             # print(ent)
@@ -329,25 +333,31 @@ class DateMatcher(object):
             tmp = re.split('(,|\s|\.|-|\/|_)', pattern)
             day = int(tmp[0])
             month = int(tmp[2])
-            if cat == "long":
-                year = str(tmp[4])
-                if len(year) == 4:
-                    year = int(year)
-                elif len(year) == 2:
-                    if int(year) > 50:
-                        year = "19"+year
-                    else:
-                        year = "20"+year
-                    year = int(year)
-                wod = self.week_days[datetime.date(year, month, day).weekday()]
+            flag = self.check_valid_date(day, month)
+            if not flag:
+                value.append([])
             else:
-                year = "None"
-                wod = "None"
+                if cat == "long":
+                    year = str(tmp[4])
+                    if len(year) == 4:
+                        year = int(year)
+                    elif len(year) == 2:
+                        if int(year) > 50:
+                            year = "19"+year
+                        else:
+                            year = "20"+year
+                        year = int(year)
+                    wod = self.week_days[datetime.date(year, month, day).weekday()]
+                    value.append([self.normalize_date((wod, day, month, year))])
+                else:
+                    year = "None"
+                    wod = "None"
+                    value.append([self.normalize_date((wod, day, month, year))])
             entities.append({
                 "start": span[0],
                 "end": span[1]
             })
-            value.append([self.normalize_date((wod, day, month, year))])
+            
         return value, entities
 
     def normalize_date(self, input_date): # (WOD, DD, MM, YYYY)
@@ -366,7 +376,7 @@ class DateMatcher(object):
                 entities = []
                 for vs, es in zip(val, ent):
                     v = vs[int(len(vs)/2)]
-                    values.append(v)
+                    values.append([v])
                     entities.append(es)
                 return values, entities
         entities = []
@@ -550,3 +560,9 @@ class DateMatcher(object):
             return values, entities, flag
 
 
+    def check_valid_date(self, day, month):
+        flag = False
+        day_count_for_month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        if int(day) > day_count_for_month[(month)]:
+            return flag
+        else: return True
