@@ -492,6 +492,7 @@ class DateMatcher(object):
             day_tmp = []
             for i in day:
                 value = re.sub('(ngày)|(ngay)|(ngafy)', '', i[0])
+                value = re.sub('(tháng)|(thang)', '', value)
                 value = value.strip()
                 value = self.dict_normalize.get(value, value)
                 day_tmp.append((value, i[1]))
