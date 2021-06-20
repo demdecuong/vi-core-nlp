@@ -50,24 +50,24 @@ extractor = Extractor(load_dict=False) # True: Load dictionary path
 # text = 'ngày 7 tháng 6 lúc 14.15.00 giờ'
 # print(extractor.extract_time(text))
 
-<<<<<<< HEAD
 text = 'tôi là hoàng vũ'
 
 print(extractor.extract_person_name(text))
-=======
-# text = '7 giờ 20 kém 5 phút sáng thứ ba đầu tiên của tháng sau'
 
-# print(extractor.extract_time(text))
->>>>>>> 85ec123ff80be06813a9f0b7cc99700ee4007d50
+text = 'khoảng 7 den 8 giờ'
+print(extractor.extract_time(text))
 
-# text = '2 tiếng nữa tại vinmec'
-# print(extractor.extract_time(text))
+text = 'khoảng 7-8 giờ chiều mai'
+print(extractor.extract_time(text))
 
-# text = '3 giờ tiếp theo nhưng vào ngày mai'
-# print(extractor.extract_time(text))
+text = 'ngày thứ 2 tuần sau vào lúc 9h30'
+print(extractor.extract_time(text))
 
-# text = '3 giờ 20 phút kế tiếp'
-# print(extractor.extract_ner(text,'inform'))
+text = 'ngày thứ 2 tuần sau vào lúc 9 giờ 30'
+print(extractor.extract_time(text))
 
-text = "31/06/1995"
-print(extractor.extract_date(text))
+# text = "khoảng đầu chiều mai"
+# text = "khoảng đầu buổi chiều được ạ"
+# text = "khoảng đầu buổi chiều được ạ"
+text = 'tầm cuối buổi sáng'
+print(extractor.extract_time(text))

@@ -4,9 +4,9 @@ def get_time_pattern():
 
     # 11 am, 12pm, 1pm, 2:15pm, 3.30pm ,4.45, 5:30, 06:15, 07:30pm, 8:30 pm, 9.15 pm
     abs_pattern =  [
-        "(?=((?: |^)[0-2]?\d[:.hg ]?[0-5]\d?(?:|$)))",
-        "(?=((?: |^)[0-2]?\d[:.hg]))",
-        "(?=((?: |^)[0-2]?\d[:.hg ]?[0-5]\d?(?= giờ|tiếng)\d?(?:|$)))"
+        "(?=((?: |^|\s*)[0-2]?\d[:.hg ]?[0-5]\d?(?:|$)))",
+        "(?=((?: |^|\s*)[0-2]?\d[:.hg]))",
+        "(?=((?: |^|\s*)[0-2]?\d[:.hg ]?[0-5]\d?(?= giờ|tiếng)\d?(?:|$)))"
     ]
 
     # contains giờ (logic)
@@ -19,9 +19,18 @@ def get_time_pattern():
     am_pattern = ['am','sáng', 'giờ sáng', 'buổi sáng', 'sunup', 'morning']
     pm_pattern = ['pm','tối','chiều','buổi chiều', 'buổi tối', 'giờ chiều', 'giờ tối' ,'trưa', 'buổi trưa', 'giờ trưa', 'xế chiều', 'chiều tà', 'noon','afternoon','evening']
     
-    # relative : 
-    # 2 giờ nữa, 15 phút nữa 
 
+    # special : cuoi buoi sang cuoi buoi chieu
+    spec_pattern = {
+        'đầu giờ sáng'      : '8h00',
+        'đầu buổi sáng'     : '8h00',
+        'cuối giờ sáng'     : '11h00',
+        'cuối buổi sáng'    : '11h00',
+        'đầu giờ chiều'     : '13h30', 
+        'đầu buổi chiều'    : '13h30', 
+        'cuối giờ chiều'    : '17h00', 
+        'cuối buổi chiều'   : '17h00', 
+    }
     relative_pattern = []
     return abs_pattern, am_pattern, pm_pattern
 

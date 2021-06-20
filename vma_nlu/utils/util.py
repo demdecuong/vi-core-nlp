@@ -37,7 +37,7 @@ def tokenize(sentence):
 
 def padding_punct(s):
     s = s.replace('\n', '').strip()
-    s = re.sub('([.,!?()],"")', r' \1 ', s)
+    s = re.sub('([.,!?()]),"")', r' \1 ', s)
     s = re.sub('\s{2,}', ' ', s)
     return s
 

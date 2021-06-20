@@ -21,11 +21,12 @@ VALUE1 : 1 ITEM
 (?:một|hai|ba|bốn|tư|tứ|năm|sáu|bảy|tám|chín|mười|mươi|mốt)(?= giờ|tiếng)
 '''
 import datetime
-import threading
+import string
 import re
 
 from nltk import ngrams
 from vma_nlu.utils.time_pattern import get_time_pattern
+from vma_nlu.utils.preproces import Preprocess
 from vietnam_number import w2n
 
 class TimeMatcher:
@@ -38,12 +39,16 @@ class TimeMatcher:
         self.max_n_grams = 3
         self.absolute_pattern, self.am_pattern, self.pm_pattern = get_time_pattern()
 
+        self.preprocessor = Preprocess()
+
     def extract_time(self, text):
         text = self.preprocess(text)
+        # text = self.preprocessor.preprocess(text)
+
         text = text.replace('tiếng','giờ')
 
         time_result = self.extract_absolute_time(text)
-        
+
         if time_result[2] != self.default_hour and time_result[3] != self.default_min:
             return self.output_format(time_result,'absolute_pattern')
         else:
@@ -87,6 +92,10 @@ class TimeMatcher:
         start = -1
         end = -1
 
+        if 'giờ' in text.split(' '):
+            return start, end, hour, minute
+            
+
         for pattern in self.absolute_pattern:
             time = re.search(pattern, text)
             if time != None and time.group(1) != None:
@@ -99,6 +108,9 @@ class TimeMatcher:
                     hour, minute = time.split('h')
                 elif 'g' in time:
                     hour, minute = time.split('g')
+                else:
+                    hour = time
+                    minute = ''
                 start = text.find(time)
                 end = start + len(time)
                 break
@@ -171,7 +183,9 @@ class TimeMatcher:
         return hour, minute
 
     def get_hour(self,hour_range):
-        # 9h gio ruoi
+        # refine hour_range : padding punct
+        hour_range = self.refine_hour_range(hour_range)
+
         if hour_range[-1].replace('h','').replace('g','').isdigit():
             return hour_range[-1].replace('h','').replace('g','')
         else:
@@ -246,6 +260,12 @@ class TimeMatcher:
                 hour = 0
                 return start,end, hour, minute
         return start,end, hour, minute
+
+    def refine_hour_range(self,hour_range):
+        s = ' '.join(hour_range)
+        s = s.translate(str.maketrans({key: " {0} ".format(key) for key in string.punctuation}))
+        hour_range = s.split(' ')
+        return hour_range
 
 if __name__ == '__main__':
     matcher = TimeMatcher()
