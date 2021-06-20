@@ -21,16 +21,32 @@ def get_time_pattern():
     
 
     # special : cuoi buoi sang cuoi buoi chieu
-    spec_pattern = {
-        'đầu giờ sáng'      : '8h00',
-        'đầu buổi sáng'     : '8h00',
-        'cuối giờ sáng'     : '11h00',
-        'cuối buổi sáng'    : '11h00',
+    first_spec_pattern = {
+        'đầu giờ sáng'      : '7h00',
+        'đầu buổi sáng'     : '7h00',
         'đầu giờ chiều'     : '13h30', 
         'đầu buổi chiều'    : '13h30', 
-        'cuối giờ chiều'    : '17h00', 
-        'cuối buổi chiều'   : '17h00', 
+        
     }
+    mid_spec_pattern = {
+        'giữa giờ sáng'     : '9h',
+        'giữa buổi sáng'    : '9h',
+        'giữa buổi chiều'   : '9h',
+        'giữa giờ chiều'    : '9h',
+    }
+
+    last_spec_pattern = {
+        'cuối giờ sáng'     : '11h00',
+        'cuối buổi sáng'    : '11h00',
+        'cuối giờ chiều'    : '17h00', 
+        'cuối buổi chiều'   : '17h00',
+    } 
+    spec_pattern = [
+        first_spec_pattern,
+        mid_spec_pattern,
+        last_spec_pattern
+    ] 
+    
     relative_pattern = []
     return abs_pattern, am_pattern, pm_pattern
 

@@ -80,6 +80,7 @@ class TimeMatcher:
         minute = self.get_minute(minute_range)
 
         hour, minute = self.refine_hour_minute(hour,minute,status)
+        hour, minute = self.round_hour_minute_to_base(hour,minute)
         
         start = max(0, hour_index - self.left_shift)
         end = min(hour_index + self.right_shift, len(text))
@@ -95,7 +96,6 @@ class TimeMatcher:
         if 'giờ' in text.split(' '):
             return start, end, hour, minute
             
-
         for pattern in self.absolute_pattern:
             time = re.search(pattern, text)
             if time != None and time.group(1) != None:
@@ -118,6 +118,7 @@ class TimeMatcher:
         if minute == '':
             minute = 0
         hour, minute = self.refine_hour_minute(hour,minute,status)
+        hour, minute = self.round_hour_minute_to_base(hour,minute)
 
         return start, end, hour, minute
 
@@ -266,6 +267,27 @@ class TimeMatcher:
         s = s.translate(str.maketrans({key: " {0} ".format(key) for key in string.punctuation}))
         hour_range = s.split(' ')
         return hour_range
+
+    def round_minute_to_base(self,minute,base):
+        '''
+            return: a float rounded to the nearest 15min interval
+            if base is 15 for example
+        '''
+        if minute in [0,15,30,60]:
+            return minute
+        rounded = base * ((minute//base) + 1)
+        
+        return rounded
+
+    def round_hour_minute_to_base(self,hour,minute,base=15):
+        if hour == self.default_hour and minute == self.default_min:
+            return hour, minute
+        minute = self.round_minute_to_base(minute,base)
+        if minute >= 60:
+            minute -= 60
+            hour += 1
+        return hour, minute
+
 
 if __name__ == '__main__':
     matcher = TimeMatcher()

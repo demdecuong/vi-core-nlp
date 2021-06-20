@@ -115,6 +115,18 @@ class Tester:
     def test_intent(self):
         pass
 
+    def unit_test(self,features='pername'):
+        assert features in ['pername','time','date']
+        while True:
+            utterance = str(input("Enter a sentence:"))
+            if features == 'pername':
+                result = self.extractor.extract_person_name(utterance)
+            elif features == 'time':
+                result = self.extractor.extract_time(utterance)
+            elif features == 'date':
+                result = self.extractor.extract_datetime(utterance)
+            print(result)
+
     def read_test_cases(self, path):
         pass
 
