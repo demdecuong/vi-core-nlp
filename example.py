@@ -16,7 +16,10 @@ print(extractor.extract_time(text))
 text = 'ngày thứ 2 tuần sau vào lúc 9h30'
 print(extractor.extract_time(text))
 
-text = 'ngày thứ 2 tuần sau vào lúc 9 giờ 30'
+text = 'đặt lịch hôm nay, 20h'
+print(extractor.extract_time(text))
+
+text = 'đặt lịch hôm nay, 25h'
 print(extractor.extract_time(text))
 
 # text = "khoảng đầu chiều mai"

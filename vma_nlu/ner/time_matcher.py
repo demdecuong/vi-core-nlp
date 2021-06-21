@@ -181,6 +181,12 @@ class TimeMatcher:
             minute -= 60
             hour += 1
 
+        hour,minute = self.is_valid(hour,minute)
+        return hour, minute
+
+    def is_valid(self,hour,minute):
+        if hour > 24 or hour < 0 or minute > 60 or minute < 0:
+            return self.default_hour, self.default_min
         return hour, minute
 
     def get_hour(self,hour_range):
@@ -227,9 +233,16 @@ class TimeMatcher:
             return minute
             
     def output_format(self,time_result,extractor):
-        if time_result[0] == -1:
+        if time_result[2] == -1 or time_result[3] == -1:
             return {
-                'entities' : []
+                'entities':[{
+                    'start' : time_result[0],
+                    'end' : time_result[1],
+                    'entity' : 'time',
+                    'value' : [],
+                    'confidence' : 1.0,
+                    'extractor' : extractor
+                }]
             }
         else:
             return {
