@@ -235,14 +235,7 @@ class TimeMatcher:
     def output_format(self,time_result,extractor):
         if time_result[2] == -1 or time_result[3] == -1:
             return {
-                'entities':[{
-                    'start' : time_result[0],
-                    'end' : time_result[1],
-                    'entity' : 'time',
-                    'value' : [],
-                    'confidence' : 1.0,
-                    'extractor' : extractor
-                }]
+                'entities':[]
             }
         else:
             return {
