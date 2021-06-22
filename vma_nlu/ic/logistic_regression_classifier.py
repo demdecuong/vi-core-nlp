@@ -11,7 +11,7 @@ from rasa.shared.nlu.training_data.training_data import TrainingData
 from rasa.shared.nlu.training_data.message import Message
 
 WORK_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(WORK_DIR, "weight/SGD_model.pkl")
+MODEL_PATH = os.path.join(WORK_DIR, "weight/LR_model.pkl")
 
 logger = logging.getLogger(__name__)
 

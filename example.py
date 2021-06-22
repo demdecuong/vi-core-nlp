@@ -25,5 +25,5 @@ print(extractor.extract_time(text))
 # text = "khoảng đầu chiều mai"
 # text = "khoảng đầu buổi chiều được ạ"
 # text = "khoảng đầu buổi chiều được ạ"
-text = 'tầm cuối buổi sáng'
-print(extractor.extract_time(text))
+text = '20 tháng 7 năm 1997'
+print(extractor.extract_date(text))
