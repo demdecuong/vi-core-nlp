@@ -50,15 +50,20 @@ class PatternExtractor(EntityExtractor):
             output = self.extractor.extract_ner(text, intent['name'])
             old_entities = message.data.get("entities")
             for entity in output:
-                if entity['entity'] == 'time' and len(entity['value']) == 2:
+                entity['extractor'] = 'PatternExtractor'
+                if entity['entity'] == 'time' and entity["value"]:
                     entity['value'] = f'{entity["value"][0]}:{entity["value"][1]}'
                     old_entities.append(entity)
-                elif entity['entity'] == 'date_time' and len(entity['value']) == 4:
-                    if entity["value"][1] and entity["value"][2] and entity["value"][3]:
-                        entity['value'] = f'{entity["value"][1]}/{entity["value"][2]}/{entity["value"][3]}'
+                elif entity['entity'] == 'date_time' and entity["value"]:
+                    first_date_extracted = entity["value"][0]
+                    if first_date_extracted[1] and first_date_extracted[2] and first_date_extracted[3]:
+                        entity['value'] = f'{first_date_extracted[1]}/{first_date_extracted[2]}/{first_date_extracted[3]}'
                         old_entities.append(entity)
-                    elif entity["value"][1] and entity["value"][2]:
-                        entity['value'] = f'{entity["value"][1]}/{entity["value"][2]}'
+                    elif first_date_extracted[2] and first_date_extracted[3]:
+                        entity['value'] = f'xx/{first_date_extracted[2]}/{first_date_extracted[3]}'
+                        old_entities.append(entity)
+                    elif first_date_extracted[3]:
+                        entity['value'] = f'xx/xx/{first_date_extracted[3]}'
                         old_entities.append(entity)
                 else:
                     old_entities.append(entity)
