@@ -156,8 +156,11 @@ class TimeMatcher:
         return result
 
     def refine_hour_minute(self,hour,minute,status):
-        hour = int(hour)
-        minute = int(minute)
+        try:
+            hour = int(hour)
+            minute = int(minute)
+        except :
+            return self.default_hour, self.default_min
 
         if hour != self.default_hour and minute == self.default_min:
             minute = 0
