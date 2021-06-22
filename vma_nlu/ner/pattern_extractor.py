@@ -50,7 +50,8 @@ class PatternExtractor(EntityExtractor):
             output = self.extractor.extract_ner(text, intent['name'])
             old_entities = message.data.get("entities")
             for entity in output:
-                if entity['entity'] == 'time' and entity["time"]:
+                entity['extractor'] = 'PatternExtractor'
+                if entity['entity'] == 'time' and entity["value"]:
                     entity['value'] = f'{entity["value"][0]}:{entity["value"][1]}'
                     old_entities.append(entity)
                 elif entity['entity'] == 'date_time' and entity["value"]:
