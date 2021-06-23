@@ -72,6 +72,8 @@ class LogisticRegressionClassifier(IntentClassifier):
         classifier_file_name = file_name + "_classifier.pkl"
         pickle.dump(self.learner, open(os.path.join(model_dir, classifier_file_name), "wb"))
 
+        return {"classifier": classifier_file_name}
+
     @classmethod
     def load(
         cls,
