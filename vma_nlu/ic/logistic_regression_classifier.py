@@ -4,8 +4,17 @@ import logging
 import numpy as np
 from typing import Any, Dict, List, Optional, Text, Tuple, Type
 
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+
 from rasa.nlu.components import Component
 from rasa.nlu.classifiers.classifier import IntentClassifier
+from rasa.shared.nlu.constants import INTENT, TEXT
 from rasa.nlu.config import RasaNLUModelConfig
 from rasa.shared.nlu.training_data.training_data import TrainingData
 from rasa.shared.nlu.training_data.message import Message
@@ -15,10 +24,11 @@ MODEL_PATH = os.path.join(WORK_DIR, "weight/LR_model.pkl")
 
 logger = logging.getLogger(__name__)
 
+
 class LogisticRegressionClassifier(IntentClassifier):
     name = "LogisticRegressionClassifier"
 
-    def __init__(self, component_config: Optional[Dict[Text, Any]] = None, learner = None) -> None:
+    def __init__(self, component_config: Optional[Dict[Text, Any]] = None, learner=None) -> None:
         super(LogisticRegressionClassifier, self).__init__(component_config)
         self.learner = learner
 
@@ -28,17 +38,19 @@ class LogisticRegressionClassifier(IntentClassifier):
         config: Optional[RasaNLUModelConfig] = None,
         **kwargs: Any,
     ) -> None:
-        """Train this component.
+        """Train LR classifier"""
+        X_train = [e.get(TEXT) for e in training_data.intent_examples]
+        y_train = [e.get(INTENT) for e in training_data.intent_examples]
 
-        This is the components chance to train itself provided
-        with the training data. The component can rely on
-        any context attribute to be present, that gets created
-        by a call to :meth:`components.Component.pipeline_init`
-        of ANY component and
-        on any context attributes created by a call to
-        :meth:`components.Component.train`
-        of components previous to this one."""
-        pass
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_train, y_train, test_size=0.2, random_state=42)
+        text_clf = Pipeline([('vect', CountVectorizer(ngram_range=(1, 2),
+                                                      max_df=0.8,
+                                                      max_features=None)),
+
+                             ('clf', SGDClassifier(loss='log'))
+                             ])
+        self.learner = text_clf.fit(X_train, y_train)
 
     def process(self, message: Message, **kwargs: Any) -> None:
         """Process an incoming message."""
@@ -57,8 +69,8 @@ class LogisticRegressionClassifier(IntentClassifier):
 
     def persist(self, file_name: Text, model_dir: Text) -> Optional[Dict[Text, Any]]:
         """Persist this component to disk for future loading."""
-
-        pass
+        classifier_file_name = file_name + "_classifier.pkl"
+        pickle.dump(self.learner, open(os.path.join(model_dir, classifier_file_name), "wb"))
 
     @classmethod
     def load(
@@ -70,26 +82,28 @@ class LogisticRegressionClassifier(IntentClassifier):
         **kwargs: Any,
     ) -> "Component":
         """Load this component from file."""
-
-        if not os.path.isfile(MODEL_PATH):
-            logger.error(f"File not found. Cannot load Naive Bayes model: {MODEL_PATH}")
+        classifier_file = os.path.join(model_dir, meta.get("classifier"))
+        if not os.path.isfile(classifier_file):
+            logger.error(
+                f"File not found. Cannot load LR model: {classifier_file}")
             return cls(component_config=meta)
         else:
             try:
-                learner = pickle.load(open(MODEL_PATH, 'rb'))
-                logger.debug(f"Loads Naive Bayes model successfully ")
+                learner = pickle.load(open(classifier_file, 'rb'))
+                logger.debug(f"Loads LR model successfully ")
                 return cls(meta, learner)
             except Exception as ex:
-                logger.error(f"Cannot load Naive Bayes model: {MODEL_PATH}: error: {ex}")
+                logger.error(
+                    f"Cannot load LR model: {classifier_file}: error: {ex}")
 
     def predict(self, text: Text):
         text = [text]
         predict = self.learner.predict(text)
         confidence = np.max(self.learner.predict_proba(text)[0])
         return {
-            "intent":{
-                "name":predict[0],
+            "intent": {
+                "name": predict[0],
                 "confidence": confidence
             },
-            "intent_ranking":[]
+            "intent_ranking": []
         }
