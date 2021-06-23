@@ -330,7 +330,7 @@ class DateMatcher(object):
         value = []
         entities = []
         for pattern, span in patterns:
-            tmp = re.split('(,|\s|\.|-|\/|_)', pattern)
+            tmp = re.split('(,|\s|\.|-|\/|_)', pattern.strip())
             day = int(tmp[0])
             month = int(tmp[2])
             flag = self.check_valid_date(day, month)
