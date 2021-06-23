@@ -347,6 +347,8 @@ class DateMatcher(object):
                         else:
                             year = "20"+year
                         year = int(year)
+                    elif len(year) == 1:
+                        year = int(datetime.datetime.now().year)
                     wod = self.week_days[datetime.date(year, month, day).weekday()]
                     value.append([self.normalize_date((wod, day, month, year))])
                 else:
