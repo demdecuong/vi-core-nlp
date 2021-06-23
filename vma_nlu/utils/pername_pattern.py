@@ -294,6 +294,20 @@ def get_person_pattern():
         'ngài: \.?([^()0-9-.,!*]+)', 
     ]
 
+    format_pronoun21 = [
+        ' bac si \.?([^()0-9-.,!*]+)',
+        ' bac si tên \.?([^()0-9-.,!*]+)',
+        ' bac si là \.?([^()0-9-.,!*]+)',
+        ' bac si tên là \.?([^()0-9-.,!*]+)',
+        ' bac si : \.?([^()0-9-.,!*]+)',
+        ' bac si: \.?([^()0-9-.,!*]+)', 
+        'bac si \.?([^()0-9-.,!*]+)',
+        'bac si tên \.?([^()0-9-.,!*]+)',
+        'bac si là \.?([^()0-9-.,!*]+)',
+        'bac si tên là \.?([^()0-9-.,!*]+)',
+        'bac si : \.?([^()0-9-.,!*]+)',
+        'bac si: \.?([^()0-9-.,!*]+)', 
+    ]
     # (tên/tên là/tên :) la [Name]
     format_semi_pronoun = [
         ' tên là \.?([^()0-9-.,!*]+)',
@@ -322,6 +336,15 @@ def get_person_pattern():
         'bác sĩ',
         'tên',
         'là',
+        'bs',
+        'ngài', 
+        'bsi',
+        'bacsi',
+        'bac si',
+        'dr',
+        'mr',
+        'ms',
+        'mrs'
     ]
 
     format_pronoun = [
@@ -334,6 +357,7 @@ def get_person_pattern():
         format_pronoun18,
         format_pronoun19,
         format_pronoun20,
+        format_pronoun21,
         format_pronoun1,
         format_pronoun2,
         format_pronoun3,

@@ -1,15 +1,15 @@
 from vma_nlu.tester import Tester
 
 tester = Tester()
+tester.test_template()
+# print('----------------- Test person name -----------------')
+# tester.test_person_name()
 
-print('----------------- Test person name -----------------')
-tester.test_person_name()
+# print('----------------- Test time -----------------')
+# tester.test_time()
 
-print('----------------- Test time -----------------')
-tester.test_time()
-
-print('----------------- Test date -----------------')
-tester.test_date()
+# print('----------------- Test date -----------------')
+# tester.test_date()
 
 # tester.unit_test('time')
 

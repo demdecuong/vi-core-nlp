@@ -48,7 +48,6 @@ class TimeMatcher:
         text = text.replace('tiếng','giờ')
 
         time_result = self.extract_absolute_time(text)
-
         if time_result[2] != self.default_hour and time_result[3] != self.default_min:
             return self.output_format(time_result,'absolute_pattern')
         else:

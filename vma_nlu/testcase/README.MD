@@ -1,5 +1,23 @@
 # Test Cases Document
 
+### Usage
+- Test template : 
+```
+from vma_nlu.tester import Tester
+
+tester = Tester()
+tester.test_template()
+
+# Test NER
+tester.test_person_name()
+tester.test_time()
+tester.test_date()
+
+# Test VLSP2016
+tester.test_person_name_vlsp('train')
+tester.test_person_name_vlsp('dev')
+tester.test_person_name_vlsp('test')
+```
 ## Person Name
 Mỗi testcase đảm bảo các data
 - viết Hoa chữ cái đầu
@@ -31,6 +49,10 @@ Mỗi testcase đảm bảo các data
 | 4 | 10/10 |
 | 5 | 3/10 |
 | Total | 42/49 |
+
+- Template
+
+Correct =  12944/253168
 
 - VLSP 2016 (Data contains Person Name only)
 

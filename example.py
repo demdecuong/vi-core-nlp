@@ -3,6 +3,8 @@ from vma_nlu.tester import Tester
 
 extractor = Extractor(load_dict=False) # True: Load dictionary path
 
-text = '6 tháng 8 2000'
+text = '9h 20 phút '
 print(extractor.extract_time(text))
 
+text = 'bs nguyen tung an'
+print(extractor.extract_person_name(text))
