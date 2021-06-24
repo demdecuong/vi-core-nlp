@@ -1,15 +1,35 @@
-[want] đặt lịch vào [date/time] [pronoun] [person] .
-[want] đặt lịch với [pronoun] [person] vào [date/time] .
+[want] đặt lịch vào [time] [pronoun] [person] .
+[want] đặt lịch vào [date] [pronoun] [person] .
+[want] đặt lịch vào [date] [time] [pronoun] [person] .
+[want] đặt lịch vào [time] [date] [pronoun] [person] .
+[want] đặt lịch với [pronoun] [person] vào [time] .
+[want] đặt lịch với [pronoun] [person] vào [date] .
+[want] đặt lịch với [pronoun] [person] vào [date] [time] .
+[want] đặt lịch với [pronoun] [person] vào [time] [date] .
 [want] khám lúc [time] ngày [date] với [pronoun] [person] .
-[want] khám vào [date/time] .
+[want] khám vào [date] [time] .
+[want] khám vào [time] [date] .
 [want] hẹn với [pronoun] [person] .
-[want] hẹn khám [date/time] .
+[want] hẹn khám [date] [time] .
+[want] hẹn khám [time] [date] .
 [want] đặt lịch với [pronoun] [person] .
 [want] đặt lịch với [pronoun] [person] khoa [khoa] .
 [want] hủy lịch khám với [pronoun] [person] .
-[want] hủy lịch khám [date/time] .
+[want] hủy lịch khám [date] [time] .
+[want] hủy lịch khám [time] [date] .
+[want] hủy lịch khám [time] .
+[want] hủy lịch khám [date] .
 [want] hủy lịch khám lúc [time] ngày [date] với [pronoun] [person] .
-[want] hủy lịch vào [date/time] [pronoun] [person] .
-hủy [want_cancel] lịch vào [date/time] [pronoun] [person] .
+[want] hủy lịch vào [date] [time] [pronoun] [person] .
+[want] hủy lịch vào [time] [date] [pronoun] [person] .
+[want] hủy lịch vào [date] [pronoun] [person] .
+[want] hủy lịch vào [time] [pronoun] [person] .
+hủy [want_cancel] lịch vào [date] [time] [pronoun] [person] .
+hủy [want_cancel] lịch vào [time] [date] [pronoun] [person] .
+hủy [want_cancel] lịch vào [time] [pronoun] [person] .
+hủy [want_cancel] lịch vào [date] [pronoun] [person] .
 hủy [want_cancel] lịch khám với [pronoun] [person] .
-hủy [want_cancel] lịch khám [date/time] .
+hủy [want_cancel] lịch khám [date] [time] .
+hủy [want_cancel] lịch khám [time] [date] .
+hủy [want_cancel] lịch khám [date] .
+hủy [want_cancel] lịch khám [time] .

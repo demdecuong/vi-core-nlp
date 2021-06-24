@@ -32,7 +32,6 @@ class DateMatcher(object):
         with open(dict_path, "r", encoding="utf-8") as f:
             self.dict_normalize = json.load(f)
 
-
     def extract_date(self, text):
 
         text = text.lower()
