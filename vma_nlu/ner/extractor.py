@@ -40,9 +40,9 @@ class Extractor:
             intent      -   string 
         Return
         '''
-        #assert intent in ['greet','goodbye','thank','book_apt','change_apt','cancel_apt','inform','agree','disagree']
+        #assert intent in ['greet','goodbye','thank','book_appt','change_appt','cancel_appt','inform','agree','disagree']
         try:
-            if intent in ['inform', 'book_apt', 'change_apt']:
+            if intent in ['inform', 'book_appt', 'change_appt']:
                 result = []
                 person_name = self.extract_person_name(utterance)['entities']
                 print(person_name)

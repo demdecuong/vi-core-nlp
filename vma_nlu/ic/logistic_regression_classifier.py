@@ -1,6 +1,7 @@
 import os
 import pickle
 import logging
+import re
 import numpy as np
 from typing import Any, Dict, List, Optional, Text, Tuple, Type
 
@@ -99,7 +100,7 @@ class LogisticRegressionClassifier(IntentClassifier):
                     f"Cannot load LR model: {classifier_file}: error: {ex}")
 
     def predict(self, text: Text):
-        text = [text]
+        text = [self.normalize_text(text)]
         predict = self.learner.predict(text)
         confidence = np.max(self.learner.predict_proba(text)[0])
         return {
@@ -109,3 +110,8 @@ class LogisticRegressionClassifier(IntentClassifier):
             },
             "intent_ranking": []
         }
+
+    def normalize_text(self, s):
+        s = re.sub(r'([a-z])\1+', lambda m: m.group(1), s, flags=re.IGNORECASE)
+        s = re.sub(r'([a-z][a-z])\1+', lambda m: m.group(1), s, flags=re.IGNORECASE)
+        return s

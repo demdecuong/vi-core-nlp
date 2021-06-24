@@ -3,8 +3,11 @@ from vma_nlu.tester import Tester
 
 extractor = Extractor(load_dict=False) # True: Load dictionary path
 
-text = '9h 20 phút '
-print(extractor.extract_time(text))
+# text = '9h 20 phút '
+# print(extractor.extract_time(text))
 
-text = 'bs nguyen tung an'
-print(extractor.extract_person_name(text))
+# text = 'bs nguyen tung an'
+# print(extractor.extract_person_name(text))
+
+text = 'tôi muốn đặt lịch lúc 9h ngày 30/6 với bs nguyễn văn c'
+print(extractor.extract_ner(text, 'book_appt'))
