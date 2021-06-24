@@ -10,6 +10,7 @@ from vma_nlu.testcase.tc_time import get_time_tc
 from vma_nlu.testcase.tc_pername import get_person_name_tc
 from vma_nlu.testcase.tc_date import get_date_test_case
 from vma_nlu.utils.util import read
+from vma_nlu.utils.preproces import Preprocess
 
 VLSP_PATH = './vma_nlu/testcase/vlsp2016'
 class Tester:
@@ -18,6 +19,8 @@ class Tester:
         self.per_tc, self.per_expected_result = get_person_name_tc()
         self.time_tc, self.time_expected_result, self.time_spec_tc, self.time_spec_expected_result = get_time_tc()
         self.date_tc, self.date_expected_result = get_date_test_case()
+        self.preprocessor = Preprocess()
+        self.error_factor = 2
 
     def test_person_name(self):
         tc_num = 1
@@ -134,10 +137,16 @@ class Tester:
         # Set up data
         template = read(tem_dir+'/template.txt')
         data_template = pd.read_csv(tem_dir + '/data_template.csv')
-        person_data = [str(x).lower() for x in data_template['person'].tolist() if str(x) != 'nan']
+        person_data = [self.preprocessor.preprocess((str(x).lower())) for x in data_template['person'].tolist() if str(x) != 'nan']
+        date_time_data = [self.preprocessor.preprocess(str(x)) for x in data_template['date/time'].tolist() if str(x)!='nan']
+        date_data = [self.preprocessor.preprocess(str(x)) for x in data_template['date'].tolist() if str(x)!='nan']
+        time_data = [self.preprocessor.preprocess(str(x)) for x in data_template['time'].tolist() if str(x) != 'nan']
+            
+        date_time_data.extend(date_data)
+        date_time_data.extend(time_data)
+
         # list of generated data
         data = self.generate_data_from_template(template,data_template)
-
         # Testing 
         time_res = []
         pername_res = []
@@ -148,31 +157,36 @@ class Tester:
         time_cnt = 0
         for i in tqdm(range(len(data))):
             pername = self.extractor.extract_person_name(data[i], mode='pattern', rt='relative')['entities'][0]['value']
-            pername = pername.lower()
-            for name in person_data:
-                cnt = 0
-                for c1,c2 in zip(name,pername):
-                    if c1 != c2:
-                        break
-                    else:
-                        cnt+=1
-                if cnt == len(pername):
-                    per_cnt += 1
+            pername = self.preprocessor.preprocess(pername.lower())
+            if pername in person_data:
+                per_cnt += 1
             time = self.extractor.extract_time(data[i])['entities']
             if time != []:
-                time = time[0]['value']
+                time = data[i][max(time[0]['start'] - self.error_factor,0):min(time[0]['end'] + self.error_factor,len(data[i]))]
+                time = self.preprocessor.preprocess(str(time))
+                for label in date_time_data:
+                    if label in time or time in label:
+                        time_cnt += 1
+                        break
             try:
                 date = self.extractor.extract_date(data[i])['entities']
+                if date != []:
+                    date = data[i][max(date[0]['start'] - self.error_factor,0):min(date[0]['end'] + self.error_factor,len(data[i]))]
+                    date = self.preprocessor.preprocess(str(date))
+                    for label in date_time_data:
+                        if label in date or date in label:
+                            date_cnt += 1
+                            break
             except:
-                print(data[i])
                 date = []
-
+                print(data[i])
             time_res.append(time)
             pername_res.append(pername)
             date_res.append(date)
 
         self.write_result('Person name Accuracy',per_cnt,len(data))
-        # self.write_result('Date Accuracy',date_cnt,len(data))
+        self.write_result('Date Accuracy',date_cnt,len(data))
+        self.write_result('Time Accuracy',time_cnt,len(data))
         df = pd.DataFrame({
             'utterance' : data,
             'pername' : pername_res,

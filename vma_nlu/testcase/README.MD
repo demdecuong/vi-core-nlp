@@ -50,9 +50,9 @@ Mỗi testcase đảm bảo các data
 | 5 | 3/10 |
 | Total | 42/49 |
 
-- Template
+- Template Testset
 
-Correct =  12944/253168
+Precision = 1742224/2206632 = 78.95 %
 
 - VLSP 2016 (Data contains Person Name only)
 
@@ -75,6 +75,8 @@ Correct =  12944/253168
 -   số lương : 8
 
 ### Result
+- Public Testset 
+
 | Testcase | Accuracy |
 | --- | --- |
 | 1 | 10/10 |
@@ -84,6 +86,9 @@ Correct =  12944/253168
 | 5 | 9/9 |
 | Total | 46/49 |
 
+- Template Testset
+
+Precision =  662352/2206632 = 62.45 %
 
 ## Date
 ### testcase 1: Absolute - Number (21/3/1997, 21/3, 21-3, ... )
@@ -107,6 +112,8 @@ Correct =  12944/253168
 
 ### Result:
 
+- Public Testset
+
 | Testcase | Accuracy |
 | --- | --- |
 | 1 | 6/7 |
@@ -115,6 +122,11 @@ Correct =  12944/253168
 | 4 | 5/6 |
 | 5 | 4/7 |
 | Total | 23/29 |
+
+- Template Testset
+
+Precision = 1997632/2206632 = 90.53 %
+
 ## Intent
 TBD
 

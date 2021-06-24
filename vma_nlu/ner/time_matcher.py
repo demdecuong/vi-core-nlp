@@ -81,7 +81,7 @@ class TimeMatcher:
         hour, minute = self.refine_hour_minute(hour,minute,status)
         hour, minute = self.round_hour_minute_to_base(hour,minute)
         
-        start = max(0, hour_index - self.left_shift)
+        start = max(0, hour_index - self.left_shift) 
         end = min(hour_index + self.right_shift, len(text))
         return start,end, hour, minute
 
@@ -111,7 +111,7 @@ class TimeMatcher:
                     hour = time
                     minute = ''
                 start = text.find(time)
-                end = start + len(time)
+                end = start + len(time) + 5
                 break
         # Case 9h -> minute = ''
         if minute == '':
@@ -242,8 +242,8 @@ class TimeMatcher:
         else:
             return {
                 'entities':[{
-                    'start' : time_result[0],
-                    'end' : time_result[1],
+                    'start' : min(time_result[0]-2,0),
+                    'end' : time_result[1]+2,
                     'entity' : 'time',
                     'value' : (time_result[2],time_result[3]),
                     'confidence' : 1.0,
