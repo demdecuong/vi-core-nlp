@@ -352,8 +352,8 @@ class DateMatcher(object):
                     wod = self.week_days[datetime.date(year, month, day).weekday()]
                     value.append([self.normalize_date((wod, day, month, year))])
                 else:
-                    year = "None"
-                    wod = "None"
+                    year = None
+                    wod = None
                     value.append([self.normalize_date((wod, day, month, year))])
             entities.append({
                 "start": span[0],
@@ -363,7 +363,7 @@ class DateMatcher(object):
         return value, entities
 
     def normalize_date(self, input_date): # (WOD, DD, MM, YYYY)
-        WOD = str(input_date[0])
+        WOD = input_date[0]
         DD = int(input_date[1])
         MM = int(input_date[2])
         YYYY = input_date[3]
@@ -443,10 +443,10 @@ class DateMatcher(object):
         # print(tmp)
         start_span = 100
         end_span = 0
-        wod_tmp = ["None"] * tmp
-        day_tmp = ["None"] * tmp
-        month_tmp = ["None"] * tmp
-        year_tmp = ["None"] * tmp
+        wod_tmp = [None] * tmp
+        day_tmp = [None] * tmp
+        month_tmp = [None] * tmp
+        year_tmp = [None] * tmp
         if wod:
             wod = wod * tmp
             wod = wod[:tmp]
