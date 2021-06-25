@@ -56,15 +56,8 @@ class PatternExtractor(EntityExtractor):
                     old_entities.append(entity)
                 elif entity['entity'] == 'date_time' and entity["value"]:
                     first_date_extracted = entity["value"][0]
-                    if first_date_extracted[1] and first_date_extracted[2] and first_date_extracted[3]:
-                        entity['value'] = f'{first_date_extracted[1]}/{first_date_extracted[2]}/{first_date_extracted[3]}'
-                        old_entities.append(entity)
-                    elif first_date_extracted[2] and first_date_extracted[3]:
-                        entity['value'] = f'xx/{first_date_extracted[2]}/{first_date_extracted[3]}'
-                        old_entities.append(entity)
-                    elif first_date_extracted[3]:
-                        entity['value'] = f'xx/xx/{first_date_extracted[3]}'
-                        old_entities.append(entity)
+                    entity['value'] = f'{first_date_extracted[1]}/{first_date_extracted[2]}/{first_date_extracted[3]}'
+                    old_entities.append(entity)
                 else:
                     old_entities.append(entity)
             message.set("entities", old_entities, add_to_output=True)
