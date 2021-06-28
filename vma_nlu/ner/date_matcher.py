@@ -565,6 +565,6 @@ class DateMatcher(object):
     def check_valid_date(self, day, month):
         flag = False
         day_count_for_month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        if month >=12 or month <=0 or int(day) > day_count_for_month[(month)]:
+        if month > 12 or month <=0 or int(day) > day_count_for_month[(month)]:
             return flag
         else: return True
