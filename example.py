@@ -9,5 +9,5 @@ extractor = Extractor(load_dict=False) # True: Load dictionary path
 # text = 'bs nguyen tung an'
 # print(extractor.extract_person_name(text))
 
-text = 'tôi muốn đặt lịch lúc 9h'
-print(extractor.extract_ner(text, 'book_appt'))
+text = 'huỷ lịch khám lúc 9 giờ sáng mai, với bác sĩ nguyễn quang sáng'
+print(extractor.extract_ner(text, 'cancel_appt'))
