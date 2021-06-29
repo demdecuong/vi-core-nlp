@@ -42,7 +42,7 @@ class Extractor:
         '''
         #assert intent in ['greet','goodbye','thank','book_appt','change_appt','cancel_appt','inform','agree','disagree']
         try:
-            if intent in ['inform', 'book_appt', 'change_appt']:
+            if intent in ['inform', 'book_appt', 'change_appt', 'cancel']:
                 result = []
                 person_name = self.extract_person_name(utterance)['entities']
                 print(person_name)
