@@ -1,3 +1,4 @@
 from vma_nlu.ic.naive_bayes_classifier import NaiveBayesClassifier
 from vma_nlu.ic.logistic_regression_classifier import LogisticRegressionClassifier
 from vma_nlu.ner.pattern_extractor import PatternExtractor
+from vma_nlu.ner.flair_extractor import FlairExtractor
