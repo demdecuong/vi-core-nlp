@@ -47,10 +47,10 @@ class Extractor:
         try:
             if intent in ['inform', 'book_appt', 'change_appt', 'cancel_appt']:
                 result = []
-                person_name = self.extract_person_name(utterance)['entities']
-                print(person_name)
-                if person_name != []:
-                    result.extend(person_name)
+                # person_name = self.extract_person_name(utterance)['entities']
+                # print(person_name)
+                # if person_name != []:
+                #     result.extend(person_name)
                 time = self.extract_time(utterance)['entities']
                 print(time)
                 if time != []:
