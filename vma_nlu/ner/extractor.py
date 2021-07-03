@@ -9,6 +9,7 @@ from vma_nlu.utils.preproces import Preprocess
 from vma_nlu.ner.date_matcher import DateMatcher
 from vma_nlu.ner.time_matcher import TimeMatcher
 from vma_nlu.ner.pername_matcher import PernameMatcher
+from vma_nlu.ner.pername_deeplearning.inference import Inference
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 NAME_PATH = os.path.join(ROOT_DIR, 'data/fullname.pkl')
@@ -31,6 +32,8 @@ class Extractor:
             n_gram, NAME_PATH, SW_PATH, load_dict)
 
         self.preprocessor = Preprocess()
+
+        self.pername_extractor_deeplearning = Inference()
 
     def extract_ner(self, utterance, intent):
         '''
@@ -119,3 +122,8 @@ class Extractor:
 
         person_name = self.extract_person_name(utterance)
         return time, date, person_name
+        
+    def extract_name_deep_learning(self, utterance):
+        entity = self.pername_extractor_deeplearning.inference(utterance)
+        return entity
+        
