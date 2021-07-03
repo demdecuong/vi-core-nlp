@@ -121,7 +121,7 @@ class Extractor:
         date = self.extract_date(utterance)
 
         person_name = self.extract_person_name(utterance)
-        return time, date, person_name
+        return time, date, person_name  
     def extract_name_deep_learning(self, utterance):
         entity = self.pername_extractor_deeplearning.inference(utterance)
         return entity

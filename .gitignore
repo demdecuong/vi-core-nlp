@@ -45,5 +45,5 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-data/
+# model pretrained
 checkpoint.pth

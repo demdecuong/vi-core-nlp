@@ -5,8 +5,8 @@ class Config(object):
 
         self.model_name_or_path = 'vinai/phobert-base'
         self.pos_tag_set_path = None
-        self.label_set_path = './vma_nlu/ner/pername_deeplearning/data/label_set.txt'
-        self.char_vocab_path = './vma_nlu/ner/pername_deeplearning/data/charindex.json'
+        self.label_set_path = './vma_nlu/data/label_set.txt'
+        self.char_vocab_path = './vma_nlu/data/charindex.json'
         self.fasttext_path = './data/cc.vi.300.bin'
         self.save_folder = 'save_checkpoint'
         self.checkpoint = './checkpoint.pth'
