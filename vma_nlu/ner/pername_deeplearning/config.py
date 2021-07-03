@@ -7,8 +7,6 @@ class Config(object):
         self.pos_tag_set_path = None
         self.label_set_path = './vma_nlu/data/label_set.txt'
         self.char_vocab_path = './vma_nlu/data/charindex.json'
-        self.fasttext_path = './data/cc.vi.300.bin'
-        self.save_folder = 'save_checkpoint'
         self.checkpoint = './checkpoint.pth'
 
         self.use_pretrained = False
@@ -28,29 +26,7 @@ class Config(object):
         self.char_vocab_size = 108
         self.pos_vocab_size = 23
         
-
         self.max_char_len = 20
         self.max_seq_len = 160
 
         self.num_labels = 2
-
-        
-        # train
-        self.iteration = 1
-        self.batch_size = 64
-        self.num_epochs = 10
-        self.learning_rate = 5e-5
-        self.adam_epsilon = 1e-8
-        self.weight_decay = 0.01
-        self.warmup_steps = 0
-        self.max_grad_norm = 1
-
-        # data
-        self.train_data = './data/train.json'
-        self.dev_data = './data/test.json'
-        self.test_data = './data/test.json'
-
-        #
-        self.do_train = True
-        self.do_eval = True
-
