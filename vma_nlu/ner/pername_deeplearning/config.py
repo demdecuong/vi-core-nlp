@@ -27,6 +27,6 @@ class Config(object):
         self.pos_vocab_size = 23
         
         self.max_char_len = 20
-        self.max_seq_len = 160
+        self.max_seq_len = 100
 
         self.num_labels = 2
