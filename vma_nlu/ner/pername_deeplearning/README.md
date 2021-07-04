@@ -2,7 +2,7 @@
 
 ## Usage:
 
-### Download pretrained [model](https://drive.google.com/file/d/1Jn2JvX7IJA2lSol7M3pW0BiM2xoDd51y/view?usp=sharing) 
+### Download pretrained [model](https://drive.google.com/file/d/1-9ycIeCBWLf1oiJ-4Kd8cUuDcYMeIMcL/view?usp=sharing) 
 
 Config checkpoint path `config.py`
 
