@@ -50,7 +50,8 @@ class BiaffineExtractor(EntityExtractor):
     def process(self, message: Message, **kwargs: Any) -> None:
         """Process an incoming message."""
         text = message.data.get('text')
-        if text:
+        intent = message.data.get('intent')
+        if text and intent['name']  in ['inform', 'book_appt', 'change_appt', 'cancel_appt']:
             result = self.learner.inference(text)
             old_entities = message.data.get("entities")
             for e in result.get("entities"):

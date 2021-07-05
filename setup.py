@@ -31,7 +31,7 @@ VERSION = os.getenv('PACKAGE_VERSION', 'v0.0.1')[1:]
 
 setup(
     name='vma_nlu',
-    version='v1.2.9',
+    version='v1.3.0',
     description='VMA-NLU is a library to implement NLU component in virtual medical assistant.',
     long_description=long_description,
     include_package_data=True,
