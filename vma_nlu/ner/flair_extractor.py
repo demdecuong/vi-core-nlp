@@ -56,7 +56,7 @@ class FlairExtractor(EntityExtractor):
             for e in result.get("entities"):
                 if e.get("labels")[0].value == "PERSON":
                     entity = {}
-                    entity["value"] = e.get("text")
+                    entity["value"] = e.get("text").title()
                     entity["start"] = e.get("start_pos")
                     entity["end"] = e.get("end_pos")
                     entity["confidence"] = e.get("labels")[0].score

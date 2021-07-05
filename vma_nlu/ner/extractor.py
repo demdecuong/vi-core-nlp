@@ -33,7 +33,7 @@ class Extractor:
 
         self.preprocessor = Preprocess()
 
-        self.pername_extractor_deeplearning = Inference()
+        # self.pername_extractor_deeplearning = Inference()
 
     def extract_ner(self, utterance, intent):
         '''
@@ -122,7 +122,7 @@ class Extractor:
 
         person_name = self.extract_person_name(utterance)
         return time, date, person_name  
-    def extract_name_deep_learning(self, utterance):
-        entity = self.pername_extractor_deeplearning.inference(utterance)
-        return entity
+    # def extract_name_deep_learning(self, utterance):
+    #     entity = self.pername_extractor_deeplearning.inference(utterance)
+    #     return entity
         
