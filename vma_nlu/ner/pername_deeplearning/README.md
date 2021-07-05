@@ -2,9 +2,8 @@
 
 ## Usage:
 
-### Download pretrained [model](https://drive.google.com/file/d/1Jn2JvX7IJA2lSol7M3pW0BiM2xoDd51y/view?usp=sharing) 
+### Tải [model](https://drive.google.com/drive/folders/1T3DzH4wluKwbLvNwzj-yujx-jxdLMU4q?usp=sharing) và một vài file cần thiết cho model. Lưu trữ tại thư mục `vma_nlu/data/`
 
-Config checkpoint path `config.py`
 
 ### Training model 
 ```

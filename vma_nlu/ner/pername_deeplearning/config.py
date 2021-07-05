@@ -7,7 +7,7 @@ class Config(object):
         self.pos_tag_set_path = None
         self.label_set_path = './vma_nlu/data/label_set.txt'
         self.char_vocab_path = './vma_nlu/data/charindex.json'
-        self.checkpoint = './checkpoint.pth'
+        self.checkpoint = './vma_nlu/data/checkpoint.pth'
 
         self.use_pretrained = False
 
