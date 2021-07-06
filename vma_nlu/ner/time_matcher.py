@@ -65,24 +65,26 @@ class TimeMatcher:
 
         if 'giờ' not in text:
             # Maybe it contains 'phut'
-            if 'phút' in text:
+            if 'phút' in text or 'phut' in text:
                 start,end, hour, minute = self.no_hour_case(text)
                 hour, minute = self.refine_hour_minute(hour,minute,status)
+                # should be round time 
             return start,end, hour, minute
 
         hour_index = text.index('giờ')
         hour_range = text[max(0, hour_index - self.left_shift): hour_index]
-        minute_range = text[hour_index +
-                            1: min(hour_index + self.right_shift, len(text))]
-
+        minute_range = text[hour_index + 1: min(hour_index + self.right_shift, len(text))]
         hour = self.get_hour(hour_range)
         minute = self.get_minute(minute_range)
 
         hour, minute = self.refine_hour_minute(hour,minute,status)
         hour, minute = self.round_hour_minute_to_base(hour,minute)
         
-        start = max(0, hour_index - self.left_shift) 
-        end = min(hour_index + self.right_shift, len(text))
+        start = len(' '.join(text[:hour_index-1]))
+        if minute == 0:
+            end = len(' '.join(text[:hour_index + 1]))
+        else:
+            end = len(' '.join(text[: hour_index + self.right_shift + 1]))
         return start,end, hour, minute
 
     def extract_absolute_time(self, text):
@@ -94,30 +96,49 @@ class TimeMatcher:
 
         if 'giờ' in text.split(' '):
             return start, end, hour, minute
-            
-        for pattern in self.absolute_pattern:
-            time = re.search(pattern, text)
-            if time != None and time.group(1) != None:
-                time = time.group(1)
-                if '.' in time: 
-                    hour, minute = time.split('.')
-                elif ':' in time:
-                    hour, minute = time.split(':')
-                elif 'h' in time:
-                    hour, minute = time.split('h')
-                elif 'g' in time:
-                    hour, minute = time.split('g')
-                else:
-                    hour = time
-                    minute = ''
-                start = text.find(time)
-                end = start + len(time) + 5
-                break
-        # Case 9h -> minute = ''
-        if minute == '':
-            minute = 0
-        hour, minute = self.refine_hour_minute(hour,minute,status)
-        hour, minute = self.round_hour_minute_to_base(hour,minute)
+
+        absolute_pattern = self.absolute_pattern[0]
+        times = [(x.group(), x.span()) for x in re.finditer(absolute_pattern, text)]
+        if times:
+            hours = []
+            minutes = []
+            starts = []
+            ends = []
+            for time in times:
+                [hour, minute] = re.split('[:.hg]', time[0])
+                if not re.search('\d', minute):
+                    minute = 0
+                (start, end) = time[1]
+                hour, minute = self.refine_hour_minute(hour, minute, self.get_time_status(text[start: start+10]))
+                hour, minute = self.round_hour_minute_to_base(hour,minute)
+                hours.append(hour)
+                minutes.append(minute)
+                starts.append(start)
+                ends.append(end)   
+        # for pattern in self.absolute_pattern: #not have pattern 'giờ' in text
+        #     # time = re.search(pattern, text)
+        #     time = [(x.group(), x.span()) for x in re.finditer(pattern, text)]
+        #     if time != None and time.group(1) != None:
+        #         time = time.group(1)
+        #         if '.' in time: 
+        #             hour, minute = time.split('.')
+        #         elif ':' in time:
+        #             hour, minute = time.split(':')
+        #         elif 'h' in time:
+        #             hour, minute = time.split('h')  
+        #         elif 'g' in time:
+        #             hour, minute = time.split('g')
+        #         else:
+        #             hour = time
+        #             minute = ''
+        #         start = text.find(time)
+        #         end = start + len(time) + 5
+        #         break
+        # # Case 9h -> minute = ''
+        # if minute == '':
+        #     minute = 0
+        # hour, minute = self.refine_hour_minute(hour,minute,status)
+        # hour, minute = self.round_hour_minute_to_base(hour,minute)
 
         return start, end, hour, minute
 
@@ -166,7 +187,6 @@ class TimeMatcher:
         # Check hour/minute is valid
         if hour == self.default_hour and minute == self.default_min:
             return hour, minute
-
         if status[0] == 1 and hour < 12:
             hour += 12
         
@@ -182,7 +202,6 @@ class TimeMatcher:
         if minute >= 60:
             minute -= 60
             hour += 1
-
         hour,minute = self.is_valid(hour,minute)
         return hour, minute
 
@@ -242,8 +261,8 @@ class TimeMatcher:
         else:
             return {
                 'entities':[{
-                    'start' : min(time_result[0]-2,0),
-                    'end' : time_result[1]+2,
+                    'start' : time_result[0],
+                    'end' : time_result[1],
                     'entity' : 'time',
                     'value' : (time_result[2],time_result[3]),
                     'confidence' : 1.0,
@@ -256,16 +275,16 @@ class TimeMatcher:
         text = re.sub('(?<! )(?=[,!?()])|(?<=[,!?()])(?! )', r' ', text)
         return text
 
-    def no_hour_case(self,text):
+    def no_hour_case(self,text): # list 
         hour = self.default_hour
         minute = self.default_min
         start = 0
         end = 0
         for i in range(len(text)):
-            if text[i] == 'phút':
+            if text[i] == 'phút' or text[i] == 'phut':
                 minute = self.get_minute(text[max(0,i - self.left_shift):i])
-                start = i - len(str(minute))
-                end = i
+                start = len(" ".join(text[:i-1]).strip())
+                end = len(" ".join(text[:i+1]).strip())
                 hour = 0
                 return start,end, hour, minute
         return start,end, hour, minute
