@@ -1,5 +1,7 @@
 import json
 
+import re
+
 import torch
 from torch import nn
 from transformers import AutoTokenizer
@@ -73,7 +75,8 @@ class Inference(object):
             pred_entity = self.get_entity(cate_pred, pred)
             result.append(pred_entity)
         result = self.output_format(text, result)
-
+        result = self.revised_output(result, text)
+        
         return result
 
     def preprocessing(self, text):
@@ -172,4 +175,37 @@ class Inference(object):
                 'entity': tmp
             }
                
-        
+    def revised_output(self, result, text):
+        result = result['entity']
+        if not result:
+            return {
+                'entity': []
+            }
+        else:
+            revised = []
+            for span in result:
+                value = span['value']
+                start = span['start']
+                end = span['end']
+                confidence = span['confidence']
+                entity = span['entity']
+                tmp = re.search('((bs\s+)|(BS\s+)|(Bs\s+)|(bS\s+))', value)
+                if tmp:
+                    value = value[tmp.span()[1]:]
+                    start = start + tmp.span()[1]
+                tmp = re.search('^((sỹ)|(Sỹ)|(SỸ)|(sỸ)|(sy)|(Sy)|(sY)|(SY))\s+', value)
+                if tmp:
+                    tmp_2 = re.search('((bác)|(Bác)|(bÁc)|(báC)|(BÁc)|(BáC)|(bÁC)|(BÁC)|(bac)|(Bac)|(bAc)|(baC)|(BAc)|(BaC)|(bAC)|(BAC))$', text[:start])
+                    if tmp_2:
+                        value = value[tmp.span()[1]:]
+                        start = start + tmp.span()[1]
+                revised.append({
+                    'start': start,
+                    'end': end,
+                    'entity': entity,
+                    'value': value,
+                    'confidence': confidence
+                })
+        return {
+            'entity': revised
+        }
