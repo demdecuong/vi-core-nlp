@@ -13,10 +13,10 @@ from vma_nlu.ner.pername_deeplearning.model.model import Model
 # from config import Config
 
 class Inference(object):
-    def __init__(self) -> None:
+    def __init__(self, label_set_path='./vma_nlu/data/label_set.txt', char_vocab_path = './vma_nlu/data/charindex.json', checkpoint = './vma_nlu/data/checkpoint.pth') -> None:
         super().__init__()
 
-        args = Config()
+        args = Config(label_set_path, char_vocab_path, checkpoint)
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -157,7 +157,7 @@ class Inference(object):
     def output_format(self, text, output):
         if not output[0]:
             return {
-                'entity': []
+                'entities': []
             }
         else:
             tmp = []
@@ -172,7 +172,7 @@ class Inference(object):
                     'confidence': span[3] #
                 })
             return {
-                'entity': tmp
+                'entities': tmp
             }
                
     def revised_output(self, result, text):

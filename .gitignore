@@ -2,6 +2,7 @@ vncorenlp
 vma_nlu/__pycache__/
 vma_nlu/data/raw
 vma_nlu/data/fullname.pkl
+vma_nlu/data/checkpoint.ph
 vma_nlu/first_name.txt
 vma_nlu/firstfirstname.txt
 vma_nlu/fullname.txt
@@ -12,6 +13,7 @@ vma_nlu/midlastname.txt
 vma_nlu/utils/__pycache__/
 vma_nlu/ic/__pycache__/
 vma_nlu/ner/__pycache__/
+vma_nlu/ner/models/
 vma_nlu/testcase/__pycache__/
 vma_nlu/testcase/vlsp2016/
 
