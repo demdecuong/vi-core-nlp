@@ -1,13 +1,13 @@
 
 class Config(object):
-    def __init__(self, label_set_path, char_vocab_path, checkpoint) -> None:
+    def __init__(self) -> None:
         super().__init__()
 
         self.model_name_or_path = 'vinai/phobert-base'
         self.pos_tag_set_path = None
-        self.label_set_path = label_set_path
-        self.char_vocab_path = char_vocab_path
-        self.checkpoint = checkpoint
+        # self.label_set_path = label_set_path
+        # self.char_vocab_path = char_vocab_path
+        # self.checkpoint = checkpoint
 
         self.use_pretrained = False
 

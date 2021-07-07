@@ -15,12 +15,6 @@ logger = logging.getLogger(__name__)
 class BiaffineExtractor(EntityExtractor):
     name = "BiaffineExtractor"
 
-    defaults = {
-        "label_set_path": "",
-        "char_vocab_path": "",
-        "checkpoint": "",
-    }
-
     def __init__(
         self,
         component_config: Optional[Dict[Text, Any]] = None,
@@ -64,11 +58,7 @@ class BiaffineExtractor(EntityExtractor):
     def persist(self, file_name: Text, model_dir: Text) -> Optional[Dict[Text, Any]]:
         """Persist this component to disk for future loading."""
 
-        label_set_path = self.component_config.get("label_set_path")
-        char_vocab_path = self.component_config.get("char_vocab_path")
-        checkpoint = self.component_config.get("checkpoint")
-
-        return {"label_set_path": label_set_path, "char_vocab_path": char_vocab_path, "checkpoint": checkpoint}
+        pass
 
     @classmethod
     def load(
@@ -80,16 +70,9 @@ class BiaffineExtractor(EntityExtractor):
         **kwargs: Any,
     ) -> "Component":
         """Load this component from file."""
-        label_set_path = meta.get("label_set_path")
-        char_vocab_path = meta.get("char_vocab_path")
-        checkpoint = meta.get("checkpoint")
-        if not os.path.isfile(label_set_path) or not os.path.isfile(char_vocab_path) or not os.path.isfile(checkpoint):
-            logger.error(f"File not found. Cannot load Biaffine Extractor model: {checkpoint}")
-            return cls(component_config=meta)
-        else:
-            try:
-                learner = Inference(label_set_path, char_vocab_path, checkpoint)
-                logger.debug(f"Load Biaffine Extractor model successfully ")
-                return cls(meta, learner)
-            except Exception as ex:
-                logger.error(f"Cannot load Biaffine Extractor model: {checkpoint}: error: {ex}")
+        try:
+            learner = Inference()
+            logger.debug(f"Load Biaffine Extractor model successfully ")
+            return cls(meta, learner)
+        except Exception as ex:
+            logger.error(f"Cannot load Biaffine Extractor model, error: {ex}")

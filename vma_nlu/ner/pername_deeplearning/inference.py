@@ -1,30 +1,31 @@
 import json
-
 import re
-
 import torch
+
 from torch import nn
 from transformers import AutoTokenizer
 
-from vma_nlu.ner.pername_deeplearning.utils import load_model
+from vma_nlu.ner.pername_deeplearning.utils import load_model, initializeFolder, download_model
 from vma_nlu.ner.pername_deeplearning.config import Config
 from vma_nlu.ner.pername_deeplearning.model.model import Model
 # from utils import load_model
 # from config import Config
 
 class Inference(object):
-    def __init__(self, label_set_path='./vma_nlu/data/label_set.txt', char_vocab_path = './vma_nlu/data/charindex.json', checkpoint = './vma_nlu/data/checkpoint.pth') -> None:
+    def __init__(self) -> None:
         super().__init__()
 
-        args = Config(label_set_path, char_vocab_path, checkpoint)
+        args = Config()
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
         self.model = Model(args)
+        checkpoint, label_set_path, char_vocab_path = download_model()
+
         print("Loading model .....")
-        self.model.load_state_dict(torch.load(args.checkpoint, map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load(checkpoint, map_location=torch.device('cpu')))
         # self.model = load_model(args.checkpoint)
 
         self.model.to(device=self.device)
@@ -34,11 +35,11 @@ class Inference(object):
         self.max_seq_len = args.max_seq_len
         self.max_char_len = args.max_char_len
 
-        with open(args.label_set_path, 'r', encoding='utf-8') as f:
+        with open(label_set_path, 'r', encoding='utf-8') as f:
             self.label_set = f.read().splitlines()
         self.label_set = {i: w for i, w in enumerate(self.label_set)}
 
-        with open(args.char_vocab_path, 'r', encoding='utf-8') as f:
+        with open(char_vocab_path, 'r', encoding='utf-8') as f:
             self.char_vocab = json.load(f)
 
         self.softmax = nn.Softmax(dim=2)
@@ -176,10 +177,10 @@ class Inference(object):
             }
                
     def revised_output(self, result, text):
-        result = result['entity']
+        result = result['entities']
         if not result:
             return {
-                'entity': []
+                'entities': []
             }
         else:
             revised = []
@@ -207,5 +208,7 @@ class Inference(object):
                     'confidence': confidence
                 })
         return {
-            'entity': revised
+            'entities': revised
         }
+
+initializeFolder()
