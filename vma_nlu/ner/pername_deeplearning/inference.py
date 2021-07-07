@@ -11,6 +11,8 @@ from vma_nlu.ner.pername_deeplearning.model.model import Model
 # from utils import load_model
 # from config import Config
 
+if torch.cuda.is_available():
+    torch.cuda.empty_cache()
 class Inference(object):
     def __init__(self) -> None:
         super().__init__()
