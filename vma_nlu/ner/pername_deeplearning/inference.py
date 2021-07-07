@@ -168,7 +168,7 @@ class Inference(object):
             output = output[0]
             for span in output:
                 tmp.append({
-                    'start': len(" ".join(tokens[:span[0]])),
+                    'start': len(" ".join(tokens[:span[0]])) + 1,
                     'end': len(" ".join(tokens[:span[1]+1])),
                     'entity': 'person_name',
                     'value': " ".join(tokens[span[0]: span[1]+1]),
