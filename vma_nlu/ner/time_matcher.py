@@ -80,7 +80,9 @@ class TimeMatcher:
         hour, minute = self.refine_hour_minute(hour,minute,status)
         hour, minute = self.round_hour_minute_to_base(hour,minute)
         
-        start = len(' '.join(text[:hour_index-1])) + 1
+        start = len(' '.join(text[:hour_index-1]))
+        if start != 0:
+            start += 1
         if minute == 0:
             end = len(' '.join(text[:hour_index + 1]))
         else:
@@ -283,11 +285,13 @@ class TimeMatcher:
         for i in range(len(text)):
             if text[i] == 'phút' or text[i] == 'phut':
                 minute = self.get_minute(text[max(0,i - self.left_shift):i])
-                start = len(" ".join(text[:i-1]).strip()) + 1
+                start = len(" ".join(text[:i-1]).strip())
+                if start != 0 :
+                    start += 1
                 end = len(" ".join(text[:i+1]).strip())
                 hour = 0
                 return start,end, hour, minute
-        return start,end, hour, minute
+        return start, end, hour, minute
 
     def refine_hour_range(self,hour_range):
         s = ' '.join(hour_range)
