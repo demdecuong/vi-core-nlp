@@ -152,6 +152,7 @@ class Extractor:
             nha_mang = result[0][0]
             remain = result[0][1]
             return nha_mang + remain
+    
     def extract_all(self, utterance):
         time = self.extract_time(utterance)
         date = self.extract_date(utterance)
