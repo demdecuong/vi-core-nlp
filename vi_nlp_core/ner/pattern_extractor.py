@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Optional, Text, Tuple, Type, Callable
-from vma_nlu.ner.extractor import Extractor
+from vi_nlp_core.ner.extractor import Extractor
 
 from rasa.nlu.components import Component
 from rasa.nlu.extractors.extractor import EntityExtractor

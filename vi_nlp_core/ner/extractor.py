@@ -2,14 +2,14 @@ import re
 import os
 
 # from underthesea import ner
-from vma_nlu.ner import date_matcher
-from vma_nlu.utils.util import read_dict, get_ngram, tokenize
-from vma_nlu.utils.pername_pattern import get_person_pattern, get_phone_pattern
-from vma_nlu.utils.preproces import Preprocess
-from vma_nlu.ner.date_matcher import DateMatcher
-from vma_nlu.ner.time_matcher import TimeMatcher
-from vma_nlu.ner.pername_matcher import PernameMatcher
-from vma_nlu.ner.pername_deeplearning.inference import Inference
+from vi_nlp_core.ner import date_matcher
+from vi_nlp_core.utils.util import read_dict, get_ngram, tokenize
+from vi_nlp_core.utils.pername_pattern import get_person_pattern, get_phone_pattern
+from vi_nlp_core.utils.preproces import Preprocess
+from vi_nlp_core.ner.date_matcher import DateMatcher
+from vi_nlp_core.ner.time_matcher import TimeMatcher
+from vi_nlp_core.ner.pername_matcher import PernameMatcher
+
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 NAME_PATH = os.path.join(ROOT_DIR, 'data/fullname.pkl')
@@ -122,7 +122,3 @@ class Extractor:
 
         person_name = self.extract_person_name(utterance)
         return time, date, person_name  
-    # def extract_name_deep_learning(self, utterance):
-    #     entity = self.pername_extractor_deeplearning.inference(utterance)
-    #     return entity
-        

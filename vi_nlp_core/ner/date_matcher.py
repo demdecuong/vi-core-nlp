@@ -4,9 +4,9 @@ import json
 from datetime import date
 import datetime
 
-from vma_nlu.utils.date_pattern import absolute, relative
+from vi_nlp_core.utils.date_pattern import absolute, relative
 class DateMatcher(object):
-    def __init__(self, dict_path = "./vma_nlu/data/dictionary_normalize_date.json") -> None:
+    def __init__(self, dict_path = "./vi_nlp_core/data/dictionary_normalize_date.json") -> None:
         super().__init__()
 
         self.abs_pattern, self.wod, self.wod_vn, self.day_vn, self.month, self.month_vn, self.year, self.only_number, self.short_abs = absolute()

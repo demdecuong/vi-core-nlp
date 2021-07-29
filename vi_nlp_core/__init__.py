@@ -1,3 +1,2 @@
-from vma_nlu.ner.pattern_extractor import PatternExtractor
-from vma_nlu.ner.biaffine_extractor import BiaffineExtractor
+from vi_nlp_core.ner.pattern_extractor import PatternExtractor
 __version__ = '0.1.0'

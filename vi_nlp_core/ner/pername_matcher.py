@@ -1,8 +1,8 @@
 import re
 
-from vma_nlu.utils.util import read_dict, get_ngram, tokenize
-from vma_nlu.utils.pername_pattern import get_person_pattern
-from vma_nlu.utils.preproces import Preprocess
+from vi_nlp_core.utils.util import read_dict, get_ngram, tokenize
+from vi_nlp_core.utils.pername_pattern import get_person_pattern
+from vi_nlp_core.utils.preproces import Preprocess
 
 class PernameMatcher:
     def __init__(self,n_gram = 4, dict_path='data/fullname.pkl', sw_path = 'data/stopwords.pkl',load_dict=False):
