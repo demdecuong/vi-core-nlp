@@ -5,8 +5,10 @@ from datetime import date
 import datetime
 
 from vi_nlp_core.utils.date_pattern import absolute, relative
+DICT_PATH = "./vi_nlp_core/data/dictionary_normalize_date.json"
+
 class DateMatcher(object):
-    def __init__(self, dict_path = "./vi_nlp_core/data/dictionary_normalize_date.json") -> None:
+    def __init__(self,dict_path) -> None:
         super().__init__()
 
         self.abs_pattern, self.wod, self.wod_vn, self.day_vn, self.month, self.month_vn, self.year, self.only_number, self.short_abs = absolute()
@@ -20,7 +22,7 @@ class DateMatcher(object):
 
         self.short_abs = self.short_abs[0]
         self.only_number = self.only_number[0]
-        ####################################################
+
         self.short_time, self.long_time, self.adj_pattern_top, self.adj_pattern_middle, self.adj_pattern_bot = relative()
         self.rel_pattern = "|".join([self.short_time[0], self.long_time[0]])
 

@@ -58,7 +58,7 @@ class TimeMatcher:
         minute = self.get_minute(minute_range)
 
         hour, minute = self.refine_hour_minute(hour,minute,status)
-        hour, minute = self.round_hour_minute_to_base(hour,minute)
+        # hour, minute = self.round_hour_minute_to_base(hour,minute)
         
         start = len(' '.join(raw_text[:hour_index-1])) # future fix mười một giờ - index
         if start != 0:
@@ -92,7 +92,7 @@ class TimeMatcher:
                     minute = 0
                 (start, end) = time[1]
                 hour, minute = self.refine_hour_minute(hour, minute, self.get_time_status(text[start: start+10]))
-                hour, minute = self.round_hour_minute_to_base(hour,minute)
+                # hour, minute = self.round_hour_minute_to_base(hour,minute)
                 hours.append(hour)
                 minutes.append(minute)
                 starts.append(start)

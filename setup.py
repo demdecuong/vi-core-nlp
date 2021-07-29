@@ -37,7 +37,7 @@ VERSION = os.getenv('PACKAGE_VERSION', 'v0.0.1')[1:]
 
 setup(
     name='vi_nlp_core',
-    version='0.2',
+    version='0.3',
     description='vi-core-nlp is a library that supports Vietnamese NER by pattern matching .',
     long_description=long_description,
     long_description_content_type='text/markdown',

@@ -34,8 +34,28 @@ class Extractor:
         self.preprocessor = Preprocess()
 
         # self.pername_extractor_deeplearning = Inference()
+    def extract_ner(self, utterance):
+        '''
+        Extract NER based on given intent
+        Input:
+            utterance   -   string
+            return_value    return value only 
+        Return
+        '''
+        result = []
+        person_name = self.extract_person_name(utterance)['entities']
 
-    def extract_ner(self, utterance, intent):
+        if person_name != []:
+            result.extend(person_name)
+        time = self.extract_time(utterance)['entities']
+        if time != []:
+            result.extend(time)
+        date = self.extract_date(utterance)['entities']
+        if date != []:
+            result.extend(date)
+        return result
+
+    def extract_ner_old(self, utterance, intent):
         '''
         Extract NER based on given intent
         Input:
@@ -69,28 +89,39 @@ class Extractor:
             print(ex)
             return []
 
-    def extract_time(self, utterance):
+    def extract_time(self, utterance, return_value = False):
         '''
         Input:
-            input string
+            utterance :  string
+            return_value : return value only
         Output:
             return value of (hour,minute)
         '''
         result = self.time_extractor.extract_time(utterance)
+        if return_value:
+            final_result = []
+            for ent in result['entities']:
+                final_result.append(ent['value'])
+            return final_result
         return result
 
-    def extract_date(self, utterance):
+    def extract_date(self, utterance, return_value = False):
         '''
         Input:
-            input string
+            utterance : input string
+            return_value : return value only
         Output:
             return tuple of (dow,dd,mm,yyyy)
         '''
-
         result = self.patternmatching_date.extract_date(utterance)
+        if return_value:
+            final_result = []
+            for ent in result['entities']:
+                final_result.append(ent['value'])
+            return final_result
         return result
 
-    def extract_person_name(self, utterance, mode='pattern', rt='relative'):
+    def extract_person_name(self, utterance, return_value= False):
         '''
         Input:
             input string
@@ -98,6 +129,11 @@ class Extractor:
             return a json with 'value' is a string 
         '''
         result = self.pername_extractor.extract_person_name(utterance)
+        if return_value:
+            final_result = []
+            for ent in result['entities']:
+                final_result.append(ent['value'])
+            return final_result
         return result
 
     def extract_phone_num(self, utterance):
