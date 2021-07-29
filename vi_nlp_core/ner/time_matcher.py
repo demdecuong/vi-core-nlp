@@ -1,32 +1,10 @@
-'''
-tám giờ rưỡi
-tám giờ ba mươi phút
-tám ba mươi phút
-
-mười bốn giờ
-tám giờ kém mười lăm
-tám giờ kém 15
-8 giờ kém 15
-2 tiếng nữa
-'''
-
-'''
-[VALUE1] [giờ|tiếng] [kém|nữa] [VALUE2]
-
-VALUE1 : 3 ITEM
-(?:một|hai|ba|bốn|tư|tứ|năm|sáu|bảy|tám|chín|mười|mươi|mốt) (?:một|hai|ba|bốn|tư|tứ|năm|sáu|bảy|tám|chín|mười|mươi|mốt) (?:một|hai|ba|bốn|tư|tứ|năm|sáu|bảy|tám|chín|mười|mươi|mốt)(?= giờ|tiếng)
-VALUE1 : 2 ITEM
-(?:một|hai|ba|bốn|tư|tứ|năm|sáu|bảy|tám|chín|mười|mươi|mốt) (?:một|hai|ba|bốn|tư|tứ|năm|sáu|bảy|tám|chín|mười|mươi|mốt)(?= giờ|tiếng)
-VALUE1 : 1 ITEM
-(?:một|hai|ba|bốn|tư|tứ|năm|sáu|bảy|tám|chín|mười|mươi|mốt)(?= giờ|tiếng)
-'''
 import datetime
 import string
 import re
 
 from nltk import ngrams
-from vma_nlu.utils.time_pattern import get_time_pattern
-from vma_nlu.utils.preproces import Preprocess
+from vi_nlp_core.utils.time_pattern import get_time_pattern
+from vi_nlp_core.utils.preproces import Preprocess
 from vietnam_number import w2n
 
 class TimeMatcher:
@@ -44,17 +22,17 @@ class TimeMatcher:
     def extract_time(self, text):
         text = self.preprocess(text)
         # text = self.preprocessor.preprocess(text)
-
+        raw_text = text
         text = text.replace('tiếng','giờ')
 
-        time_result = self.extract_absolute_time(text)
+        time_result = self.extract_absolute_time(text) # không có 'giờ' pattern trong câu
         if time_result[2] != self.default_hour and time_result[3] != self.default_min:
             return self.output_format(time_result,'absolute_pattern')
         else:
-            time_result = self.extract_relative_time(text)        
+            time_result = self.extract_relative_time(text, raw_text)        
         return self.output_format(time_result,'relative_pattern')
 
-    def extract_relative_time(self, text):
+    def extract_relative_time(self, text, raw_text):
         hour = self.default_hour
         minute = self.default_min
         start = 0
@@ -62,6 +40,7 @@ class TimeMatcher:
         status = self.get_time_status(text)
 
         text = text.split(' ')
+        raw_text = raw_text.split(' ')
 
         if 'giờ' not in text:
             # Maybe it contains 'phut'
@@ -74,19 +53,20 @@ class TimeMatcher:
         hour_index = text.index('giờ')
         hour_range = text[max(0, hour_index - self.left_shift): hour_index]
         minute_range = text[hour_index + 1: min(hour_index + self.right_shift, len(text))]
+
         hour = self.get_hour(hour_range)
         minute = self.get_minute(minute_range)
 
         hour, minute = self.refine_hour_minute(hour,minute,status)
         hour, minute = self.round_hour_minute_to_base(hour,minute)
         
-        start = len(' '.join(text[:hour_index-1]))
+        start = len(' '.join(raw_text[:hour_index-1])) # future fix mười một giờ - index
         if start != 0:
             start += 1
         if minute == 0:
-            end = len(' '.join(text[:hour_index + 1]))
+            end = len(' '.join(raw_text[:hour_index + 1]))
         else:
-            end = len(' '.join(text[: hour_index + self.right_shift + 1]))
+            end = len(' '.join(raw_text[: hour_index + self.right_shift + 1]))
         return start,end, hour, minute
 
     def extract_absolute_time(self, text):
@@ -117,30 +97,6 @@ class TimeMatcher:
                 minutes.append(minute)
                 starts.append(start)
                 ends.append(end)   
-        # for pattern in self.absolute_pattern: #not have pattern 'giờ' in text
-        #     # time = re.search(pattern, text)
-        #     time = [(x.group(), x.span()) for x in re.finditer(pattern, text)]
-        #     if time != None and time.group(1) != None:
-        #         time = time.group(1)
-        #         if '.' in time: 
-        #             hour, minute = time.split('.')
-        #         elif ':' in time:
-        #             hour, minute = time.split(':')
-        #         elif 'h' in time:
-        #             hour, minute = time.split('h')  
-        #         elif 'g' in time:
-        #             hour, minute = time.split('g')
-        #         else:
-        #             hour = time
-        #             minute = ''
-        #         start = text.find(time)
-        #         end = start + len(time) + 5
-        #         break
-        # # Case 9h -> minute = ''
-        # if minute == '':
-        #     minute = 0
-        # hour, minute = self.refine_hour_minute(hour,minute,status)
-        # hour, minute = self.round_hour_minute_to_base(hour,minute)
 
         return start, end, hour, minute
 
