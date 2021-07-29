@@ -1,4 +1,4 @@
-from vma_nlu.tester import Tester
+from vi_nlp_core.tester import Tester
 
 tester = Tester()
 # tester.test_template()
@@ -11,15 +11,7 @@ tester = Tester()
 # print('----------------- Test date -----------------')
 # tester.test_date()
 
-# tester.unit_test('time')
-
-
-# VLSP-2016 TESTSET
-# tester.test_person_name_vlsp('train')
-# tester.test_person_name_vlsp('dev')
-# tester.test_person_name_vlsp('test')
-
-from vma_nlu.ner.extractor import Extractor
+from vi_nlp_core.ner.extractor import Extractor
 
 extractor = Extractor(load_dict=False) # True: Load dictionary path
 

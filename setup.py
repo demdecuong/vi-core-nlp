@@ -38,13 +38,13 @@ VERSION = os.getenv('PACKAGE_VERSION', 'v0.0.1')[1:]
 setup(
     name='vi_nlp_core',
     version='0.2',
-    description='VMA-NLU is a library to implement NLU component in virtual medical assistant.',
+    description='vi-core-nlp is a library that supports Vietnamese NER by pattern matching .',
     long_description=long_description,
     long_description_content_type='text/markdown',
     include_package_data=True,
-    url='https://github.com/demdecuong/NER_Extractor/tree/main',
+    url='https://github.com/demdecuong/vi-core-nlp/tree/main',
     packages=find_packages(),
-    author='minhnp',
+    author='minhnp et al.',
     author_email='nguyenphucminh2804@gmail.com',
     classifiers=[
         'Programming Language :: Python :: 3',

@@ -5,14 +5,14 @@ import pandas as pd
 from termcolor import colored
 from nltk import text
 from tqdm import tqdm
-from vma_nlu.ner.extractor import Extractor
-from vma_nlu.testcase.tc_time import get_time_tc
-from vma_nlu.testcase.tc_pername import get_person_name_tc
-from vma_nlu.testcase.tc_date import get_date_test_case
-from vma_nlu.utils.util import read
-from vma_nlu.utils.preproces import Preprocess
+from vi_nlp_core.ner.extractor import Extractor
+from vi_nlp_core.testcase.tc_time import get_time_tc
+from vi_nlp_core.testcase.tc_pername import get_person_name_tc
+from vi_nlp_core.testcase.tc_date import get_date_test_case
+from vi_nlp_core.utils.util import read
+from vi_nlp_core.utils.preproces import Preprocess
 
-VLSP_PATH = './vma_nlu/testcase/vlsp2016'
+VLSP_PATH = './vi_nlp_core/testcase/vlsp2016'
 class Tester:
     def __init__(self):
         self.extractor = Extractor(load_dict=False)
@@ -133,7 +133,7 @@ class Tester:
                 result = self.extractor.extract_datetime(utterance)
             print(result)
 
-    def test_template(self,tem_dir = './vma_nlu/testcase/template'):
+    def test_template(self,tem_dir = './vi_nlp_core/testcase/template'):
         # Set up data
         template = read(tem_dir+'/template.txt')
         data_template = pd.read_csv(tem_dir + '/data_template.csv')

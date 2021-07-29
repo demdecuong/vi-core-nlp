@@ -49,3 +49,5 @@ share/python-wheels/
 MANIFEST
 # model pretrained
 checkpoint.pth
+
+.DS_Store
