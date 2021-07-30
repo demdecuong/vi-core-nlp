@@ -1,3 +1,2 @@
-include vma_nlu/ic/weight/*
-include vma_nlu/data/dictionary_normalize_date.json
-include vma_nlu/data/stopwords.pkl
+include vi_nlp_core/data/dictionary_normalize_date.json
+include vi_nlp_core/data/stopwords.pkl
