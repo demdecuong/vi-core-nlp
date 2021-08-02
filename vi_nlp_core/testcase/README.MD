@@ -3,7 +3,7 @@
 ### Usage
 - Test template : 
 ```
-from vma_nlu.tester import Tester
+from vi_nlp_core.tester import Tester
 
 tester = Tester()
 tester.test_template()

@@ -9,7 +9,7 @@ import json
 import ast
 import re
 
-from vma_nlu.utils.util import save
+from vi_nlp_core.utils.util import save
 
 def read(path):
     data = []

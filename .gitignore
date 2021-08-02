@@ -1,21 +1,21 @@
 vncorenlp
-vma_nlu/__pycache__/
-vma_nlu/data/raw
-vma_nlu/data/fullname.pkl
-vma_nlu/data/checkpoint.ph
-vma_nlu/first_name.txt
-vma_nlu/firstfirstname.txt
-vma_nlu/fullname.txt
-vma_nlu/fullname2.txt
-vma_nlu/last_name.txt
-vma_nlu/mid_name.txt
-vma_nlu/midlastname.txt
-vma_nlu/utils/__pycache__/
-vma_nlu/ic/__pycache__/
-vma_nlu/ner/__pycache__/
-vma_nlu/ner/models/
-vma_nlu/testcase/__pycache__/
-vma_nlu/testcase/vlsp2016/
+vi_nlp_core/__pycache__/
+vi_nlp_core/data/raw
+vi_nlp_core/data/fullname.pkl
+vi_nlp_core/data/checkpoint.ph
+vi_nlp_core/first_name.txt
+vi_nlp_core/firstfirstname.txt
+vi_nlp_core/fullname.txt
+vi_nlp_core/fullname2.txt
+vi_nlp_core/last_name.txt
+vi_nlp_core/mid_name.txt
+vi_nlp_core/midlastname.txt
+vi_nlp_core/utils/__pycache__/
+vi_nlp_core/ic/__pycache__/
+vi_nlp_core/ner/__pycache__/
+vi_nlp_core/ner/models/
+vi_nlp_core/testcase/__pycache__/
+vi_nlp_core/testcase/vlsp2016/
 
 
 # Byte-compiled / optimized / DLL files

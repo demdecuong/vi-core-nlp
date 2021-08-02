@@ -9,7 +9,8 @@ from vi_nlp_core.utils.preproces import Preprocess
 from vi_nlp_core.ner.date_matcher import DateMatcher
 from vi_nlp_core.ner.time_matcher import TimeMatcher
 from vi_nlp_core.ner.pername_matcher import PernameMatcher
-
+from vi_nlp_core.ner.gender_matcher import GenderMatcher
+from vi_nlp_core.ner.dep_matcher import DepMatcher
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 NAME_PATH = os.path.join(ROOT_DIR, 'data/fullname.pkl')
@@ -28,6 +29,10 @@ class Extractor:
 
         self.time_extractor = TimeMatcher()
 
+        self.gender_matcher = GenderMatcher()
+        
+        self.dep_matcher = DepMatcher()
+        
         self.pername_extractor = PernameMatcher(
             n_gram, NAME_PATH, SW_PATH, load_dict)
 
@@ -159,3 +164,9 @@ class Extractor:
 
         person_name = self.extract_person_name(utterance)
         return time, date, person_name  
+
+    def map_gender_to_key(self, str):
+        return self.gender_matcher.map_gender_to_key(str)
+
+    def map_dep_to_key(self, str):
+        return self.dep_matcher.map_dep_to_key(str)

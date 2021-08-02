@@ -221,7 +221,7 @@ class PernameMatcher:
                 "extractor": extractor
                 }
 
-    def load_dict(self,dict_path='./vma_nlu/data/fullname.pkl'):
+    def load_dict(self,dict_path='./vi_nlp_core/data/fullname.pkl'):
         print('Loading person name vocabulary ...')
         self.fullname_dict = read_dict(dict_path)
     
