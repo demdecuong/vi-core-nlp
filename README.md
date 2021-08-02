@@ -1,4 +1,4 @@
-# NER/Intent classification for Vietnamese Appointment Chatbot
+# NER for Vietnamese Medical Appointment Chatbot
 
 # Usage
 
@@ -6,7 +6,7 @@
 ```
 import vi_nlp_core
 from vi_nlp_core.ner.extractor import Extractor
-
+extractor = Extractor()
 text = 'tôi muốn đặt lịch với bs nguyễn nhật lệ lúc 8h sáng ngày 20/7'
 print(extractor.extract_ner(text))
 ```
@@ -49,4 +49,13 @@ text = 'tiêu hóa'
 res = extractor.map_dep_to_key(text)
 print(res)
 # {'key': 'SP008', 'text': 'tiêu hóa', 'value': 'tiêu hóa'}
+```
+
+**From symptoms to Department**
+```
+text = ['ho', 'sổ mũi', 'đau họng', 'đau đầu', 'nghẹt mũi']
+res = extractor.get_department_from_symptoms(text)
+```
+```
+[('SP018', 1.0), ('SP006', 0.6), ('SP009', 0.4)]
 ```

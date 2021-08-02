@@ -20,3 +20,7 @@ print(res)
 text = 'tiêu hóa'
 res = extractor.map_dep_to_key(text)
 print(res)
+
+text = ['ho', 'sổ mũi', 'đau họng', 'đau đầu', 'nghẹt mũi']
+res = extractor.get_department_from_symptoms(text)
+print(res)
