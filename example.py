@@ -24,3 +24,9 @@ print(res)
 text = ['ho', 'sổ mũi', 'đau họng', 'đau đầu', 'nghẹt mũi']
 res = extractor.get_department_from_symptoms(text)
 print(res)
+
+text = "dạo này tôi thấy trong người mệt mỏi, thần kinh căng thẳng do cách ly covid quá lâu"
+res = extractor.extract_symptoms(text)
+print(res)
+res = extractor.extract_symptoms(text,get_dep_keys=True)
+print(res)

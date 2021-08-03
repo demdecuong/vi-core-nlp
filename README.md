@@ -53,8 +53,23 @@ print(res)
 
 **From symptoms to Department**
 ```
+text = "dạo này tôi thấy trong người mệt mỏi, thần kinh căng thẳng do cách ly covid quá lâu"
+res = extractor.extract_symptoms(text)
+```
+```
+{'entities': [{'start': 29, 'end': 32, 'entity': 'symptom', 'value': 'mệt', 'confidence': 1.0, 'extractor': 'fuzzy_matching'}, {'start': 39, 'end': 48, 'entity': 'symptom', 'value': 'thần kinh', 'confidence': 1.0, 'extractor': 'fuzzy_matching'}, {'start': 49, 'end': 59, 'entity': 'symptom', 'value': 'căng thẳng', 'confidence': 1.0, 'extractor': 'fuzzy_matching'}]}
+```
+Extract Department Keys directly
+```
+res = extractor.extract_symptoms(text,get_dep_keys=True,top_k=3) 
+```
+```
+[('SP012', 1.0), ('SP001', 0.0), ('SP002', 0.0)]
+```
+**Search department from list of symptoms**
+```
 text = ['ho', 'sổ mũi', 'đau họng', 'đau đầu', 'nghẹt mũi']
-res = extractor.get_department_from_symptoms(text)
+res = extractor.get_department_from_symptoms(text,top_k=3)
 ```
 ```
 [('SP018', 1.0), ('SP006', 0.6), ('SP009', 0.4)]

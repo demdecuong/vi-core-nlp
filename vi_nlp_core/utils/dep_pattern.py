@@ -136,7 +136,7 @@ def get_dep_symptoms_dict():
                        'thiếu cân', 'ốm', 'tăng cân', 'suy dinh dưỡng']
     d['hô hấp'] = ['khó thở', 'đau ngực', 'sốt', 'nôn', 'ho']
     d['nội thận'] = ['mệt', 'tiểu đêm', 'đái đêm', 'tăng huyết áp',
-                     'đái tháo đường', 'tiểu đường', 'phù, ói, nôn, khó thở, mệt, lơ mơ', ]
+                     'đái tháo đường', 'tiểu đường', 'phù', 'ói', 'nôn', 'khó thở', 'mệt', 'lơ mơ', ]
     d['nhi'] = ['sốt', 'ho', 'ói', 'nôn', 'táo bón', 'sổ mũi', 'tiêu chảy', 'đau bụng', 'nôn ói'
                 'dị ứng', 'nhiễm trùng da', 'tai nạn', 'co giật', 'thở mệt', 'ọc sữa', 'ho',
                 'đau đầu', 'dị ứng', 'viêm da', 'thở khò khè', ]
@@ -156,7 +156,7 @@ def get_dep_symptoms_dict():
                      'nóng tính', 'nóng tánh', 'tự tử ']
     d['thần kinh'] = ['đau đầu', 'chóng mặt', 'mất ngủ', 'nói khó', 'khó nói', 'yếu tay',
                       'yếu chân', 'yếu chân tay', 'yếu tay chân', 'hồi hộp', 'tai biến',  'đau đầu',
-                      'chóng mặt', 'rối loạn ý thức', 'co giật', 'rối loạn ngôn ngữ', ]
+                      'chóng mặt', 'rối loạn ý thức', 'co giật', 'rối loạn ngôn ngữ','căng thẳng' ]
     d['tuyến vú'] = ['u vú', 'đau vú', 'chảy dịch núm vú', ]
     d['chẩn đoán hình ảnh'] = ['ho', 'sốt', 'khó thở', 'ho ra máu', 'đau bụng', 'ói', 'nôn', 'tiêu chảy', 'đi ngoài',
                                'táo bón', 'rối loạn tri giác', 'liệt nửa người', 'suy hô hấp', 'x-quang', ]

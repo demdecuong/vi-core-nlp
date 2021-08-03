@@ -176,3 +176,6 @@ class Extractor:
 
     def get_department_from_symptoms(self, symptoms):
         return self.symptom_matcher.get_department_from_symptoms(symptoms)
+
+    def extract_symptoms(self, utterance, get_dep_keys=False, top_k=3):
+        return self.symptom_matcher.extract_symptoms(utterance, get_dep_keys=get_dep_keys, top_k=top_k)
