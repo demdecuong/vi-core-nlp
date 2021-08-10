@@ -3,7 +3,7 @@ from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
 from vi_nlp_core.utils.util import read_dict, get_ngram, tokenize, padding_punct
-from vi_nlp_core.utils.dep_pattern import get_dep_dict, get_dep_symptoms_dict, get_dep_keys
+from vi_nlp_core.utils.dep_pattern import get_dep_dict, get_dep_symptoms_dict, get_dep_keys, get_list_of_symps
 from vi_nlp_core.utils.preproces import Preprocess
 
 
@@ -147,6 +147,9 @@ class SymptomMatcher:
         data = []
         for k, v in self.dep_symp_dict.items():
             data.extend(v)
+        
+        li_symps = get_list_of_symps()
+        data.extend(li_symps)
         data = list(set(data))
         return data
 
