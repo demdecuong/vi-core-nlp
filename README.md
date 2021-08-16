@@ -2,16 +2,16 @@
 
 # Usage
 
-`from vi_nlp_core.ner.extractor import Extractor`
-
+```
+from vi_nlp_core.ner.extractor import Extractor
+extractor = Extractor()
+```
 **Extract person name**
 
 ```
 text = "tôi cần đặt bác sĩ tạ biên cương"
 print(extractor.extract_person_name(text)
-```
 
-```
 {'entities': [{'start': 19, 'end': 32, 'entity': 'person_name', 'value': 'Tạ Biên Cương', 'confidence': 1.0, 'extractor': 'pattern'}]}
 ```
 
@@ -21,9 +21,7 @@ the value is the timestamp value
 ```
 text = "tôi sinh vào ngày 21-3-1997"
 extractor.extract_date(text)
-```
 
-```
 {'entities': [{'start': 0, 'end': 5, 'entity': 'time', 'value': 1628562600.0, 'confidence': 1.0, 'extractor': 'absolute_pattern'}]}
 ```
 
@@ -32,9 +30,7 @@ extractor.extract_date(text)
 ```
 text = '14:50 ngày 7 tháng 6'
 print(extractor.extract_time(text,return_value=True)) #return value only
-```
 
-```
 {'entities': [{'start': 7, 'end': 9, 'entity': 'time', 'value': 1628560800.0, 'confidence': 1.0, 'extractor': 'absolute_pattern'}]}
 ```
 
@@ -43,11 +39,12 @@ print(extractor.extract_time(text,return_value=True)) #return value only
 ```
 text = 'rai'
 res = extractor.map_gender_to_key(text)
-print(res)
+
 # {'key': 'GEN01', 'text': 'rai', 'value': 'trai'}
+
 text = 'tiêu hóa'
 res = extractor.map_dep_to_key(text)
-print(res)
+
 # {'key': 'SP008', 'text': 'tiêu hóa', 'value': 'tiêu hóa'}
 ```
 
@@ -62,11 +59,10 @@ def extract_symptoms(self, utterance, input_symptoms= None, input_dep_keys=None,
 - top_k (optional) : return top_k answer (symptoms or dep_keys)
 ```
 e.g:
-    input_dict = {
+    input_dep_keys = {
         'A001': ['đau bụng', 'sốt', 'ho', 'ói', 'nôn', 'chóng mặt'],
         'A004': ['khó thở', 'đau ngực', 'sốt', 'nôn', 'ho'])
         )
-
 ```
 
 Example :

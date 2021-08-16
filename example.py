@@ -57,6 +57,11 @@ res = extractor.extract_symptoms(
     text, get_dep_keys=True)
 print(res)
 
+res = extractor.extract_symptoms(
+    'tôi là người cô đơn', get_dep_keys=True)
+print(res)
+
+
 text = 'ngày 28 tháng 4 năm 1999'
 print(extractor.extract_date(text))
 text = 'khoảng 9h em qua nha bác sĩ '

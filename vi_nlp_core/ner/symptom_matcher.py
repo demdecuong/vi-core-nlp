@@ -54,7 +54,8 @@ class SymptomMatcher:
                     data.append(ent['value'])
                 result = self.get_department_from_symptoms(data, input_dep_keys, top_k)
             elif symptoms == []:
-                result = 'No symptoms are existed or some symptoms are not updated in database'
+                # 'No symptoms are existed or some symptoms are not updated in database'
+                result = None
             else:
                 result = {}
                 result['entities'] = symptoms
@@ -69,7 +70,8 @@ class SymptomMatcher:
                     data.append(ent['value'])
                 result = self.get_department_from_symptoms(data, input_dep_keys, top_k)
             elif symptoms == []:
-                result = 'No symptoms are existed or some symptoms are not updated in database'
+                # 'No symptoms are existed or some symptoms are not updated in database'
+                result = None
             else:
                 result = {}
                 result['entities'] = symptoms
