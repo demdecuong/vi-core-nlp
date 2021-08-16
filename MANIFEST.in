@@ -1,2 +1,3 @@
 include vi_nlp_core/data/dictionary_normalize_date.json
 include vi_nlp_core/data/stopwords.pkl
+include vi_nlp_core/data/symptoms.txt

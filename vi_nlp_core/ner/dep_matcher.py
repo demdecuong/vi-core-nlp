@@ -46,14 +46,13 @@ class DepMatcher:
             ratios = [fuzz.ratio(str, value)
                       for value in v]  # ensure both are in string
             scores.append({"key": k, "score": max(ratios),'value': v[ratios.index(max(ratios))]})
-
         filtered_scores = [
             item for item in scores if item['score'] >= self.threshold]
         sorted_filtered_scores = sorted(
             filtered_scores, key=lambda k: k['score'], reverse=True)
         filtered_list_of_dicts = [ item
                                   for item in sorted_filtered_scores]
-        return (self.keys[filtered_list_of_dicts[0]['key']], filtered_list_of_dicts[0]['value'])
+        return (filtered_list_of_dicts[0]['key'], filtered_list_of_dicts[0]['value'])
 
 
     def get_keys(self):

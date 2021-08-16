@@ -1,13 +1,14 @@
 def absolute():
-    absolute = ['(\d+(,|\s|\.|-|\/|_)+\d+(,|\s|\.|-|\/|_)+\d+)', # 21/03/1997  21-03-1997  21.03.1997
-                   '((monday|tuesday|wednesday|thursday|friday|saturday|sunday)(,|\s|\.|-|\/|_)\d+(,|\s|\.|-|\/|_)*\d*(,|\s|\.|-|\/|_)*\d*)', # Monday 21 3 
-                ] 
+    absolute = [r'(((?<=\s)|^)([0-9]{1,2}(\s|\.|-|\/|_)+[0-9]{1,2}(\s|\.|-|\/|_)+[0-9]{2,4})((?=\s)|$))', # 21/03/1997  21-03-1997  21.03.1997
+                r'(((?<=\s)|^)([0-9]{4}(\s|\.|-|\/|_)+[0-9]{1,2}(\s|\.|-|\/|_)+[0-9]{1,2})((?=\s)|$))',    
+                   r'((monday|tuesday|wednesday|thursday|friday|saturday|sunday)(,|\s|\.|-|\/|_)\d+(,|\s|\.|-|\/|_)*\d*(,|\s|\.|-|\/|_)*\d*)', # Monday 21 3 
+                ]
     wod = ['(monday|tuesday|wednesday|friday|saturday|sunday)']
     wod_vn = ['(((thứ)|(thu)|(thuws))(\s+|\.+)*[2-8])|(((thứ)|(thu)|(thuws))(\s+|\.+)*((hai)|(bay)|(tư)|(tu)|(bốn)|(bon)|(năm)|(nam)|(lăm)|(lam)|(sáu)|(say)|(bảy)|(ba)))|((chủ nhật)|(chu nhat)|(cn))']
 
     day_vn = ['(((ngày)|(ngay)|(ngafy))(\s+|\.+)*(\d\d|\d)($|\s))|(((ngày)|(ngay)|(ngafy))\s+((không)|(khong)|(một)|(hai)|(bay)|(bốn)|(bon)|(tư)|(tu)|(năm)|(lăm)|(nam)|(lam)|(sáu)|(sau)|(bảy)|(ba)|(tám)|(tam)|(chín)|(chin)|(mười)|(mươi)|(muoi))(\s*((không)|(khong)|(một)|(mốt)|(mot)|(hai)|(bay)|(bốn)|(bon)|(tư)|(tu)|(năm)|(lăm)|(nam)|(lam)|(sáu)|(sau)|(bảy)|(ba)|(tám)|(tam)|(chín)|(chin)|(mười)|(mươi)|(muoi)))?(\s*((không)|(khong)|(một)|(mốt)|(mot)|(hai)|(bay)|(bốn)|(bon)|(tư)|(tu)|(năm)|(lăm)|(nam)|(lam)|(sáu)|(sau)|(bảy)|(ba)|(tám)|(tam)|(chín)|(chin)|(mười)|(mươi)|(muoi)))?)|((^|\s)\d\d?\s*((tháng)|(thang)))|((^|\s)((không)|(khong)|(một)|(hai)|(bay)|(bốn)|(bon)|(tư)|(tu)|(năm)|(lăm)|(nam)|(lam)|(sáu)|(sau)|(bảy)|(ba)|(tám)|(tam)|(chín)|(chin)|(mười)|(mươi)|(muoi))(\s*((không)|(khong)|(một)|(mốt)|(mot)|(hai)|(bay)|(bốn)|(bon)|(tư)|(tu)|(năm)|(lăm)|(nam)|(lam)|(sáu)|(sau)|(bảy)|(ba)|(tám)|(tam)|(chín)|(chin)|(mười)|(mươi)|(muoi)))?(\s*((không)|(khong)|(một)|(mốt)|(mot)|(hai)|(bay)|(bốn)|(bon)|(tư)|(tu)|(năm)|(lăm)|(nam)|(lam)|(sáu)|(sau)|(bảy)|(ba)|(tám)|(tam)|(chín)|(chin)|(mười)|(mươi)|(muoi)))?\s*((tháng)|(thang)))']
 
-    month = ['((?<=\s)january(?=\s)|(?<=\s)jan(?=\s)|(?<=\s)february(?=\s)|(?<=\s)feb(?=\s)|(?<=\s)march(?=\s)|(?<=\s)mar(?=\s)|(?<=\s)april(?=\s)|(?<=\s)apr(?=\s)|(?<=\s)may(?=\s)|(?<=\s)june(?=\s)|(?<=\s)jun(?=\s)|(?<=\s)july(?=\s)|(?<=\s)jul(?=\s)|(?<=\s)august(?=\s)|(?<=\s)aug(?=\s)|(?<=\s)september(?=\s)|(?<=\s)sep(?=\s)|(?<=\s)october(?=\s)|(?<=\s)oct(?=\s)|(?<=\s)november(?=\s)|(?<=\s)nov(?=\s)|(?<=\s)december(?=\s)|(?<=\s)dec(?=\s))']
+    month = ['(january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sep|october|oct|november|nov|december|dec)']
     month_vn = ['(((tháng)|(thang)|(thasng))(\s+|\.+)*(\d\d|\d)($|\s))|(((tháng)|(thang))(\s+|\.+)*(một|mot|hai|ba|bốn|bon|tư|tu|năm|nam|lăm|lam|sáu|bảy|bay|tám|tam|chín|chin|muoi|mười một|muoi mot|mười hai|muoi hai|giêng|gieng|chạp|chap|mười))']
 
     year = ['('+'|'.join([str(i) for i in list(range(1900, 2050))])+')']

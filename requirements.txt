@@ -1,3 +1,4 @@
 vietnam-number==1.0.3
 fuzzywuzzy==0.18.0
 datetime==4.3
+python-Levenshtein==0.12.2

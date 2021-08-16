@@ -31,9 +31,9 @@ class Extractor:
         self.time_extractor = TimeMatcher()
 
         self.gender_matcher = GenderMatcher()
-        
+
         self.dep_matcher = DepMatcher()
-        
+
         self.pername_extractor = PernameMatcher(
             n_gram, NAME_PATH, SW_PATH, load_dict)
 
@@ -97,7 +97,7 @@ class Extractor:
             print(ex)
             return []
 
-    def extract_time(self, utterance, return_value = False):
+    def extract_time(self, utterance, return_value=False):
         '''
         Input:
             utterance :  string
@@ -113,7 +113,7 @@ class Extractor:
             return final_result
         return result
 
-    def extract_date(self, utterance, return_value = False):
+    def extract_date(self, utterance, return_value=False):
         '''
         Input:
             utterance : input string
@@ -129,7 +129,7 @@ class Extractor:
             return final_result
         return result
 
-    def extract_person_name(self, utterance, return_value= False):
+    def extract_person_name(self, utterance, return_value=False):
         '''
         Input:
             input string
@@ -160,13 +160,13 @@ class Extractor:
             nha_mang = result[0][0]
             remain = result[0][1]
             return nha_mang + remain
-    
+
     def extract_all(self, utterance):
         time = self.extract_time(utterance)
         date = self.extract_date(utterance)
 
         person_name = self.extract_person_name(utterance)
-        return time, date, person_name  
+        return time, date, person_name
 
     def map_gender_to_key(self, str):
         return self.gender_matcher.map_gender_to_key(str)
@@ -177,5 +177,21 @@ class Extractor:
     def get_department_from_symptoms(self, symptoms):
         return self.symptom_matcher.get_department_from_symptoms(symptoms)
 
-    def extract_symptoms(self, utterance, get_dep_keys=False, top_k=3):
-        return self.symptom_matcher.extract_symptoms(utterance, get_dep_keys=get_dep_keys, top_k=top_k)
+    def extract_symptoms(self, utterance, input_symptoms=None, input_dep_keys=None, get_dep_keys=False, top_k=3):
+        return self.symptom_matcher.extract_symptoms(utterance,
+                                                     input_symptoms=input_symptoms,
+                                                     input_dep_keys=input_dep_keys,
+                                                     get_dep_keys=get_dep_keys,
+                                                     top_k=top_k)
+
+    def set_dep_symp_database(self, input_dict):
+        '''
+            input_dict = {
+                'SP001' : ['sot','buon ngu','chong mat'],
+                'SP002' : ['sot','buon ngu','chong mat'],
+            }
+        '''
+        assert type(input_dict) == dict
+        assert type(list(input_dict.items())[0][1]) == list
+        self.symptom_matcher.dep_symp_dict = input_dict
+    
