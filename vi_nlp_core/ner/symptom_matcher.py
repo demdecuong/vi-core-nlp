@@ -169,7 +169,7 @@ class SymptomMatcher:
             score_list, key=lambda k: k['score'], reverse=True)
 
         res = [(item['key'], item['score'])
-               for item in filtered_scores[:top_k]]
+               for item in filtered_scores[:top_k] if item['score'] != 0]
 
         return res
 

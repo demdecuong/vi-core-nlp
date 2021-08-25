@@ -193,5 +193,8 @@ class Extractor:
         '''
         assert type(input_dict) == dict
         assert type(list(input_dict.items())[0][1]) == list
+        print('[INFO] Your Department Symtpoms Dictionay has been modified !')
         self.symptom_matcher.dep_symp_dict = input_dict
     
+    def get_symptoms_database(self):
+        return self.symptom_matcher.dep_symp_dict
